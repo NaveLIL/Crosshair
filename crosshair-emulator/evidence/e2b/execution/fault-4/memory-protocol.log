@@ -1,0 +1,18 @@
+> readl 0x40e00000
+< OK 0x0000000000000000
+> readl 0x40e00008
+< OK 0x0000000000000000
+> set_irq_in /machine/gpio unnamed-gpio-in 0 0
+< OK
+> set_irq_in /machine/gpio unnamed-gpio-in 1 0
+< OK
+> set_irq_in /machine/gpio unnamed-gpio-in 2 0
+< OK
+> set_irq_in /machine/gpio unnamed-gpio-in 89 0
+< OK
+> writel 0xa000c004 0xa5a5a5a5
+< OK
+> readl 0xa000c004
+< OK 0x00000000a5a5a5a5
+> readl 0xa00085c4
+< OK 0x00000000ee160e10

@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "command": [
+    "<host-path>",
+    "-machine",
+    "versatilepb,audiodev=audio0",
+    "-cpu",
+    "arm926",
+    "-m",
+    "128M",
+    "-accel",
+    "tcg",
+    "-display",
+    "none",
+    "-monitor",
+    "none",
+    "-serial",
+    "stdio",
+    "-nic",
+    "none",
+    "-audiodev",
+    "none,id=audio0",
+    "-no-reboot",
+    "-qmp",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-kernel",
+    "<workspace>/target/artifacts/versatilepb/crosshair-boot.elf",
+    "-device",
+    "loader,addr=0x102bc,data=0xa5a5a5a5,data-len=4"
+  ],
+  "qemu_version": "QEMU emulator version 9.2.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "image_sha256": {
+    "crosshair-boot.elf": "e53c3e531dd6f7e0d5346036b186070a776919d979000da219c2a982825a516f",
+    "crosshair-boot.bin": "4a7bcaa4dc1661138a40b33d6ce802307ea69bf603fe7d1c1031ebfe54a55128"
+  },
+  "registers": "\r\nCPU#0\r\nR00=00000002 R01=00000028 R02=0000000a R03=0000000a\r\nR04=00010254 R05=000102b8 R06=43524f53 R07=00000000\r\nR08=00000000 R09=00000000 R10=00000000 R11=00000000\r\nR12=fff0bdc0 R13=00014320 R14=00010040 R15=00010038\r\nPSR=600001d3 -ZC- A svc32\r\ns00=00000000 s01=00000000 d00=0000000000000000\r\ns02=00000000 s03=00000000 d01=0000000000000000\r\ns04=00000000 s05=00000000 d02=0000000000000000\r\ns06=00000000 s07=00000000 d03=0000000000000000\r\ns08=00000000 s09=00000000 d04=0000000000000000\r\ns10=00000000 s11=00000000 d05=0000000000000000\r\ns12=00000000 s13=00000000 d06=0000000000000000\r\ns14=00000000 s15=00000000 d07=0000000000000000\r\ns16=00000000 s17=00000000 d08=0000000000000000\r\ns18=00000000 s19=00000000 d09=0000000000000000\r\ns20=00000000 s21=00000000 d10=0000000000000000\r\ns22=00000000 s23=00000000 d11=0000000000000000\r\ns24=00000000 s25=00000000 d12=0000000000000000\r\ns26=00000000 s27=00000000 d13=0000000000000000\r\ns28=00000000 s29=00000000 d14=0000000000000000\r\ns30=00000000 s31=00000000 d15=0000000000000000\r\nFPSCR: 00000000\r\n",
+  "memory": "00000000000102b8: 0x43524f53 0x00000002 0x00000000 0x00000000\r\n00000000000102c8: 0x00000000 0x00000028\r\n",
+  "expected_utf8": "CROSSHAIR BOOT 0.1 \u2014 HELLO FROM RUST\r\n",
+  "stage": 2
+}

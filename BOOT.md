@@ -45,3 +45,11 @@ Panic сохраняет stage 3 и сообщение `CROSSHAIR PANIC — HALT
 ## E2A: собственная экспериментальная machine
 
 `crosshair-blueangel-e2a` использует QEMU9.2 CPU260 proxy, synthetic128MiB RAM и64B low-vector RAM. Generic ELF loader, entry `0xa0008000`, два стека, триIRQ26 и terminal idle проверены реальным исполнением, включая reset/reboot и четыре data-abort probes. Это отдельный [загрузочный контракт E2A](docs/E2A_CONTRACT.md), а не HaRET или заводская плата. [Протокол/сравнение E1](reports/E2A_MINIMAL_BOARD.md). E1 QEMU9.1 и его тесты сохранены.
+
+## E2B: GPIO и функциональная MMU
+
+`crosshair-blueangel-e2b` сохраняет RAM/vector/UART/timer/PIC контракт E2A и добавляет GPIO90 по PA`0x40e00000`. Только CPU260 proxy. Generic loader загружает собственный ELF с entry PA`0xa0008000`; ARM entry очищает BSS, создаёт SVC16KiB/IRQ4KiB stacks и различимые UNDEF/prefetch/data-abort vectors. Никакого OEM startup не используется.
+
+Guest считывает reset CP15, проверяет cache-bit readback без заявления о физических cache, создаёт собственную16KiB-aligned L1, выполняет uncached section alias VA`0x20000200`→PA`0xa0000200`, восстанавливает MMU/control state. Затем GPIO direction/AF/preload и пять IRQ проверяются реальным TCG execution. Первый фронт приходит при masked PIC; guest проверяет сохранённый pending и нулевой IRQ count, снимает маску и обрабатывает событие. Host adapter подаёт уровни0/1/2/89; это не драйвер клавиатуры. После PASS — masked SVC idle. Тот же процесс проходит `system_reset` и повторный boot с проверкой очистки заранее испорченной BSS.
+
+Три отдельных negative probes проверяют GPIO data abort и точный DFAR; ещё два — UNDEF на отсутствующих в этой composition CP14 CLKCFG/PWRMODE. Harness сверяет fault vector, LR/SPSR и реальные opcodes. Существование этих controls в аппаратном PXA26x не отрицается. [Audit и неподтверждённые свойства](docs/E2B_CPU_GPIO_AUDIT.md), [исполненные журналы](reports/WAVE_003.md). Сохранение RAM и внешних input levels через QEMU warm reset — synthetic contract; физический reset/HaRET handoff этим не подтверждены.

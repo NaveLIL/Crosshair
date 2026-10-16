@@ -38,3 +38,5 @@
 E2A: узкое сравнение CPU с Intel PXA26x Developer’s Manual278638-002, EMTS278640-002 и закреплённым PXADroid/QEMU кодом, точные URL/хеши/границы выводов — [CPU profile](docs/E2A_CPU_PROFILE.md). Происхождение GPL host subset — [QEMU overlay README](crosshair-emulator/qemu/README.md).
 
 UI bitmap font: MIT Cozette v.1.30.0, pinned source/release hash, полный copyright notice и детерминированный subset — [provenance](ui/third_party/cozette/PROVENANCE.json), [font license](ui/third_party/cozette/LICENSE).
+
+Wave003: [E2B CP14/CP15/reset/GPIO audit](docs/E2B_CPU_GPIO_AUDIT.md) содержит точные разделы Intel278638-002, encodings, закреплённые QEMU/PXADroid commits и повторно сверенные SHA-256 четырёх CPU/MMU source files. Source contract, интерпретация GPIO gating и synthetic choices отделены от [реальных QTest/TCG результатов](reports/WAVE_003.md).

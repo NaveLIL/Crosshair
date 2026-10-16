@@ -1,0 +1,112 @@
+> readl 0x40e00000
+< OK 0x0000000000000000
+> readl 0x40e00008
+< OK 0x0000000000000000
+> set_irq_in /machine/gpio unnamed-gpio-in 0 0
+< OK
+> set_irq_in /machine/gpio unnamed-gpio-in 1 0
+< OK
+> set_irq_in /machine/gpio unnamed-gpio-in 2 0
+< OK
+> set_irq_in /machine/gpio unnamed-gpio-in 89 0
+< OK
+> writel 0xa000c004 0xa5a5a5a5
+< OK
+> readl 0xa000c004
+< OK 0x00000000a5a5a5a5
+> set_irq_in /machine/gpio unnamed-gpio-in 0 1
+< OK
+> readl 0x40d00004
+< OK 0x0000000000000000
+> readl 0x40d00000
+< OK 0x0000000000000000
+> readl 0x40d00010
+< OK 0x0000000000000100
+> readl 0xa000c00c
+< OK 0x0000000000000001
+> set_irq_in /machine/gpio unnamed-gpio-in 1 1
+< OK
+> readl 0x40d00000
+< OK 0x0000000000000200
+> readl 0xa000c00c
+< OK 0x0000000000000002
+> set_irq_in /machine/gpio unnamed-gpio-in 2 1
+< OK
+> readl 0x40d00000
+< OK 0x0000000000000400
+> readl 0xa000c00c
+< OK 0x0000000000000003
+> set_irq_in /machine/gpio unnamed-gpio-in 2 0
+< OK
+> readl 0x40d00000
+< OK 0x0000000000000400
+> readl 0xa000c00c
+< OK 0x0000000000000004
+> set_irq_in /machine/gpio unnamed-gpio-in 89 1
+< OK
+> readl 0x40d00000
+< OK 0x0000000000000400
+> readl 0xa000c00c
+< OK 0x0000000000000005
+> readl 0x40d00004
+< OK 0x0000000000000000
+> readl 0x40e00048
+< OK 0x0000000000000000
+> readl 0x40e00050
+< OK 0x0000000000000000
+> readl 0x40e00000
+< OK 0x0000000000000003
+> readl 0x40e00008
+< OK 0x0000000002000000
+> set_irq_in /machine/gpio unnamed-gpio-in 0 0
+< OK
+> set_irq_in /machine/gpio unnamed-gpio-in 1 0
+< OK
+> set_irq_in /machine/gpio unnamed-gpio-in 2 0
+< OK
+> set_irq_in /machine/gpio unnamed-gpio-in 89 0
+< OK
+> writel 0xa000c004 0xa5a5a5a5
+< OK
+> readl 0xa000c004
+< OK 0x00000000a5a5a5a5
+> set_irq_in /machine/gpio unnamed-gpio-in 0 1
+< OK
+> readl 0x40d00004
+< OK 0x0000000000000000
+> readl 0x40d00000
+< OK 0x0000000000000000
+> readl 0x40d00010
+< OK 0x0000000000000100
+> readl 0xa000c00c
+< OK 0x0000000000000001
+> set_irq_in /machine/gpio unnamed-gpio-in 1 1
+< OK
+> readl 0x40d00000
+< OK 0x0000000000000200
+> readl 0xa000c00c
+< OK 0x0000000000000002
+> set_irq_in /machine/gpio unnamed-gpio-in 2 1
+< OK
+> readl 0x40d00000
+< OK 0x0000000000000400
+> readl 0xa000c00c
+< OK 0x0000000000000003
+> set_irq_in /machine/gpio unnamed-gpio-in 2 0
+< OK
+> readl 0x40d00000
+< OK 0x0000000000000400
+> readl 0xa000c00c
+< OK 0x0000000000000004
+> set_irq_in /machine/gpio unnamed-gpio-in 89 1
+< OK
+> readl 0x40d00000
+< OK 0x0000000000000400
+> readl 0xa000c00c
+< OK 0x0000000000000005
+> readl 0x40d00004
+< OK 0x0000000000000000
+> readl 0x40e00048
+< OK 0x0000000000000000
+> readl 0x40e00050
+< OK 0x0000000000000000

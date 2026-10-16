@@ -19,6 +19,7 @@ def main():
     parser.add_argument("llvm", type=Path)
     parser.add_argument("--name", default="crosshair-boot")
     parser.add_argument("--split-vectors", action="store_true")
+    parser.add_argument("--record-symbol")
     args = parser.parse_args()
     out, llvm, name = args.output, args.llvm, args.name
     elf = out / f"{name}.elf"
@@ -55,7 +56,7 @@ def main():
     assert symbols["_start"] == entry
     assert symbols["__stack_top"] % 8 == 0
     assert symbols["__stack_top"] - symbols["__stack_bottom"] == 16384
-    record = "CROSSHAIR_PXA_RECORD" if args.split_vectors else "CROSSHAIR_BOOT_RECORD"
+    record = args.record_symbol or ("CROSSHAIR_PXA_RECORD" if args.split_vectors else "CROSSHAIR_BOOT_RECORD")
     assert symbols["__bss_start"] <= symbols[record] < symbols["__bss_end"]
     if args.split_vectors:
         assert symbols["__irq_stack_top"] % 8 == 0

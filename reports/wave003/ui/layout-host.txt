@@ -1,0 +1,49 @@
+
+File: <workspace>/target/artifacts/ui/layout-host.o
+Format: Mach-O 64-bit x86-64
+Arch: x86_64
+AddressSize: 64bit
+Sections [
+  Section {
+    Index: 0
+    Name: __text (5F 5F 74 65 78 74 00 00 00 00 00 00 00 00 00 00)
+    Segment: __TEXT (5F 5F 54 45 58 54 00 00 00 00 00 00 00 00 00 00)
+    Address: 0x0
+    Size: 0x0
+    Offset: 384
+    Alignment: 0
+    RelocationOffset: 0x0
+    RelocationCount: 0
+    Type: Regular (0x0)
+    Attributes [ (0x800000)
+      PureInstructions (0x800000)
+    ]
+    Reserved1: 0x0
+    Reserved2: 0x0
+    Reserved3: 0x0
+    SectionData (
+    )
+  }
+  Section {
+    Index: 1
+    Name: __const (5F 5F 63 6F 6E 73 74 00 00 00 00 00 00 00 00 00)
+    Segment: __TEXT (5F 5F 54 45 58 54 00 00 00 00 00 00 00 00 00 00)
+    Address: 0x0
+    Size: 0x24
+    Offset: 384
+    Alignment: 2
+    RelocationOffset: 0x0
+    RelocationCount: 0
+    Type: Regular (0x0)
+    Attributes [ (0x0)
+    ]
+    Reserved1: 0x0
+    Reserved2: 0x0
+    Reserved3: 0x0
+    SectionData (
+      0000: 32304955 70000000 4C000000 04000000  |20IUp...L.......|
+      0010: 24000000 04000000 0C000000 04000000  |$...............|
+      0020: 08000000                             |....|
+    )
+  }
+]

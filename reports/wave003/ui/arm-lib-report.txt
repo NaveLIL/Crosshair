@@ -1,0 +1,287 @@
+
+File: <workspace>/target/armv5te-none-eabi/release/libcrosshair_ui.rlib(lib.rmeta)
+Format: elf32-littlearm
+Arch: arm
+AddressSize: 32bit
+LoadName: <Not found>
+ElfHeader {
+  Ident {
+    Magic: (7F 45 4C 46)
+    Class: 32-bit (0x1)
+    DataEncoding: LittleEndian (0x1)
+    FileVersion: 1
+    OS/ABI: SystemV (0x0)
+    ABIVersion: 0
+    Unused: (00 00 00 00 00 00 00)
+  }
+  Type: Relocatable (0x1)
+  Machine: EM_ARM (0x28)
+  Version: 1
+  Entry: 0x0
+  ProgramHeaderOffset: 0x0
+  SectionHeaderOffset: 0x17A1C
+  Flags [ (0x0)
+  ]
+  HeaderSize: 52
+  ProgramHeaderEntrySize: 0
+  ProgramHeaderCount: 0
+  SectionHeaderEntrySize: 40
+  SectionHeaderCount: 5
+  StringTableSectionIndex: 4
+}
+BuildAttributes {
+}
+
+File: <workspace>/target/armv5te-none-eabi/release/libcrosshair_ui.rlib(crosshair_ui-64d58b87538683c7.crosshair_ui.a8790610c85c379e-cgu.0.rcgu.o)
+Format: elf32-littlearm
+Arch: arm
+AddressSize: 32bit
+LoadName: <Not found>
+ElfHeader {
+  Ident {
+    Magic: (7F 45 4C 46)
+    Class: 32-bit (0x1)
+    DataEncoding: LittleEndian (0x1)
+    FileVersion: 1
+    OS/ABI: SystemV (0x0)
+    ABIVersion: 0
+    Unused: (00 00 00 00 00 00 00)
+  }
+  Type: Relocatable (0x1)
+  Machine: EM_ARM (0x28)
+  Version: 1
+  Entry: 0x0
+  ProgramHeaderOffset: 0x0
+  SectionHeaderOffset: 0x3D84
+  Flags [ (0x5000000)
+    0x1000000
+    0x4000000
+  ]
+  HeaderSize: 52
+  ProgramHeaderEntrySize: 0
+  ProgramHeaderCount: 0
+  SectionHeaderEntrySize: 40
+  SectionHeaderCount: 134
+  StringTableSectionIndex: 1
+}
+BuildAttributes {
+  FormatVersion: 0x41
+  Section 1 {
+    SectionLength: 47
+    Vendor: aeabi
+    Tag: Tag_File (0x1)
+    Size: 37
+    FileAttributes {
+      Attribute {
+        Tag: 67
+        TagName: conformance
+        Value: 2.09
+      }
+      Attribute {
+        Tag: 6
+        Value: 4
+        TagName: CPU_arch
+        Description: ARM v5TE
+      }
+      Attribute {
+        Tag: 8
+        Value: 1
+        TagName: ARM_ISA_use
+        Description: Permitted
+      }
+      Attribute {
+        Tag: 9
+        Value: 1
+        TagName: THUMB_ISA_use
+        Description: Thumb-1
+      }
+      Attribute {
+        Tag: 14
+        Value: 0
+        TagName: ABI_PCS_R9_use
+        Description: v6
+      }
+      Attribute {
+        Tag: 17
+        Value: 1
+        TagName: ABI_PCS_GOT_use
+        Description: Direct
+      }
+      Attribute {
+        Tag: 20
+        Value: 1
+        TagName: ABI_FP_denormal
+        Description: IEEE-754
+      }
+      Attribute {
+        Tag: 21
+        Value: 1
+        TagName: ABI_FP_exceptions
+        Description: IEEE-754
+      }
+      Attribute {
+        Tag: 23
+        Value: 3
+        TagName: ABI_FP_number_model
+        Description: IEEE-754
+      }
+      Attribute {
+        Tag: 24
+        Value: 1
+        TagName: ABI_align_needed
+        Description: 8-byte alignment
+      }
+      Attribute {
+        Tag: 25
+        Value: 1
+        TagName: ABI_align_preserved
+        Description: 8-byte data alignment
+      }
+      Attribute {
+        Tag: 30
+        Value: 3
+        TagName: ABI_optimization_goals
+        Description: Size
+      }
+      Attribute {
+        Tag: 34
+        Value: 0
+        TagName: CPU_unaligned_access
+        Description: Not Permitted
+      }
+      Attribute {
+        Tag: 38
+        Value: 1
+        TagName: ABI_FP_16bit_format
+        Description: IEEE-754
+      }
+    }
+  }
+}
+
+File: <workspace>/target/armv5te-none-eabi/release/libcrosshair_ui.rlib(crosshair_ui-64d58b87538683c7.crosshair_ui.a8790610c85c379e-cgu.1.rcgu.o)
+Format: elf32-littlearm
+Arch: arm
+AddressSize: 32bit
+LoadName: <Not found>
+ElfHeader {
+  Ident {
+    Magic: (7F 45 4C 46)
+    Class: 32-bit (0x1)
+    DataEncoding: LittleEndian (0x1)
+    FileVersion: 1
+    OS/ABI: SystemV (0x0)
+    ABIVersion: 0
+    Unused: (00 00 00 00 00 00 00)
+  }
+  Type: Relocatable (0x1)
+  Machine: EM_ARM (0x28)
+  Version: 1
+  Entry: 0x0
+  ProgramHeaderOffset: 0x0
+  SectionHeaderOffset: 0x45F4
+  Flags [ (0x5000000)
+    0x1000000
+    0x4000000
+  ]
+  HeaderSize: 52
+  ProgramHeaderEntrySize: 0
+  ProgramHeaderCount: 0
+  SectionHeaderEntrySize: 40
+  SectionHeaderCount: 101
+  StringTableSectionIndex: 1
+}
+BuildAttributes {
+  FormatVersion: 0x41
+  Section 1 {
+    SectionLength: 47
+    Vendor: aeabi
+    Tag: Tag_File (0x1)
+    Size: 37
+    FileAttributes {
+      Attribute {
+        Tag: 67
+        TagName: conformance
+        Value: 2.09
+      }
+      Attribute {
+        Tag: 6
+        Value: 4
+        TagName: CPU_arch
+        Description: ARM v5TE
+      }
+      Attribute {
+        Tag: 8
+        Value: 1
+        TagName: ARM_ISA_use
+        Description: Permitted
+      }
+      Attribute {
+        Tag: 9
+        Value: 1
+        TagName: THUMB_ISA_use
+        Description: Thumb-1
+      }
+      Attribute {
+        Tag: 14
+        Value: 0
+        TagName: ABI_PCS_R9_use
+        Description: v6
+      }
+      Attribute {
+        Tag: 17
+        Value: 1
+        TagName: ABI_PCS_GOT_use
+        Description: Direct
+      }
+      Attribute {
+        Tag: 20
+        Value: 1
+        TagName: ABI_FP_denormal
+        Description: IEEE-754
+      }
+      Attribute {
+        Tag: 21
+        Value: 1
+        TagName: ABI_FP_exceptions
+        Description: IEEE-754
+      }
+      Attribute {
+        Tag: 23
+        Value: 3
+        TagName: ABI_FP_number_model
+        Description: IEEE-754
+      }
+      Attribute {
+        Tag: 24
+        Value: 1
+        TagName: ABI_align_needed
+        Description: 8-byte alignment
+      }
+      Attribute {
+        Tag: 25
+        Value: 1
+        TagName: ABI_align_preserved
+        Description: 8-byte data alignment
+      }
+      Attribute {
+        Tag: 30
+        Value: 3
+        TagName: ABI_optimization_goals
+        Description: Size
+      }
+      Attribute {
+        Tag: 34
+        Value: 0
+        TagName: CPU_unaligned_access
+        Description: Not Permitted
+      }
+      Attribute {
+        Tag: 38
+        Value: 1
+        TagName: ABI_FP_16bit_format
+        Description: IEEE-754
+      }
+    }
+  }
+}

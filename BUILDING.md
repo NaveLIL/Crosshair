@@ -1,5 +1,34 @@
 # Сборка Crosshair
 
+## Wave003: E2B и UI0.2
+
+Сохраняются закреплённые nightly-2025-03-01 и QEMU9.1/9.2. Новый overlay собирается в отдельном `local/qemu-e2b`, не изменяя runtime E1/E2A:
+
+```sh
+scripts/bootstrap-qemu-e2b.sh
+scripts/build-e2b.sh
+scripts/build-e2b.sh --negative-test
+scripts/test-e2b.sh
+scripts/test-ui.sh
+# Все принятые регрессии + E2B:
+scripts/test-wave003.sh
+```
+
+Для внешних caches можно задать `QEMU_SYSTEM_ARM`, `QEMU_PXA`, `QEMU_BLUEANGEL`, `QEMU_E2B` абсолютными путями к соответствующим четырём runtime; `RUSTUP_HOME` — к уже подготовленной изолированной Rust installation. На чистом checkout bootstrap-скрипты используют свои проектные каталоги. На этой волне фактически проверен macOS x86_64; WSL2 остаётся основной предлагаемой Windows-средой, без заявления о новом WSL-прогоне.
+
+Сборки E2B находятся в `target/artifacts/e2b/{normal,negative-test}`: ELF, flat RAM image, отдельные64B vectors, `image.json`, ELF attributes/disassembly/size. Запускает ELF только тестовый QEMU harness; это не образ для HaRET. Execution и QTest logs — `target/artifacts/e2b-tests` и `e2b-qtest`. UI PNG240×320, raw565 и37-event input trace — `target/artifacts/ui/ui02apps.png`, `ui02apps.raw565`, `ui02-input-trace.json`. [Протокол с памятью и границами](reports/WAVE_003.md).
+
+Текстовые presentation copies после успешного полного прогона:
+
+```sh
+mkdir -p target/artifacts/wave003
+scripts/test-wave003.sh >target/artifacts/wave003/all-tests.log 2>&1
+python3 tools/collect_wave003_evidence.py
+# При внешнем cache добавить: --qemu-cache /absolute/path/to/qemu-e2b
+```
+
+Collector проверяет статусы, hashes источников UI/образов/эмулятора и сохраняет прежние evidence. Он не запускает тесты и не заменяет завершённый exit0 полного скрипта.
+
 Дополнение E1: собственный PXA reference guest и QTest на Connex/Verdex/Mainstone — [результаты](reports/E1_PXA_REFERENCE.md). Отдельные команды: `scripts/bootstrap-qemu-pxa.sh`, затем `scripts/test-pxa-reference.sh`. QEMU9.1 устанавливается в `local/qemu-pxa` независимо от QEMU9.2. Это тестовая база, не команда для Blue Angel.
 
 Состояние на 16.10.2026: ARM ELF собран на macOS x86_64. Основная рекомендуемая среда для Windows 11 — WSL2/Ubuntu 24.04. В этой сессии доступа к Windows/WSL нет: команды ниже подготовлены, но их исполнение на Windows не подтверждено. XP/VMware остаётся средой обслуживания WM, не инструментальной средой ядра.
