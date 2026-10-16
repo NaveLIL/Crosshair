@@ -6,7 +6,9 @@
 
 **E2A проверен:** собственная `crosshair-blueangel-e2a` на QEMU9.2 с экспериментальным CPU260 proxy выполняет Crosshair, timer IRQ, reset/reboot и MMIO data-abort tests. [Результаты и сравнение с E1](reports/E2A_MINIMAL_BOARD.md), [контракт](docs/E2A_CONTRACT.md). Это ограниченная синтетическая плата; точность PXA263 не заявляется.
 
-UI0.1 — отдельный программный RGB565 primitive renderer для240×320 с кириллицей, dirty rectangles и host pixel tests; аппаратного дисплея пока нет. [Архитектура и проверка](docs/UI_0.1.md).
+**Wave003 / E2B:** GPIO90 с особой семантикой86–89, CP15/MMU alias, маскированный pending и реальные GPIO IRQ проверены QTest/TCG на отдельной экспериментальной плате. **UI0.2:** компоненты, логические события, видимый фокус и прокручиваемый тестовый экран «Приложения» прошли19 host-тестов и20000 детерминированных операций. [Итоговый протокол и RAM](reports/WAVE_003.md), [CPU/GPIO audit](docs/E2B_CPU_GPIO_AUDIT.md), [UI0.2](docs/UI_0.2.md).
+
+Программный RGB565 renderer240×320 с кириллицей и dirty rectangles остаётся независимым от дисплея. UI собран для ARMv5TE; исполнение экрана проверено на host, физического LCD driver пока нет. [Основа UI0.1](docs/UI_0.1.md).
 
 Blue Angel имеет отдельный собираемый HaRET flat-image адаптер; физического запуска и готовых аппаратных драйверов пока нет. QEMU VersatilePB не эмулирует Blue Angel.
 

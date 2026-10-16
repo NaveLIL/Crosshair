@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 //! Bounded software drawing. This crate allocates no framebuffer and touches no MMIO.
 
+pub mod components;
 pub mod font;
 
 pub const MAX_WIDTH: usize = 240;

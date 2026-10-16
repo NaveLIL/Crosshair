@@ -14,6 +14,8 @@ blueangel = ["boot-image"]
 pxa-reference = []
 e2a = ["pxa-reference"]
 e2a-mmio-test = ["e2a"]
+e2b = []
+e2b-negative-test = ["e2b"]
 panic-test = []
 
 [[bin]]
@@ -27,6 +29,13 @@ required-features = ["boot-image"]
 name = "crosshair-pxa-reference"
 path = "src/pxa_reference.rs"
 required-features = ["pxa-reference"]
+test = false
+bench = false
+
+[[bin]]
+name = "crosshair-e2b"
+path = "src/e2b.rs"
+required-features = ["e2b"]
 test = false
 bench = false
 

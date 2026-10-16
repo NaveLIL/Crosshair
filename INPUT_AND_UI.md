@@ -8,4 +8,4 @@
 
 Целевой экран 240×320 требует компактного UI, ясного focus, прямого управления и читаемой кириллицы. Ни GUI, ни аппаратные input drivers в Boot0.1 не реализованы.
 
-UI0.1 добавляет [отдельный software primitive layer](docs/UI_0.1.md):240×320 RGB565, bitmap кириллица, clipped drawing, bounded dirty regions и host framebuffer export. Это проверяемая основа рендеринга; focus routing, stylus calibration, физическая QWERTY и ATI display transport остаются следующими отдельными контрактами.
+UI0.1 добавляет [отдельный software primitive layer](docs/UI_0.1.md):240×320 RGB565, bitmap кириллица, clipped drawing, bounded dirty regions и host framebuffer export. UI0.2 поверх него реализует [компоненты, видимый focus, логические действия и FIFO](docs/UI_0.2.md), выбор/прокрутку тестового каталога «Приложения» и кириллический фильтр. Это host-tested экран и ARM compile-only library. Stylus calibration, физическая QWERTY, повтор/дребезг и ATI display transport остаются отдельными контрактами. GPIO test wires эмулятора не выдаются за контроллер аппаратной клавиатуры.

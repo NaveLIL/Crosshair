@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the GPL E2A host experiment in its own QEMU 9.2 tree.
+# Build a GPL E2A/E2B host experiment in its own QEMU 9.2 tree.
 # Existing baseline source/build trees are never patched in place.
 # Dependencies match bootstrap-qemu.sh; no pixman/display backend is needed.
 set -euo pipefail
@@ -9,8 +9,12 @@ commit=ae35f033b874c627d81d51070187fbf55f0bf1a7
 archive_sha=f859f0bc65e1f533d040bbe8c92bcfecee5af2c921a6687c652fb44d089bd894
 python=${PYTHON:-python3}
 jobs=${CROSSHAIR_QEMU_JOBS:-4}
+variant=${CROSSHAIR_QEMU_MODEL_VARIANT:-e2a}
+case "$variant" in e2a|e2b) ;; *) printf 'Unknown model variant: %s\n' "$variant" >&2; exit 2;; esac
 case "$jobs" in ''|*[!0-9]*|0) printf 'CROSSHAIR_QEMU_JOBS must be positive\n' >&2; exit 2;; esac
-base=${CROSSHAIR_QEMU_BLUEANGEL_DIR:-"$root/local/qemu-blueangel"}
+default_cache="$root/local/qemu-blueangel"
+if [[ "$variant" == e2b ]]; then default_cache="$root/local/qemu-e2b"; fi
+base=${CROSSHAIR_QEMU_BLUEANGEL_DIR:-"$default_cache"}
 baseline=${CROSSHAIR_QEMU_BASELINE_SOURCE:-"$root/local/qemu/qemu-$version"}
 downloads=${CROSSHAIR_QEMU_ARCHIVE_DIR:-"$root/local/downloads"}
 src="$base/qemu-$version"
@@ -50,7 +54,7 @@ if [[ -d "$baseline" ]] && [[ "$src" -ef "$baseline" ]]; then
     printf 'Refusing to mutate the baseline source tree\n' >&2; exit 1
 fi
 free_kib=$(df -Pk "$base" | awk 'NR==2 {print $4}')
-if (( free_kib < 524288 )); then printf 'Need at least 512 MiB free for E2A build\n' >&2; exit 1; fi
+if (( free_kib < 524288 )); then printf 'Need at least 512 MiB free for emulator build\n' >&2; exit 1; fi
 if [[ ! -f "$archive" ]]; then
     curl --fail --location --retry 3 "https://download.qemu.org/qemu-$version.tar.xz" -o "$archive.partial"
     mv "$archive.partial" "$archive"
@@ -85,14 +89,16 @@ if [[ ! -f "$src/configure" ]]; then
 fi
 # Validate the copied baseline's patch targets against the verified archive,
 # then apply an idempotent overlay solely inside the isolated source tree.
-"$python" - "$src" "$overlay" "$archive" <<'PY'
+"$python" - "$src" "$overlay" "$archive" "$variant" <<'PY'
 from pathlib import Path
 import sys, tarfile
-src, overlay, archive = map(Path, sys.argv[1:])
+src, overlay, archive = map(Path, sys.argv[1:4])
+variant = sys.argv[4]
+symbol = 'CROSSHAIR_BLUEANGEL_' + variant.upper()
 if (src / 'VERSION').read_text().strip() != '9.2.0':
     raise SystemExit('Unexpected QEMU source version')
-kconfig = '\nconfig CROSSHAIR_BLUEANGEL_E2A\n    bool\n    depends on TCG && ARM\n    select SERIAL\n'
-meson = "\narm_ss.add(when: 'CONFIG_CROSSHAIR_BLUEANGEL_E2A', if_true: files('crosshair-blueangel-e2a.c'))\n"
+kconfig = f'\nconfig {symbol}\n    bool\n    depends on TCG && ARM\n    select SERIAL\n'
+meson = f"\narm_ss.add(when: 'CONFIG_{symbol}', if_true: files('crosshair-blueangel-{variant}.c'))\n"
 with tarfile.open(archive) as source:
     for relative, addition in [('hw/arm/Kconfig', kconfig), ('hw/arm/meson.build', meson)]:
         original = source.extractfile('qemu-9.2.0/' + relative).read().decode()
@@ -102,12 +108,13 @@ with tarfile.open(archive) as source:
             raise SystemExit(f'Unexpected pre-existing source changes: {relative}')
         if current != original + addition:
             path.write_text(original + addition)
-target = src / 'hw/arm/crosshair-blueangel-e2a.c'
-payload = (overlay / target.name).read_bytes()
-if not target.exists() or target.read_bytes() != payload:
-    target.write_bytes(payload)
-config = src / 'configs/devices/arm-softmmu/crosshair-blueangel-e2a.mak'
-payload = b'CONFIG_CROSSHAIR_BLUEANGEL_E2A=y\nCONFIG_GENERIC_LOADER=y\n'
+for name in (['e2a'] if variant == 'e2a' else ['e2a', 'e2b']):
+    target = src / f'hw/arm/crosshair-blueangel-{name}.c'
+    payload = (overlay / target.name).read_bytes()
+    if not target.exists() or target.read_bytes() != payload:
+        target.write_bytes(payload)
+config = src / f'configs/devices/arm-softmmu/crosshair-blueangel-{variant}.mak'
+payload = f'CONFIG_{symbol}=y\nCONFIG_GENERIC_LOADER=y\n'.encode()
 if not config.exists() or config.read_bytes() != payload:
     config.write_bytes(payload)
 PY
@@ -148,7 +155,7 @@ fi
     cd "$build"
     export PATH="$venv/bin:$PATH"
     "$src/configure" --target-list=arm-softmmu --without-default-features \
-        --without-default-devices --with-devices-arm=crosshair-blueangel-e2a \
+        --without-default-devices --with-devices-arm="crosshair-blueangel-$variant" \
         --enable-system --enable-tcg --enable-fdt=internal --disable-pixman \
         --disable-werror --disable-docs --disable-tools --disable-guest-agent --disable-rust \
         --disable-debug-info --audio-drv-list= --prefix="$base/install" \
@@ -171,7 +178,7 @@ ln -sfn ../build/qemu-system-arm "$base/bin/qemu-system-arm"
 "$base/bin/qemu-system-arm" -machine help > "$evidence/machines.txt"
 "$base/bin/qemu-system-arm" -cpu help > "$evidence/cpus.txt"
 "$base/bin/qemu-system-arm" -device loader,help > "$evidence/loader.txt"
-grep -Eq '^crosshair-blueangel-e2a[[:space:]]' "$evidence/machines.txt"
+grep -Eq "^crosshair-blueangel-$variant[[:space:]]" "$evidence/machines.txt"
 cp "$build/arm-softmmu-config-devices.mak" "$evidence/resolved-devices.mak"
 {
     uname -a
@@ -186,17 +193,21 @@ PY
     "$pkg_config" --version
     "$pkg_config" --modversion glib-2.0
 } > "$evidence/host-tools.txt"
-"$python" - "$evidence/source.json" "$base/bin/qemu-system-arm" "$overlay/crosshair-blueangel-e2a.c" "$archive_sha" "$commit" <<'PY'
+"$python" - "$evidence/source.json" "$base/bin/qemu-system-arm" "$overlay/crosshair-blueangel-$variant.c" "$archive_sha" "$commit" "$variant" <<'PY'
 import hashlib, json
 from pathlib import Path
 import sys
-output, binary, overlay, archive_sha, commit = sys.argv[1:]
-Path(output).write_text(json.dumps({
+output, binary, overlay, archive_sha, commit, variant = sys.argv[1:]
+result = {
     'upstream_version': '9.2.0', 'upstream_commit': commit,
     'upstream_archive_sha256': archive_sha,
     'overlay_sha256': hashlib.sha256(Path(overlay).read_bytes()).hexdigest(),
     'qemu_sha256': hashlib.sha256(Path(binary).read_bytes()).hexdigest(),
     'host_license': 'GPL-2.0-only; see crosshair-emulator/qemu/COPYING.GPL-2.0',
-}, indent=2) + '\n')
+}
+if variant == 'e2b':
+    result['included_e2a_sha256'] = hashlib.sha256(Path(overlay).with_name('crosshair-blueangel-e2a.c').read_bytes()).hexdigest()
+    result['machine'] = 'crosshair-blueangel-e2b'
+Path(output).write_text(json.dumps(result, indent=2) + '\n')
 PY
-printf 'E2A emulator ready: %s\n' "$base/bin/qemu-system-arm"
+printf '%s emulator ready: %s\n' "$variant" "$base/bin/qemu-system-arm"

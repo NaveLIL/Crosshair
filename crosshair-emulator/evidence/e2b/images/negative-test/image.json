@@ -1,0 +1,61 @@
+{
+  "entry": 2684387328,
+  "flags": 83886592,
+  "segments": [
+    {
+      "pa": 0,
+      "filesz": 64,
+      "memsz": 64,
+      "flags": 5
+    },
+    {
+      "pa": 2684387328,
+      "filesz": 1983,
+      "memsz": 1983,
+      "flags": 5
+    },
+    {
+      "pa": 2684403712,
+      "filesz": 0,
+      "memsz": 53248,
+      "flags": 6
+    }
+  ],
+  "symbols": {
+    "CROSSHAIR_E2B_RECORD": 2684403712,
+    "E2B_L1": 2684420096,
+    "_ZN13crosshair_e2b14negative_probe17h86a4d7e3c18a914aE": 2684388696,
+    "_ZN13crosshair_e2b4arch4idle17h1331722d5cf77dacE": 2684387472,
+    "_ZN13crosshair_e2b8pxa_uart13ReferenceUart4init17hd1399e2865e52b12E": 2684387476,
+    "_ZN13crosshair_e2b8pxa_uart13ReferenceUart4send17h79eb1b504f476e12E": 2684387532,
+    "_ZN13crosshair_e2b9cpu_probe17h670b5e0246a447b2E": 2684387608,
+    "_ZN4core9panicking5panic17hac0b3160507ed839E": 2684389180,
+    "_ZN4core9panicking9panic_fmt17h94659d61375b856eE": 2684389176,
+    "_ZN83_$LT$$RF$mut$u20$I$u20$as$u20$core..iter..traits..exact_size..ExactSizeIterator$GT$3len17h6fc1747e9f68a475E": 2684389184,
+    "__bss_end": 2684436480,
+    "__bss_start": 2684403712,
+    "__image_end": 2684456960,
+    "__irq_stack_bottom": 2684452864,
+    "__irq_stack_top": 2684456960,
+    "__stack_bottom": 2684436480,
+    "__stack_top": 2684452864,
+    "_start": 2684387328,
+    "e2b_data_abort": 2684387428,
+    "e2b_fault": 2684387440,
+    "e2b_irq": 2684387396,
+    "e2b_other": 2684387436,
+    "e2b_prefetch": 2684387420,
+    "e2b_undefined": 2684387412,
+    "e2b_vectors": 0,
+    "kernel_idle": 2684387468,
+    "rust_begin_unwind": 2684389104,
+    "rust_fault": 2684388836,
+    "rust_irq": 2684388524,
+    "rust_main": 2684388424
+  },
+  "sha256": {
+    "crosshair-e2b.elf": "d2cd89ed39640c8b9383ef4b19d10e3fa347542619fb8d89a62502eb3cbfe429",
+    "crosshair-e2b.bin": "ccfb5a6778d078dad9353049719c5abe73ae9eb4c273ff01cc0e4e5391e62451",
+    "vectors.bin": "3f66cb201cfc1ae18c5273aebdb0223d6ff962a99eccc1732df91f363e7aa379"
+  }
+}

@@ -4,14 +4,17 @@ fn main() {
     let versatile = env::var_os("CARGO_FEATURE_VERSATILEPB").is_some();
     let blueangel = env::var_os("CARGO_FEATURE_BLUEANGEL").is_some();
     let pxa = env::var_os("CARGO_FEATURE_PXA_REFERENCE").is_some();
+    let e2b = env::var_os("CARGO_FEATURE_E2B").is_some();
     assert!(
-        usize::from(versatile) + usize::from(blueangel) + usize::from(pxa) == 1,
+        usize::from(versatile) + usize::from(blueangel) + usize::from(pxa) + usize::from(e2b) == 1,
         "select exactly one BSP"
     );
     let board = if versatile {
         "versatilepb"
     } else if blueangel {
         "blueangel"
+    } else if e2b {
+        "e2b"
     } else {
         "pxa-reference"
     };

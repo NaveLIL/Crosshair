@@ -1,0 +1,66 @@
+{
+  "result": "PASS",
+  "host_tests": 19,
+  "armv5te_library_compiled": true,
+  "hardware_display_tested": false,
+  "framebuffer_bytes": 153600,
+  "dirty_capacity": 8,
+  "font_glyphs": 163,
+  "font_bitmap_bytes": 2119,
+  "arm_code_objects_verified": 2,
+  "font_regeneration_checked": true,
+  "ui02_scenario_events": 37,
+  "property_test_operations": 20000,
+  "memory_layout": {
+    "host": {
+      "surface": 112,
+      "apps_state": 76,
+      "apps_align": 4,
+      "input_queue": 36,
+      "event": 4,
+      "area": 12,
+      "char": 4,
+      "usize": 8,
+      "state_plus_queue_delta_ui01": 112,
+      "framebuffer": 153600
+    },
+    "armv5te": {
+      "surface": 88,
+      "apps_state": 76,
+      "apps_align": 4,
+      "input_queue": 36,
+      "event": 4,
+      "area": 12,
+      "char": 4,
+      "usize": 4,
+      "state_plus_queue_delta_ui01": 112,
+      "framebuffer": 153600
+    }
+  },
+  "source_sha256": {
+    "ui/Cargo.lock": "1412a87398f47182177bd439393f3a6492770c1d4aa5655c52d10e6dd7e5bcb4",
+    "ui/Cargo.toml": "afe59d3cfd9276976f83c42a402755de78dfda148db4fb5efa03537b1458cd40",
+    "ui/examples/apps.rs": "a2f0c17d9d478b271ed7addf02ea6784f489d6d92228282bb1ee6bbb98c661aa",
+    "ui/examples/primitives.rs": "998ce9abd6c560572b40bb5737d1c86d5f0c191632d6d8b771298800af0c41de",
+    "ui/src/components.rs": "ae84e82042fccb388fe10d62e20174eb9762f9574317863a562d73412076bee0",
+    "ui/src/font.rs": "3f1fe3ff9efce3663c9b4736d1eafa59b10af776307624fceb35b2b34ea2e67e",
+    "ui/src/lib.rs": "7a8d1b789f19fa94af2696a37c8b047eb881c15ae5badc13aa8c2c5cb8c99d8f",
+    "ui/tests/components.rs": "77a44982851411e6c0a42f777365fc07f2067651fbc8a5188657050ab879a634",
+    "ui/tests/surface.rs": "73e2251a7de3dc37e47f44ba95d16a2de9fca460e2ed436847a8989b232fc37e",
+    "ui/third_party/cozette/LICENSE": "5d7f0dad37ceef2dc1e9c23e85fbf18629c4eaffe9a919fa4f5b618b46766d23",
+    "ui/third_party/cozette/PROVENANCE.json": "5468337a1061c8d5f7f0a3cccaf6890ba21c35bed82ab5dc23c71b35a7a6b99e",
+    "ui/tools/layout_probe.rs": "5d029727c29fc3bfa9bd0a2ecb20829faa0b66585e634707dd82308c9c6ca4ce",
+    "ui/tools/subset_font.py": "ef250575266ec2e16d7ac7e8ac38913385ec46aac2abdffa25decc9e008dcbff",
+    "scripts/test-ui.sh": "a496a2f1cd2f1b2cd1588163f5d059af4c119d7dea087ca0cb2c1185af426ed3",
+    "tools/framebuffer_png.py": "388219eee196bd78568939b4cbe05d99ac0114e8a808e8617aaafef55d98c37b"
+  },
+  "artifacts_sha256": {
+    "primitives.raw565": "631374c7c1b3a946e96807d38e4f5934ca48f3be07f22530f52dace5a27d278a",
+    "primitives.png": "cc3a69ef0153137847354369347612fb1810f78679eadc1bbd5c28aff32f3880",
+    "ui02apps.raw565": "ca60a99c0efdc0050b05fed1c01ebfd7da81212b7bd523f02c725ee227e7d77d",
+    "ui02apps.png": "766036a8f703939975fcef58b20e67cc3c4c0d82c0a21a1986b35aea22c877ae",
+    "ui02-input-trace.json": "4eda390806a0b35041730f7448c8bd1ef8dae282ced8a90c616179b40638e2c5",
+    "memory-layout.json": "add1e950c89e6af59f86ceb97a43cc2d05343b2f8bf29a6fd4e795e326db1f97",
+    "arm-lib-report.txt": "c50f8f8dc29e541761c1f05a709f81114f430733f06f3229af3fb36526e3523d"
+  }
+}

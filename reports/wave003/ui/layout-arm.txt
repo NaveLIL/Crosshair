@@ -1,0 +1,165 @@
+
+File: <workspace>/target/artifacts/ui/layout-arm.o
+Format: elf32-littlearm
+Arch: arm
+AddressSize: 32bit
+LoadName: <Not found>
+Sections [
+  Section {
+    Index: 0
+    Name:  (0)
+    Type: SHT_NULL (0x0)
+    Flags [ (0x0)
+    ]
+    Address: 0x0
+    Offset: 0x0
+    Size: 0
+    Link: 0
+    Info: 0
+    AddressAlignment: 0
+    EntrySize: 0
+    SectionData (
+    )
+  }
+  Section {
+    Index: 1
+    Name: .strtab (48)
+    Type: SHT_STRTAB (0x3)
+    Flags [ (0x0)
+    ]
+    Address: 0x0
+    Offset: 0xEC
+    Size: 167
+    Link: 0
+    Info: 0
+    AddressAlignment: 1
+    EntrySize: 0
+    SectionData (
+      0000: 002E7465 7874002E 636F6D6D 656E7400  |..text..comment.|
+      0010: 2E41524D 2E617474 72696275 74657300  |.ARM.attributes.|
+      0020: 2E6E6F74 652E474E 552D7374 61636B00  |.note.GNU-stack.|
+      0030: 2E737472 74616200 2E73796D 74616200  |.strtab..symtab.|
+      0040: 2E726F64 6174612E 5F5A4E31 326C6179  |.rodata._ZN12lay|
+      0050: 6F75745F 70726F62 65313943 524F5353  |out_probe19CROSS|
+      0060: 48414952 5F55495F 4C41594F 55543137  |HAIR_UI_LAYOUT17|
+      0070: 68383137 64656337 62323462 35343461  |h817dec7b24b544a|
+      0080: 3345006C 61796F75 745F7072 6F62652E  |3E.layout_probe.|
+      0090: 38326362 63366165 30616661 32396161  |82cbc6ae0afa29aa|
+      00A0: 2D636775 2E3000                      |-cgu.0.|
+    )
+  }
+  Section {
+    Index: 2
+    Name: .text (1)
+    Type: SHT_PROGBITS (0x1)
+    Flags [ (0x6)
+      SHF_ALLOC (0x2)
+      SHF_EXECINSTR (0x4)
+    ]
+    Address: 0x0
+    Offset: 0x34
+    Size: 0
+    Link: 0
+    Info: 0
+    AddressAlignment: 4
+    EntrySize: 0
+    SectionData (
+    )
+  }
+  Section {
+    Index: 3
+    Name: .rodata._ZN12layout_probe19CROSSHAIR_UI_LAYOUT17h817dec7b24b544a3E (64)
+    Type: SHT_PROGBITS (0x1)
+    Flags [ (0x2)
+      SHF_ALLOC (0x2)
+    ]
+    Address: 0x0
+    Offset: 0x34
+    Size: 36
+    Link: 0
+    Info: 0
+    AddressAlignment: 4
+    EntrySize: 0
+    SectionData (
+      0000: 32304955 58000000 4C000000 04000000  |20IUX...L.......|
+      0010: 24000000 04000000 0C000000 04000000  |$...............|
+      0020: 04000000                             |....|
+    )
+  }
+  Section {
+    Index: 4
+    Name: .comment (7)
+    Type: SHT_PROGBITS (0x1)
+    Flags [ (0x30)
+      SHF_MERGE (0x10)
+      SHF_STRINGS (0x20)
+    ]
+    Address: 0x0
+    Offset: 0x58
+    Size: 53
+    Link: 0
+    Info: 0
+    AddressAlignment: 1
+    EntrySize: 1
+    SectionData (
+      0000: 00727573 74632076 65727369 6F6E2031  |.rustc version 1|
+      0010: 2E38372E 302D6E69 6768746C 79202832  |.87.0-nightly (2|
+      0020: 38373438 37363234 20323032 352D3032  |87487624 2025-02|
+      0030: 2D323829 00                          |-28).|
+    )
+  }
+  Section {
+    Index: 5
+    Name: .note.GNU-stack (32)
+    Type: SHT_PROGBITS (0x1)
+    Flags [ (0x0)
+    ]
+    Address: 0x0
+    Offset: 0x8D
+    Size: 0
+    Link: 0
+    Info: 0
+    AddressAlignment: 1
+    EntrySize: 0
+    SectionData (
+    )
+  }
+  Section {
+    Index: 6
+    Name: .ARM.attributes (16)
+    Type: SHT_ARM_ATTRIBUTES (0x70000003)
+    Flags [ (0x0)
+    ]
+    Address: 0x0
+    Offset: 0x8D
+    Size: 46
+    Link: 0
+    Info: 0
+    AddressAlignment: 1
+    EntrySize: 0
+    SectionData (
+      0000: 412D0000 00616561 62690001 23000000  |A-...aeabi..#...|
+      0010: 43322E30 39000604 08010901 0E001101  |C2.09...........|
+      0020: 14021500 17031801 19012200 2601      |..........".&.|
+    )
+  }
+  Section {
+    Index: 7
+    Name: .symtab (56)
+    Type: SHT_SYMTAB (0x2)
+    Flags [ (0x0)
+    ]
+    Address: 0x0
+    Offset: 0xBC
+    Size: 48
+    Link: 1
+    Info: 2
+    AddressAlignment: 4
+    EntrySize: 16
+    SectionData (
+      0000: 00000000 00000000 00000000 00000000  |................|
+      0010: 83000000 00000000 00000000 0400F1FF  |................|
+      0020: 48000000 00000000 24000000 11000300  |H.......$.......|
+    )
+  }
+]

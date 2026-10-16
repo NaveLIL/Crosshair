@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+   2047	      0	  53248	  55295	   d7ff	<workspace>/target/artifacts/e2b/negative-test/crosshair-e2b.elf

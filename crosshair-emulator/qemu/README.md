@@ -62,3 +62,73 @@ Unsupported offsets, disallowed widths, unaligned accesses and writes to read-on
 Provenance: the timer/PIC register layout and interrupt-update structure were adapted from QEMU 9.1.0 [pxa2xx_timer.c](https://gitlab.com/qemu-project/qemu/-/blob/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/timer/pxa2xx_timer.c) and [pxa2xx_pic.c](https://gitlab.com/qemu-project/qemu/-/blob/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/arm/pxa2xx_pic.c). Their 2006 Openedhand/Thorsten Zitterell attribution and original PIC author credit are retained in the C header. Reset, strict attrs errors, scheduling, small board integration and UART wrapper are new E2A work. The underlying generic serial implementation remains upstream QEMU code under its original terms. No PXA GPL implementation was copied into the MIT guest.
 
 Build evidence is written under the selected cache's `evidence/`: upstream tag, source/binary/overlay hashes, host tools, selected devices, machines, CPU list and generic-loader help. Guest and QTest execution reports are produced by the separate E2A harness; successful compilation alone is not described as execution or hardware validation.
+
+## Separate E2B GPIO experiment
+
+`scripts/bootstrap-qemu-e2b.sh` builds **`crosshair-blueangel-e2b`** in its own
+`local/qemu-e2b` cache (`CROSSHAIR_QEMU_E2B_DIR` overrides it). It reuses the
+pinned 9.2 source/dependencies/bootstrap above, leaving the E2A and reference
+caches untouched. The new translation unit includes the unchanged E2A C file;
+only the E2B unit is compiled, registering both machines without duplicate QOM
+types. E2B accepts only the experimental `pxa260` CPU proxy. Its RAM, low vectors,
+timer, PIC and diagnostic UART retain the E2A contract.
+
+The new GPL GPIO implementation follows the documented PXA26x subset in
+[the primary-source audit](../../docs/E2B_CPU_GPIO_AUDIT.md). This adds no ASIC3,
+keyboard matrix, peripheral mux driver, pull/voltage, contention, sleep or wake
+model. At PA **`0x40e00000`**, a 4 KiB MMIO aperture implements only the following
+aligned 32-bit accesses. Unknown offsets, wrong widths/alignment and accesses
+in the wrong direction return `MEMTX_ERROR`; rejected wide writes are not split
+into smaller successful mutations.
+
+| Register | Bank0 / 1 / 2 offsets | Contract |
+|---|---|---|
+| GPLR | `00 / 04 / 08` | RO pin sample |
+| GPDR | `0c / 10 / 14` | RW direction |
+| GPSR | `18 / 1c / 20` | WO output latch W1S, including preload while input |
+| GPCR | `24 / 28 / 2c` | WO output latch W1C |
+| GRER | `30 / 34 / 38` | RW rising-edge enable |
+| GFER | `3c / 40 / 44` | RW falling-edge enable |
+| GEDR | `48 / 4c / 50` | R/W1C sticky edge status |
+| GAFR | `54,58 / 5c,60 / 64,68` | RW two-bit alternate function per pin |
+
+Bank masks are `ffffffff / ffffffff / 03ffffff`; the final GAFR word mask is
+`000fffff`. Pins **0..85** use AF0 for GPIO, GPDR0=input/1=output. Pins **86..89**
+use **AF1** for GPIO and **inverted GPDR**: 0=output/1=input. All four AF encodings
+are stored, but only that GPIO selection drives the GPIO output adapter.
+
+Stable QOM path **`/machine/gpio`** exposes 90 `unnamed-gpio-in` test wires,
+90 output lines in group **`gpio-out`** and 90 output-enable lines in
+**`gpio-oe`**. GPIO output is valid only with OE=1; disconnected outputs signal
+out=0/OE=0. GPIO-mode output GPLR samples the latch. Input and unmodeled AF GPLR
+sample the external test wire; this is a deterministic adapter choice, not a
+claim about an unmodeled dedicated driver. Default external levels are zero.
+
+```text
+set_irq_in /machine/gpio unnamed-gpio-in 89 1
+irq_intercept_out /machine/gpio gpio-out
+```
+
+QTest can intercept only one output group per session; the test uses fresh
+processes for `gpio-out`, `gpio-oe` and `/machine/e2a sysbus-irq`. The three GPIO
+SysBus IRQ outputs connect to PIC8 (pin0), PIC9 (pin1), PIC10 (OR pins2..89).
+Interrupts remain latched across PIC mask/route and edge-enable changes until
+the corresponding GEDR W1C. An edge is an external transition while in GPIO
+mode and effective input direction, with GRER/GFER enabled. This AF/input gate
+is an explicitly documented interpretation of the limited model; GPDR/GAFR
+reconfiguration and output writes do not synthesize edges.
+
+**E2B reset:** all direction/AF/edge/status registers and the output latch clear
+to zero, GPIO IRQ outputs deassert, GPIO output drivers disconnect. External
+adapter wire levels persist across warm reset. Latch0 and external-wire
+retention are synthetic choices, not electrical reset guarantees. With reset
+AF0, pins86..89 are dedicated outputs in the hardware definition; their
+dedicated drivers and actual levels are unmodeled here. Migration remains
+unsupported.
+
+`python3 tools/qtest_e2b.py --qemu /absolute/path/to/qemu-e2b/bin/qemu-system-arm`
+exercises all 90 pins' directions, AF encodings, preload, edges/W1C, PIC routing,
+actual IRQ/FIQ/output/OE transitions, reset and invalid-access side effects.
+It writes JSON and protocol logs under `target/artifacts/e2b-qtest`. QTest does
+not expose `MemTxResult`; its invalid-access assertions concern diagnostics
+and state preservation, while actual CPU exceptions require the TCG harness.
