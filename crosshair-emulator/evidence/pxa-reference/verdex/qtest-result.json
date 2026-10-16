@@ -1,0 +1,124 @@
+{
+  "result": "PASS_WITH_RECORDED_MODEL_LIMITATIONS",
+  "machine": "verdex",
+  "sources": {
+    "board_wiring": "https://gitlab.com/qemu-project/qemu/-/blob/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/arm/pxa2xx.c",
+    "timer": "https://gitlab.com/qemu-project/qemu/-/blob/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/timer/pxa2xx_timer.c",
+    "pic": "https://gitlab.com/qemu-project/qemu/-/blob/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/arm/pxa2xx_pic.c",
+    "uart": "https://gitlab.com/qemu-project/qemu/-/blob/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/char/serial.c",
+    "qtest_accelerator": "https://gitlab.com/qemu-project/qemu/-/blob/fd1952d814da738ed107e05583b3e02ac11e88ff/accel/qtest/qtest.c",
+    "dummy_cpu_thread": "https://gitlab.com/qemu-project/qemu/-/blob/fd1952d814da738ed107e05583b3e02ac11e88ff/accel/dummy-cpus.c"
+  },
+  "scope": "QEMU 9.1 PXA register models only; no guest instructions or OEM firmware; not Blue Angel hardware",
+  "qemu_sha256": "337979ae970778beee07d1e41ae2f4d83124ac5d4c118452cf578126277fcab3",
+  "command": [
+    "<workspace>/local/qemu-pxa/bin/qemu-system-arm",
+    "-machine",
+    "verdex",
+    "-accel",
+    "qtest",
+    "-S",
+    "-display",
+    "none",
+    "-monitor",
+    "none",
+    "-serial",
+    "file:<workspace>/target/artifacts/pxa-qtest/verdex/qemu-uart.log",
+    "-nic",
+    "none",
+    "-qmp",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest-log",
+    "<workspace>/target/artifacts/pxa-qtest/verdex/qemu-qtest.log"
+  ],
+  "qemu_version": "QEMU emulator version 9.1.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "prelaunch_run_status": {
+    "status": "prelaunch",
+    "running": false
+  },
+  "initial_run_status": {
+    "status": "running",
+    "running": true
+  },
+  "uart": {
+    "result": "PASS",
+    "base": 1074790400,
+    "register_shift": 2,
+    "transmitted_hex": "51"
+  },
+  "frequency": {
+    "result": "PASS",
+    "virtual_interval_ns": 1000000000,
+    "expected_hz": 3250000,
+    "observed_ticks": 3250000
+  },
+  "timer_and_pic": {
+    "result": "PASS",
+    "timer0_pic_bit": 26,
+    "properties": [
+      "OIER match gating",
+      "raw pending versus ICMR",
+      "ICLR IRQ/FIQ routing",
+      "OSSR W1C"
+    ],
+    "model_specific_observations": [
+      "A match while OIER is disabled does not set OSSR; enabling OIER later does not recreate it.",
+      "Disabling OIER after a match does not clear OSSR or lower its already asserted IRQ; W1C does."
+    ]
+  },
+  "w1c_isolation": {
+    "result": "PASS",
+    "timer_channels": [
+      0,
+      1
+    ],
+    "pic_bits": [
+      26,
+      27
+    ]
+  },
+  "counter_rollover": {
+    "result": "PASS",
+    "initial_counter": 4294967280,
+    "match": 16,
+    "virtual_interval_ns": 1000000000,
+    "expected_counter": 3249984,
+    "observed_counter": 3249984
+  },
+  "cpu_registers_before": "\r\nCPU#0\r\nR00=00000000 R01=00000000 R02=00000000 R03=00000000\r\nR04=00000000 R05=00000000 R06=00000000 R07=00000000\r\nR08=00000000 R09=00000000 R10=00000000 R11=00000000\r\nR12=00000000 R13=00000000 R14=00000000 R15=00000000\r\nPSR=400001d3 -Z-- A svc32\r\nFPSCR: 00000000\r\n",
+  "cpu_registers_after": "\r\nCPU#0\r\nR00=00000000 R01=00000000 R02=00000000 R03=00000000\r\nR04=00000000 R05=00000000 R06=00000000 R07=00000000\r\nR08=00000000 R09=00000000 R10=00000000 R11=00000000\r\nR12=00000000 R13=00000000 R14=00000000 R15=00000000\r\nPSR=400001d3 -Z-- A svc32\r\nFPSCR: 00000000\r\n",
+  "reset_observation": {
+    "status": "LIMITATION_TIMER_STATE_PERSISTS",
+    "before": {
+      "OSMR0": 4660,
+      "OSCR": 4661,
+      "OIER": 1,
+      "OSSR": 1,
+      "ICMR": 67108864,
+      "ICLR": 67108864,
+      "ICPR": 67108864
+    },
+    "after": {
+      "OSMR0": 4660,
+      "OSCR": 4661,
+      "OIER": 1,
+      "OSSR": 1,
+      "ICMR": 0,
+      "ICLR": 0,
+      "ICPR": 0
+    },
+    "retained_timer_registers": [
+      "OSMR0",
+      "OSCR",
+      "OIER",
+      "OSSR"
+    ],
+    "explanation": "QEMU 9.1 pxa2xx-timer has init/realize but no reset callback. PIC resets separately; this is not evidence of correct PXA silicon reset."
+  },
+  "final_run_status": {
+    "status": "running",
+    "running": true
+  }
+}

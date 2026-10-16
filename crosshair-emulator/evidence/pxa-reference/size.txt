@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+   1211	      0	  20528	  21739	   54eb	<workspace>/target/artifacts/pxa-reference/crosshair-pxa-reference.elf

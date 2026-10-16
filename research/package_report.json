@@ -1,0 +1,58 @@
+{
+  "source_name": "Imate_PDA2k_WWE_12200_162_10600_SHIP.exe",
+  "size": 27439520,
+  "md5": "e75252819ff60d383be59230c3eb75a9",
+  "sha256": "ac59e03898d559d50a5f16c58c7ed0f7596a89138dd72a769f6fe5eb627e46c3",
+  "cab_offset": "0x4855d",
+  "cab_size": 27143235,
+  "nbf_headers": [
+    {
+      "name": "nk.nbf",
+      "outer_xor_key": "0x20040521",
+      "device": "PH20B",
+      "vendor": "CDL__001",
+      "language": "WWE",
+      "version": "1.22.00",
+      "platform": "BlueAngel",
+      "note": "Outer XOR decoded. No embedded NBF checksum verification or full payload interpretation.",
+      "decoded": {
+        "size": 33554560,
+        "md5": "19e96d5c97224e47eddff29c6eaeafec",
+        "sha256": "e77108b47d0e284531fb18a811dd477014f0e645bdbaca28d6e1e3e404f32450"
+      }
+    },
+    {
+      "name": "ms_.nbf",
+      "outer_xor_key": "0x20040522",
+      "device": "PH20B",
+      "vendor": "CDL__001",
+      "language": "WWE",
+      "version": "1.22.162",
+      "platform": "BlueAngel",
+      "note": "Outer XOR decoded. No embedded NBF checksum verification or full payload interpretation.",
+      "decoded": {
+        "size": 17236096,
+        "md5": "3fb6129e996d63d4f2c7ff934591abef",
+        "sha256": "de873e333d6feac639a1104b5bf3d4edbac244defadaf3c99a63a6636f755328"
+      }
+    },
+    {
+      "name": "radio_.nbf",
+      "outer_xor_key": "0x20040523",
+      "device": "PH20B",
+      "vendor": "CDL__001",
+      "language": "WWE",
+      "version": "1.06.00",
+      "platform": "BlueAngel",
+      "note": "Outer XOR decoded. No embedded NBF checksum verification or full payload interpretation.",
+      "decoded": {
+        "size": 4194432,
+        "md5": "fd0a1c5a35dc495e94d1ce985b13db01",
+        "sha256": "65877a55b974a535fee1705ccfd1ece730fbd145096d6aaf489e3019218a489c"
+      }
+    }
+  ],
+  "source_unchanged": true,
+  "executed_firmware_code": false,
+  "device_access": false
+}

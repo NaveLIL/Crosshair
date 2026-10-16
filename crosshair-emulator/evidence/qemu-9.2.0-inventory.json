@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-16",
+  "status": "locally executed; no guest image or physical device",
+  "commands": {
+    "version": {
+      "argv": [
+        "local/qemu/bin/qemu-system-arm",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "9bb65d1ad0a1744c5ece1d7ebff5c646c55bf5816197c9de8107ca8bdcd24162",
+      "stderr": "",
+      "stdout": "QEMU emulator version 9.2.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n"
+    },
+    "machines": {
+      "argv": [
+        "local/qemu/bin/qemu-system-arm",
+        "-machine",
+        "help"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "f7d45dbb6be3e8d7dac65d2bba2a4099f9690215bb24d3264b7725721ceca56d",
+      "stderr": "",
+      "stdout": "Supported machines are:\nast1030-evb          Aspeed AST1030 MiniBMC (Cortex-M4)\nast2500-evb          Aspeed AST2500 EVB (ARM1176)\nast2600-evb          Aspeed AST2600 EVB (Cortex-A7)\nb-l475e-iot01a       B-L475E-IOT01A Discovery Kit (Cortex-M4)\nbletchley-bmc        Facebook Bletchley BMC (Cortex-A7)\nbpim2u               Bananapi M2U (Cortex-A7)\ncanon-a1100          Canon PowerShot A1100 IS (ARM946)\ncollie               Sharp SL-5500 (Collie) PDA (SA-1110)\ncubieboard           cubietech cubieboard (Cortex-A8)\nemcraft-sf2          SmartFusion2 SOM kit from Emcraft (M2S010)\nfby35-bmc            Facebook fby35 BMC (Cortex-A7)\nfby35                Meta Platforms fby35\nfp5280g2-bmc         Inspur FP5280G2 BMC (ARM1176)\nfuji-bmc             Facebook Fuji BMC (Cortex-A7)\ng220a-bmc            Bytedance G220A BMC (ARM1176)\nhighbank             Calxeda Highbank (ECX-1000)\nimx25-pdk            ARM i.MX25 PDK board (ARM926)\nintegratorcp         ARM Integrator/CP (ARM926EJ-S)\nkudo-bmc             Kudo BMC (Cortex-A9)\nkzm                  ARM KZM Emulation Baseboard (ARM1136)\nlm3s6965evb          Stellaris LM3S6965EVB (Cortex-M3)\nlm3s811evb           Stellaris LM3S811EVB (Cortex-M3)\nmcimx6ul-evk         Freescale i.MX6UL Evaluation Kit (Cortex-A7)\nmcimx7d-sabre        Freescale i.MX7 DUAL SABRE (Cortex-A7)\nmicrobit             BBC micro:bit (Cortex-M0)\nmidway               Calxeda Midway (ECX-2000)\nmori-bmc             Mori BMC (Cortex-A9)\nmps2-an385           ARM MPS2 with AN385 FPGA image for Cortex-M3\nmps2-an386           ARM MPS2 with AN386 FPGA image for Cortex-M4\nmps2-an500           ARM MPS2 with AN500 FPGA image for Cortex-M7\nmps2-an505           ARM MPS2 with AN505 FPGA image for Cortex-M33\nmps2-an511           ARM MPS2 with AN511 DesignStart FPGA image for Cortex-M3\nmps2-an521           ARM MPS2 with AN521 FPGA image for dual Cortex-M33\nmps3-an524           ARM MPS3 with AN524 FPGA image for dual Cortex-M33\nmps3-an536           ARM MPS3 with AN536 FPGA image for Cortex-R52\nmps3-an547           ARM MPS3 with AN547 FPGA image for Cortex-M55\nmusca-a              ARM Musca-A board (dual Cortex-M33)\nmusca-b1             ARM Musca-B1 board (dual Cortex-M33)\nmusicpal             Marvell 88w8618 / MusicPal (ARM926EJ-S)\nnetduino2            Netduino 2 Machine (Cortex-M3)\nnetduinoplus2        Netduino Plus 2 Machine (Cortex-M4)\nnone                 empty machine\nnpcm750-evb          Nuvoton NPCM750 Evaluation Board (Cortex-A9)\nnuri                 Samsung NURI board (Exynos4210)\nolimex-stm32-h405    Olimex STM32-H405 (Cortex-M4)\norangepi-pc          Orange Pi PC (Cortex-A7)\npalmetto-bmc         OpenPOWER Palmetto BMC (ARM926EJ-S)\nqcom-dc-scm-v1-bmc   Qualcomm DC-SCM V1 BMC (Cortex A7)\nqcom-firework-bmc    Qualcomm DC-SCM V1/Firework BMC (Cortex A7)\nquanta-gbs-bmc       Quanta GBS (Cortex-A9)\nquanta-gsj           Quanta GSJ (Cortex-A9)\nquanta-q71l-bmc      Quanta-Q71l BMC (ARM926EJ-S)\nrainier-bmc          IBM Rainier BMC (Cortex-A7)\nraspi0               Raspberry Pi Zero (revision 1.2)\nraspi1ap             Raspberry Pi A+ (revision 1.1)\nraspi2b              Raspberry Pi 2B (revision 1.1)\nrealview-eb          ARM RealView Emulation Baseboard (ARM926EJ-S)\nrealview-eb-mpcore   ARM RealView Emulation Baseboard (ARM11MPCore)\nrealview-pb-a8       ARM RealView Platform Baseboard for Cortex-A8\nrealview-pbx-a9      ARM RealView Platform Baseboard Explore for Cortex-A9\nromulus-bmc          OpenPOWER Romulus BMC (ARM1176)\nsabrelite            Freescale i.MX6 Quad SABRE Lite Board (Cortex-A9)\nsmdkc210             Samsung SMDKC210 board (Exynos4210)\nsonorapass-bmc       OCP SonoraPass BMC (ARM1176)\nstm32vldiscovery     ST STM32VLDISCOVERY (Cortex-M3)\nsupermicro-x11spi-bmc Supermicro X11 SPI BMC (ARM1176)\nsupermicrox11-bmc    Supermicro X11 BMC (ARM926EJ-S)\nsx1                  Siemens SX1 (OMAP310) V2\nsx1-v1               Siemens SX1 (OMAP310) V1\ntacoma-bmc           OpenPOWER Tacoma BMC (Cortex-A7) (deprecated)\ntiogapass-bmc        Facebook Tiogapass BMC (ARM1176)\nversatileab          ARM Versatile/AB (ARM926EJ-S)\nversatilepb          ARM Versatile/PB (ARM926EJ-S)\nvexpress-a15         ARM Versatile Express for Cortex-A15\nvexpress-a9          ARM Versatile Express for Cortex-A9\nvirt-2.10            QEMU 2.10 ARM Virtual Machine (deprecated)\nvirt-2.11            QEMU 2.11 ARM Virtual Machine (deprecated)\nvirt-2.12            QEMU 2.12 ARM Virtual Machine (deprecated)\nvirt-2.6             QEMU 2.6 ARM Virtual Machine (deprecated)\nvirt-2.7             QEMU 2.7 ARM Virtual Machine (deprecated)\nvirt-2.8             QEMU 2.8 ARM Virtual Machine (deprecated)\nvirt-2.9             QEMU 2.9 ARM Virtual Machine (deprecated)\nvirt-3.0             QEMU 3.0 ARM Virtual Machine (deprecated)\nvirt-3.1             QEMU 3.1 ARM Virtual Machine (deprecated)\nvirt-4.0             QEMU 4.0 ARM Virtual Machine (deprecated)\nvirt-4.1             QEMU 4.1 ARM Virtual Machine (deprecated)\nvirt-4.2             QEMU 4.2 ARM Virtual Machine (deprecated)\nvirt-5.0             QEMU 5.0 ARM Virtual Machine (deprecated)\nvirt-5.1             QEMU 5.1 ARM Virtual Machine (deprecated)\nvirt-5.2             QEMU 5.2 ARM Virtual Machine (deprecated)\nvirt-6.0             QEMU 6.0 ARM Virtual Machine (deprecated)\nvirt-6.1             QEMU 6.1 ARM Virtual Machine (deprecated)\nvirt-6.2             QEMU 6.2 ARM Virtual Machine (deprecated)\nvirt-7.0             QEMU 7.0 ARM Virtual Machine\nvirt-7.1             QEMU 7.1 ARM Virtual Machine\nvirt-7.2             QEMU 7.2 ARM Virtual Machine\nvirt-8.0             QEMU 8.0 ARM Virtual Machine\nvirt-8.1             QEMU 8.1 ARM Virtual Machine\nvirt-8.2             QEMU 8.2 ARM Virtual Machine\nvirt-9.0             QEMU 9.0 ARM Virtual Machine\nvirt-9.1             QEMU 9.1 ARM Virtual Machine\nvirt                 QEMU 9.2 ARM Virtual Machine (alias of virt-9.2)\nvirt-9.2             QEMU 9.2 ARM Virtual Machine\nwitherspoon-bmc      OpenPOWER Witherspoon BMC (ARM1176)\nxilinx-zynq-a9       Xilinx Zynq Platform Baseboard for Cortex-A9\nyosemitev2-bmc       Facebook YosemiteV2 BMC (ARM1176)\n"
+    },
+    "cpus": {
+      "argv": [
+        "local/qemu/bin/qemu-system-arm",
+        "-cpu",
+        "help"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "733061e7c89b6e37ad5ea4a498358f6897337753c8ca615412048cf6f056ebec",
+      "stderr": "",
+      "stdout": "Available CPUs:\n  arm1026\n  arm1136\n  arm1136-r2\n  arm1176\n  arm11mpcore\n  arm926\n  arm946\n  cortex-a15\n  cortex-a7\n  cortex-a8\n  cortex-a9\n  cortex-m0\n  cortex-m3\n  cortex-m33\n  cortex-m4\n  cortex-m55\n  cortex-m7\n  cortex-r5\n  cortex-r52\n  cortex-r5f\n  max\n  pxa250\n  pxa255\n  pxa260\n  pxa261\n  pxa262\n  pxa270-a0\n  pxa270-a1\n  pxa270\n  pxa270-b0\n  pxa270-b1\n  pxa270-c0\n  pxa270-c5\n  sa1100\n  sa1110\n  ti925t\n"
+    }
+  }
+}

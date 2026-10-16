@@ -1,0 +1,18 @@
+# Keep binaries, dumps and personal runtime data outside the documentation repository.
+/local/
+/work/
+/private/
+/target/
+__pycache__/
+*.pyc
+*.iso
+*.vmdk
+*.vmem
+*.vmsn
+*.vmss
+*.nvram
+*.nbf
+*.nba
+*.cab
+*.exe
+*.dll

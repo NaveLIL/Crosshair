@@ -1,0 +1,5 @@
+Supported machines are:
+connex               Gumstix Connex (PXA255) (deprecated)
+mainstone            Mainstone II (PXA27x) (deprecated)
+none                 empty machine
+verdex               Gumstix Verdex Pro XL6P COMs (PXA270) (deprecated)

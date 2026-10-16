@@ -1,0 +1,8 @@
+{
+  "scope": "same host, source unchanged; cargo clean --release -p crosshair-boot --target armv5te-none-eabi then offline build; core cache retained",
+  "result": "PASS",
+  "sha256": {
+    "crosshair-boot.elf": "68d28d9e0ee4e3ee471e7d1079c7785f2c72f167f658deab86512557700c3cdf",
+    "crosshair-boot.bin": "4a7bcaa4dc1661138a40b33d6ce802307ea69bf603fe7d1c1031ebfe54a55128"
+  }
+}

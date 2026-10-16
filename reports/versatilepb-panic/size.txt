@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+    528	      4	  16504	  17036	   428c	<workspace>/target/artifacts/versatilepb-panic/crosshair-boot.elf

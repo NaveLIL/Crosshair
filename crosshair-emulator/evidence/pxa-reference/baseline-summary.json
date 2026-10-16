@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-16",
+  "status": "guest PASS; QTest PASS_WITH_RECORDED_MODEL_LIMITATIONS",
+  "qemu_version": "9.1.0",
+  "source_commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+  "scope": "reference PXA255/PXA270 emulation, not Blue Angel hardware",
+  "guest_image_sha256": {
+    "crosshair-pxa-reference.elf": "f747424ee67ab837414d94769bd10b87d9fefb93d0caa14e35f44964b5a32037",
+    "crosshair-pxa-reference.bin": "6fe8287d4c3f4376dd58fefee7241ebdfe41e37b82a69faddb588fda40481920",
+    "vectors.bin": "c743923832589ead31c43d6d30536907d49df0607b4e735b9a1e35d3ff35f2c5"
+  },
+  "machines": {
+    "connex": {
+      "guest_result": "PASS",
+      "qtest_result": "PASS_WITH_RECORDED_MODEL_LIMITATIONS"
+    },
+    "verdex": {
+      "guest_result": "PASS",
+      "qtest_result": "PASS_WITH_RECORDED_MODEL_LIMITATIONS"
+    },
+    "mainstone": {
+      "guest_result": "PASS",
+      "qtest_result": "PASS_WITH_RECORDED_MODEL_LIMITATIONS"
+    }
+  },
+  "known_model_limitations": [
+    "timer state survives system_reset while PIC resets",
+    "OIER disabled match does not latch OSSR",
+    "OIER disable does not lower already-raised IRQ",
+    "generic16550 does not model all PXA UUE/clock behavior"
+  ],
+  "physical_device_tests": false,
+  "baseline_decision": "Keep immutable QEMU9.1 as regression oracle; port audited PXA26x subset into a separate modern-QEMU board in E2, retain known limitations as explicit tests."
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "name": "BaUpgradeUt.exe",
+    "archive_name": "/BaUpgradeUt.exe",
+    "size": 434176,
+    "md5": "880e38501027824b51faafb056e645d7",
+    "sha256": "a47ef40838852539745e3dae51ae3f31af99e10e35a18ccd30f3d5a571cf952e"
+  },
+  {
+    "name": "EnterBL.exe",
+    "archive_name": "/EnterBL.exe",
+    "size": 4608,
+    "md5": "e6374c9356beeb3b986d1fb1c4ff22a0",
+    "sha256": "2be20e023cdfd9195c4254a594d396c56746512da4d0727a6d01d6e6505c51db"
+  },
+  {
+    "name": "GetDeviceData.exe",
+    "archive_name": "/GetDeviceData.exe",
+    "size": 9216,
+    "md5": "c4c5d546c1e5800d27ef18df2262e2ab",
+    "sha256": "db10f2738e809348396f2601c1500ad1903fcafe9e3bb0cce40375e4cbf999b9"
+  },
+  {
+    "name": "HTCRUU.conf",
+    "archive_name": "/HTCRUU.conf",
+    "size": 87,
+    "md5": "445445d0fefa25b5bc6f9f071ad9d970",
+    "sha256": "de13717d8b4c00f7cb623e51457ed4b52e0fe0fb9f9b04bb7867a8e89c10458b"
+  },
+  {
+    "name": "HTCRUU.dll",
+    "archive_name": "/HTCRUU.dll",
+    "size": 188416,
+    "md5": "94c3317c7f9d4bc1c012c285d427d4f4",
+    "sha256": "c7427926db0a69766aa2817254d61e0bfaff03cf6b57bb96a74078d2663dbfdf"
+  },
+  {
+    "name": "ms_.nbf",
+    "archive_name": "/ms_.nbf",
+    "size": 17236096,
+    "md5": "f3500f9d7e4a15eb3f6b5a7a0f9c33b7",
+    "sha256": "cc1e4141430b2a637031ab8f7bb1be042972218f98f6dca742037b14635dca12"
+  },
+  {
+    "name": "nk.nbf",
+    "archive_name": "/nk.nbf",
+    "size": 33554560,
+    "md5": "2d22474b653118ee2a14d1f398b0b431",
+    "sha256": "06938ad5bcba809f6b98263d34b39c1bfcd50b116bbf797116b36125020f31aa"
+  },
+  {
+    "name": "radio_.nbf",
+    "archive_name": "/radio_.nbf",
+    "size": 4194432,
+    "md5": "8a8a5416663bc52359f8f7b47f3fc6a7",
+    "sha256": "0ebc09f3731e0af221742de9c39fa619a2db405d2f9f786ca350072572b5b232"
+  }
+]

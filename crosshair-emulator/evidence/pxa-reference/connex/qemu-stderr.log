@@ -1,0 +1,2 @@
+qemu-system-arm: warning: Machine type 'connex' is deprecated: machine is old and unmaintained
+qemu-system-arm: warning: nic smc91c111.0 has no peer

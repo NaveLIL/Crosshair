@@ -1,0 +1,39 @@
+{
+  "entry": 65536,
+  "flags": 83886592,
+  "segments": [
+    {
+      "pa": 65536,
+      "filesz": 688,
+      "memsz": 688,
+      "flags": 5
+    },
+    {
+      "pa": 66224,
+      "filesz": 4,
+      "memsz": 16512,
+      "flags": 6
+    }
+  ],
+  "symbols": {
+    "CROSSHAIR_BOOT_RECORD": 66232,
+    "_ZN14crosshair_boot10DATA_CHECK17h991aa9864a29eb1fE": 66224,
+    "_ZN14crosshair_boot3bsp10diagnostic17ha191f7401309e79fE": 65600,
+    "_ZN14crosshair_boot4arch4idle17h01b599e0994f18d6E": 65596,
+    "_ZN4core9panicking5panic17hac0b3160507ed839E": 66128,
+    "_ZN4core9panicking9panic_fmt17h94659d61375b856eE": 66124,
+    "__bss_end": 66352,
+    "__bss_start": 66232,
+    "__image_end": 82736,
+    "__stack_bottom": 66352,
+    "__stack_top": 82736,
+    "_start": 65536,
+    "kernel_idle": 65592,
+    "rust_begin_unwind": 66036,
+    "rust_main": 65748
+  },
+  "sha256": {
+    "crosshair-boot.elf": "68d28d9e0ee4e3ee471e7d1079c7785f2c72f167f658deab86512557700c3cdf",
+    "crosshair-boot.bin": "4a7bcaa4dc1661138a40b33d6ce802307ea69bf603fe7d1c1031ebfe54a55128"
+  }
+}

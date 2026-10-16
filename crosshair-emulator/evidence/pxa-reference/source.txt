@@ -1,0 +1,30 @@
+Source: https://download.qemu.org/qemu-9.1.0.tar.xz
+SHA256: 816b7022a8ba7c2ac30e2e0cf973e826f6bcc8505339603212c5ede8e94d7834
+Tag commit: fd1952d814da738ed107e05583b3e02ac11e88ff
+Selectors: hw/arm/Kconfig at pinned commit, CONFIG_GUMSTIX and CONFIG_MAINSTONE.
+
+dtc upstream pin (from QEMU archive):
+[wrap-git]
+url = https://gitlab.com/qemu-project/dtc.git
+revision = b6910bec11614980a21e46fbccc35934b671bd81
+depth = 1
+
+keycodemapdb upstream pin (from QEMU archive):
+[wrap-git]
+url = https://gitlab.com/qemu-project/keycodemapdb.git
+revision = f5772a62ec52591ff6870b7e8ef32482371f22c6
+depth = 1
+
+berkeley-softfloat-3 upstream pin (from QEMU archive):
+[wrap-git]
+url = https://gitlab.com/qemu-project/berkeley-softfloat-3.git
+revision = b64af41c3276f97f0e181920400ee056b9c88037
+patch_directory = berkeley-softfloat-3
+depth = 1
+
+berkeley-testfloat-3 upstream pin (from QEMU archive):
+[wrap-git]
+url = https://gitlab.com/qemu-project/berkeley-testfloat-3.git
+revision = e7af9751d9f9fd3b47911f51a5cfd08af256a9ab
+patch_directory = berkeley-testfloat-3
+depth = 1

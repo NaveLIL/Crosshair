@@ -1,0 +1,11 @@
+# Keep Unix build scripts usable after a Windows checkout.
+*.sh text eol=lf
+*.py text eol=lf
+*.rs text eol=lf
+*.S text eol=lf
+*.ld text eol=lf
+# Markdown uses intentional two-space line breaks in the source documentation.
+*.md text eol=lf whitespace=-blank-at-eol
+# UART evidence is byte-exact CRLF emitted by the guest.
+reports/**/qemu-uart.log -text whitespace=cr-at-eol
+crosshair-emulator/evidence/**/qemu-uart.log -text whitespace=cr-at-eol

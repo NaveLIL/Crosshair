@@ -1,0 +1,7 @@
+rustc 1.87.0-nightly (287487624 2025-02-28)
+binary: rustc
+commit-hash: 287487624357c19b22d27aa3ed584b8ccd080b4d
+commit-date: 2025-02-28
+host: x86_64-apple-darwin
+release: 1.87.0-nightly
+LLVM version: 20.1.0

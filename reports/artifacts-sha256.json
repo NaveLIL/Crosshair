@@ -1,0 +1,15 @@
+{
+  "versatilepb": {
+    "crosshair-boot.bin": "4a7bcaa4dc1661138a40b33d6ce802307ea69bf603fe7d1c1031ebfe54a55128",
+    "crosshair-boot.elf": "68d28d9e0ee4e3ee471e7d1079c7785f2c72f167f658deab86512557700c3cdf"
+  },
+  "versatilepb-panic": {
+    "crosshair-boot.bin": "08e7daab3068762c4d8840587f4e3d48cf15e99e87b2069fcbd1f9a646691b1b",
+    "crosshair-boot.elf": "a70716c9a981c8a20c585ee03242914b092410c237c77c2d0511db82535b8b4d"
+  },
+  "blueangel": {
+    "crosshair-boot.bin": "d90054cdd7017903dde4361ec613dfcbca825a33756676665063d3fa774fd77c",
+    "crosshair-haret.bin": "921805ebc20a3e15188b0c5797940781547b3e257edee78713c0feb39261680e",
+    "crosshair-boot.elf": "7b7b775c7957876ec4e48cc389b8bdbc7250dd47c1ea3e77debf5c1620f37e39"
+  }
+}
