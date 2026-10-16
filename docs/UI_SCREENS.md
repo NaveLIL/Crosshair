@@ -1,6 +1,6 @@
 # UI screens and implementation status
 
-Crosshair now has two separate users of the same [Design System 0.1](UI_DESIGN_SYSTEM.md) 240×320 renderer: the preserved Wave004 diagnostic AppsScreen and the Wave007 functional User Mode Shell. The original Wave004 work followed the written gray-blue direction; the [image approved on 16.10.2026](UI_DESIGN_SYSTEM.md#approved-visual-reference-for-crosshair-shell-01) supplies the Shell's artistic direction. Physical display/input remain unverified.
+Crosshair now has two separate users of the same [Design System 0.1](UI_DESIGN_SYSTEM.md) 240×320 renderer: the preserved Wave004 diagnostic AppsScreen and the functional User Mode Shell, refined in Wave007.1. The original Wave004 work followed the written gray-blue direction; the [image approved on 16.10.2026](UI_DESIGN_SYSTEM.md#approved-visual-reference-for-crosshair-shell-01) supplies the Shell's artistic direction. Physical display/input remain unverified.
 
 ## Implemented Shell 0.1 views
 
@@ -8,16 +8,16 @@ The [Shell state machine](../shell/src/lib.rs) and [composition](../shell/src/re
 
 | View | Functional content and interaction | State / current limit |
 | --- | --- | --- |
-| Desktop | Dark system/softkey bars and a real 2×3 icon grid: Applications, Today, Settings, Diagnostics, About, Switch | Keyboard focus persists across screen visits; all six tiles perform their named action |
+| Desktop | Static wallpaper workspace;24px top/system bar,24px bottom softkeys, three small functional shortcuts (Today, Settings, Diagnostics); Start opens Launcher | Shared keyboard/tap focus persists across screen visits; the free workspace has no hidden actions; the complete catalog stays in Launcher |
 | Today | Explicit unavailable clock/power/connection state, actual supplied task/event summaries, links to Applications and Diagnostics | Separate view from Desktop; no invented appointments, notification counts or hardware status |
 | Launcher | Four implemented built-in screens; visible 16-scalar case-insensitive Latin/Cyrillic prefix query, selection, context menu and Select | Backspace erases; Back first clears query; empty results cannot launch a hidden entry; selection/query survive ordinary app visits |
 | About | Actual supplied build/version, ARMv5TE and synthetic-environment strings; own-code/font licence facts and hardware limit | Informational view; left softkey returns to caller |
 | Diagnostics | Kernel snapshot of ticks, context switches, task states, mapped working-RAM reservation and input counters; actual local UI event/frame counts | Only valid supplied groups show numbers; no free-heap/instantaneous stack/device measurements are implied |
 | Settings | Cold gray and night blue themes, actual in-memory toggle, reset confirmation with cancel | Theme affects real rendering and lasts until reboot; persistence and device/power settings absent |
 | System / Launcher menu | Reachable system screens or matching-app actions; own bounded overlay selection | Closing restores underlying screen focus; Home and opened-view switching remain available |
-| Reset dialog | Explicit Reset/Cancel buttons and keyboard selection | Only the volatile theme changes; no storage or physical operation |
+| Reset dialog | Explicit Reset/Cancel buttons with keyboard selection and modal tap handling | Only the volatile theme changes; no storage or physical operation |
 
-These built-ins currently share one Shell process and its saved UI state. They are functional screen applications, not separately loaded tasks or packages. A separate uncooperative User Busy workload exercises the scheduler concurrently. No Files/Phone/SMS/network placeholder is offered as an installed working application. [Tabler Icons](UI_ASSET_SYSTEM.md) supplies the primary system-icon subset, preserving its MIT notice and following the approved reference without embedding that image as the UI. The Mac viewer displays actual guest frames and forwards logical events; it does not implement the state machine on the host.
+These built-ins currently share one Shell process and its saved UI state. They are functional screen applications, not separately loaded tasks or packages. A separate uncooperative User Busy workload exercises the scheduler concurrently. No Files/Phone/SMS/network placeholder is offered as an installed working application. [Tabler Icons](UI_ASSET_SYSTEM.md) supplies the primary system-icon subset, preserving its MIT notice and following the approved reference without embedding that image as the UI. The experimental Mac viewer displays actual guest frames and forwards logical keyboard/tap events; it does not implement the state machine on the host.
 
 ## Preserved Wave004 diagnostic screens
 
@@ -73,3 +73,9 @@ The shared fixtures contain 37 canonical and 27 independent boundary events, pro
 Host captures prove actual software rendering at the specified dimensions. The separate [Wave004 integration](../reports/WAVE_004.md) now verifies real ARM execution, synthetic input burst/overflow/reset and all twenty canonical/boundary captures byte for byte, plus three burst checkpoints. No physical ATI W3200 screen, TSC2200 touch panel or sliding QWERTY has been exercised. The next integration boundary is proven hardware metadata and a separately specified real display/input backend.
 
 Wave007 keeps those fixtures unchanged and adds its own [host state/render tests](../shell/src/tests.rs), [frame replay exporter](../shell/examples/export.rs) and [ARM oracle](../tools/smoke_shell.py). Shell keyframes and actual kernel snapshots are compared through the same renderer; exact counts/hashes/allocations belong to [Wave007](../reports/WAVE_007.md). A host screenshot or the approved concept alone is not evidence of a User session or hardware operation.
+
+## Wave007.1 presentation refinement
+
+The six large Wave007 Desktop tiles remain visible in that wave's historical report. Current [Shell composition](../shell/src/render.rs) replaces them with a wallpaper workspace and compact shortcuts; [shared rectangles](../shell/src/geometry.rs) define both the graphics and logical tap targets. Today remains a separate information screen using only supplied kernel observations and explicit unavailable services. All tap actions retain a keyboard path, including Start, application Back, menus, theme and confirmation.
+
+Static wallpaper decoding writes directly into the sole borrowed RGB565 framebuffer. No runtime PNG/SVG decoder, additional full framebuffer, clock/radio fiction or new application/backend is introduced. Full Desktop entry/theme changes compose the workspace. Focus movement restores only old/new shortcut rectangles; opening or moving within Desktop's menu does not decode the wallpaper, and dismissal restores a bounded covered region. [Architecture and cost observations](SHELL_ARCHITECTURE.md#rendering-and-future-integration) distinguish this software work from the full-frame Present service. Physical stylus calibration and display operation remain untested.

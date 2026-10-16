@@ -19,7 +19,7 @@ import time
 
 from qemu_control import Qmp, stop_process
 from qtest_pxa import QTest, equal
-from shell_control import DISPLAY, INPUT, MACHINE, MAILBOX, await_stable, wire, physical, user_record
+from shell_control import DISPLAY, INPUT, MACHINE, MAILBOX, await_stable, wire, physical, user_record, pointer_coordinates, pointer_wire
 from smoke_display import ppm_rgb, sha
 from smoke_e2a import qemu_version
 from smoke_security import words
@@ -35,6 +35,7 @@ class NativeInput:
         self.pending = deque()
         self.quit = False
         self.window_ready = False
+        self.automation_isolation = False
 
     def feed(self, data):
         if len(self.buffer) + len(data) > 8192:
@@ -49,6 +50,9 @@ class NativeInput:
             if line == b"window-ready 1":
                 self.window_ready = True
                 continue
+            if line == b"automation-isolation 1":
+                self.automation_isolation = True
+                continue
             if line == b"quit":
                 self.quit = True
                 return
@@ -58,6 +62,8 @@ class NativeInput:
             tag, scalar = value >> 24, value & 0xFFFFFF
             if not ((1 <= tag <= 7 and scalar == 0) or (tag == 8 and scalar <= 0x10FFFF and not 0xD800 <= scalar <= 0xDFFF)):
                 raise ValueError("native frontend emitted invalid logical input")
+            if tag == 8 and scalar >= 0xF0000 and pointer_coordinates(value) is None:
+                raise ValueError("native frontend emitted out-of-bounds logical pointer")
             self.pending.append(value)
 
 
@@ -88,9 +94,16 @@ def main():
     parser.add_argument("--frontend", type=Path, default=ARTIFACTS / "gui/crosshair-gui")
     parser.add_argument("--headless-test", action="store_true", help="Test the actual QEMU frames/input and native PPM decoder, then quit")
     parser.add_argument("--window-test", action="store_true", help="Open the real native window, post four actual key events, verify ARM transitions, and close")
+    parser.add_argument("--pointer-window-test", action="store_true", help="Post actual native mouseDowns, keys and Cyrillic text; verify real ARM coordinate delivery")
     args = parser.parse_args()
-    if args.headless_test and args.window_test:
+    if sum((args.headless_test, args.window_test, args.pointer_window_test)) > 1:
         parser.error("choose one frontend test mode")
+    native_test = args.window_test or args.pointer_window_test
+    mode = "pipeline" if args.headless_test else "pointer-window-test" if args.pointer_window_test else "window-test" if args.window_test else "live"
+    expected_screens = [1,0,2,2,3,2,0] if args.pointer_window_test else [2,3,2,0]
+    expected_native_wires = ([pointer_wire(40,68),wire(5),pointer_wire(25,12),0x0800041E,
+                              wire(4),pointer_wire(227,12),wire(7)] if args.pointer_window_test
+                             else [wire(8),wire(4),wire(5),wire(7)])
     image = json.loads((ARTIFACTS / "image/image.json").read_text())
     user = json.loads((ARTIFACTS / "user-image/user-image.json").read_text())
     for name, expected in image["sha256"].items():
@@ -104,10 +117,10 @@ def main():
     sources_before = {str(path.relative_to(ROOT)): sha(path.read_bytes()) for path in sources}
     directory = ARTIFACTS / "gui"
     directory.mkdir(exist_ok=True, parents=True)
-    log_directory = directory / ("pipeline" if args.headless_test else "window-test" if args.window_test else "live")
+    log_directory = directory / mode
     log_directory.mkdir(exist_ok=True, parents=True)
-    result = {"result": "FAIL", "mode": "headless-pipeline-test" if args.headless_test else "native-window-test" if args.window_test else "live-window",
-              "scope": "actual ARM TCG Shell; host window only displays QEMU committed console pixels and forwards logical keys",
+    result = {"result": "FAIL", "mode": "headless-pipeline-test" if args.headless_test else "native-pointer-window-test" if args.pointer_window_test else "native-window-test" if args.window_test else "live-window",
+              "scope": "actual ARM TCG Shell; host window only displays QEMU committed console pixels and forwards logical keys/pointers",
               "image_sha256": image["sha256"], "user_image_sha256": user["sha256"],
               "frontend_sha256": sha(args.frontend.read_bytes()), "source_sha256": sources_before,
               "logs": log_directory.name,
@@ -181,7 +194,7 @@ def main():
                                   final_console_rgb_sha256=sha(actual))
                     shutil.copyfile(live_ppm, directory / "pipeline-final.ppm")
                 else:
-                    frontend_command = [str(args.frontend)] + (["--window-test"] if args.window_test else []) + [str(live_ppm)]
+                    frontend_command = [str(args.frontend)] + (["--pointer-window-test"] if args.pointer_window_test else ["--window-test"] if args.window_test else []) + [str(live_ppm)]
                     frontend = subprocess.Popen(frontend_command, stdin=subprocess.DEVNULL,
                                                 stdout=subprocess.PIPE, stderr=frontend_stderr, bufsize=0)
                     selector = selectors.DefaultSelector()
@@ -189,8 +202,10 @@ def main():
                     decoder = NativeInput()
                     generation = memory.readl(DISPLAY + 0x14)
                     window_events = []
+                    if native_test:
+                        result["events"] = window_events
                     window_delivered = 0
-                    print("Crosshair ARM window is live. Close the window to stop QEMU. Arrow keys, Enter, Escape, F10 Menu, Home, F1/F2 softkeys, F3 task switch.", flush=True)
+                    print("Crosshair ARM window is live. Close the window to stop QEMU. Click guest controls or use arrow keys, Enter, Escape, F10 Menu, Home, F1/F2 softkeys, F3 task switch.", flush=True)
                     while frontend.poll() is None:
                         if process.poll() is not None:
                             raise RuntimeError(f"QEMU closed unexpectedly: {process.returncode}")
@@ -208,16 +223,31 @@ def main():
                             frontend.wait(timeout=3)
                             break
                         admitted = pump_input(qmp, memory, image["symbols"], decoder)
-                        if args.window_test and admitted:
+                        if native_test and admitted:
                             window_delivered += admitted
                             observed, user_state, _ = await_stable(memory, image["symbols"], user["symbols"], window_delivered, process)
                             equal(admitted, 1, "native posted key events are independently delivered")
-                            equal(user_state["snapshot"]["screen"], [2,3,2,0][window_delivered-1],
-                                  "actual NSWindow keyDown route changes real ARM Shell state")
-                            shot = directory / f"window-step-{window_delivered}.ppm"
+                            result["last_native_observation"] = {"event":window_delivered,"wire":user_state["last_event"],
+                                "screen":user_state["snapshot"]["screen"],"generation":observed["frames"]}
+                            equal(window_delivered <= len(expected_screens), True, "native test produced only the scheduled events")
+                            equal(user_state["last_event"], expected_native_wires[window_delivered-1],
+                                  "actual ARM native test wire matches the marked scheduled NSEvent")
+                            equal(user_state["snapshot"]["screen"], expected_screens[window_delivered-1],
+                                  "actual NSWindow input route changes real ARM Shell state")
+                            if args.pointer_window_test:
+                                expected_wires = {1: (40,68), 3: (25,12), 6: (227,12)}
+                                if window_delivered in expected_wires:
+                                    equal(pointer_coordinates(user_state["last_event"]), expected_wires[window_delivered],
+                                          "actual ARM observed the exact logical mouse coordinates")
+                                if window_delivered == 4:
+                                    equal(user_state["last_event"], 0x0800041E, "actual ARM received native Cyrillic Unicode")
+                            shot = directory / f"{'pointer-window' if args.pointer_window_test else 'window'}-step-{window_delivered}.ppm"
                             qmp.request("screendump", {"filename": str(shot)})
                             window_events.append({"event":window_delivered,"screen":user_state["snapshot"]["screen"],
-                                                  "generation":observed["frames"],"console_rgb_sha256":sha(ppm_rgb(shot))})
+                                                  "generation":observed["frames"],"wire":user_state["last_event"],
+                                                  "pointer":pointer_coordinates(user_state["last_event"]),
+                                                  "snapshot":user_state["snapshot"],
+                                                  "console_rgb_sha256":sha(ppm_rgb(shot))})
                         current = memory.readl(DISPLAY + 0x14)
                         if current != generation:
                             qmp.request("screendump", {"filename": str(pending_ppm)})
@@ -225,11 +255,12 @@ def main():
                             generation = current
                     selector.close()
                     equal(frontend.returncode, 0, "native window closed cleanly")
-                    if args.window_test:
+                    if native_test:
                         equal(decoder.window_ready, True, "actual native NSWindow reported visible")
-                        equal(len(window_events), 4, "all four native keyDown events reached ARM before test window closed")
+                        equal(decoder.automation_isolation, True, "unregistered AppKit text was ignored only in explicit automation mode")
+                        equal(len(window_events), len(expected_screens), "all scheduled native input events reached ARM before test window closed")
                         equal(memory.readl(INPUT + 0x10), 0, "native window test input has no hardware overflow")
-                        result.update(window_ready=True, events=window_events)
+                        result.update(window_ready=True, automation_isolation=True, events=window_events)
                     result.update(result="PASS", last_generation=generation)
                 equal({str(path.relative_to(ROOT)): sha(path.read_bytes()) for path in sources}, sources_before,
                       "live adapter source bytes unchanged throughout execution")
@@ -247,9 +278,11 @@ def main():
                 if qmp:
                     qmp.close()
                 stop_process(process)
-                (directory / ("pipeline-result.json" if args.headless_test else "window-test-result.json" if args.window_test else "session-result.json")).write_text(json.dumps(result, indent=2) + "\n")
+                (directory / ("pipeline-result.json" if args.headless_test else "pointer-window-test-result.json" if args.pointer_window_test else "window-test-result.json" if args.window_test else "session-result.json")).write_text(json.dumps(result, indent=2) + "\n")
     if args.headless_test:
         print("PASS live frontend pipeline: real ARM User input and QEMU console frames; native keymap/PPM decoder")
+    if args.pointer_window_test:
+        print("PASS native pointer window: actual NSWindow mouseDown coordinates, keys and Cyrillic text reached ARM with QEMU frames")
     if args.window_test:
         print("PASS native window: actual NSWindow keyDowns reached ARM Launcher/About/Back/Home with QEMU frame publication")
 

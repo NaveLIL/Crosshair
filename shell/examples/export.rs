@@ -23,9 +23,21 @@ fn action(value: &str) -> io::Result<Option<Action>> {
     if value == "-1" {
         return Ok(None);
     }
+    if let Some(point) = value.strip_prefix("pointer:") {
+        let (x, y) = point
+            .split_once(',')
+            .ok_or_else(|| fail("pointer requires x,y"))?;
+        return Ok(Some(Action::Pointer {
+            x: u16::try_from(integer(x)?).map_err(|_| fail("pointer x exceeds u16"))?,
+            y: u16::try_from(integer(y)?).map_err(|_| fail("pointer y exceeds u16"))?,
+        }));
+    }
     if let Some(hex) = value.strip_prefix("text:") {
         let scalar = u32::from_str_radix(hex.trim_start_matches("0x"), 16)
             .map_err(|_| fail("invalid text scalar"))?;
+        if scalar >= crosshair_shell::POINTER_SCALAR_BASE {
+            return Err(fail("supplementary PUA is reserved for pointer wire"));
+        }
         return char::from_u32(scalar)
             .map(|ch| Some(Action::Key(Event::TextInput(ch))))
             .ok_or_else(|| fail("invalid Unicode scalar"));
@@ -33,6 +45,14 @@ fn action(value: &str) -> io::Result<Option<Action>> {
     if let Some(hex) = value.strip_prefix("wire:") {
         let wire = u32::from_str_radix(hex.trim_start_matches("0x"), 16)
             .map_err(|_| fail("invalid logical wire"))?;
+        let scalar = wire & 0x00ff_ffff;
+        if wire >> 24 == 8 && (crosshair_shell::POINTER_SCALAR_BASE..=0x10ffff).contains(&scalar) {
+            let point = scalar - crosshair_shell::POINTER_SCALAR_BASE;
+            return Ok(Some(Action::Pointer {
+                x: (point & 255) as u16,
+                y: (point >> 8) as u16,
+            }));
+        }
         let key = match wire >> 24 {
             1 => Event::Up,
             2 => Event::Down,
@@ -123,7 +143,7 @@ fn capture(
     Ok(format!(
         concat!(
             "{{\"name\":{},\"snapshot\":{},\"snapshot_words\":{:?},\"query\":{},",
-            "\"runtime_words\":{:?},\"changed\":{},\"rendered\":{},\"file\":{},",
+            "\"runtime_words\":{:?},\"render_stats\":{:?},\"changed\":{},\"rendered\":{},\"file\":{},",
             "\"width\":240,\"height\":320,\"stride\":240,\"bytes\":153600,\"fnv1a64\":\"0x{:016x}\"}}"
         ),
         json(name),
@@ -131,6 +151,7 @@ fn capture(
         shell.snapshot().words(),
         json(&query),
         shell.runtime().words(),
+        shell.render_stats().words(),
         changed,
         rendered,
         json(&file),
@@ -141,7 +162,7 @@ fn main() -> io::Result<()> {
     let mut args = std::env::args().skip(1);
     let out = PathBuf::from(args.next().ok_or_else(|| fail("OUT required"))?);
     let mut replay = None;
-    let mut build = BuildInfo::WAVE007;
+    let mut build = BuildInfo::WAVE007_1;
     while let Some(flag) = args.next() {
         let value = args.next().ok_or_else(|| fail("flag requires a value"))?;
         match flag.as_str() {

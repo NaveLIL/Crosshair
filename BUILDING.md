@@ -1,27 +1,45 @@
 # Сборка Crosshair
 
-## Wave007: User Shell и интерактивное окно macOS
+## Wave007.1: Desktop, User Shell и интерактивное окно macOS
 
 ```sh
 scripts/run-crosshair-gui.sh
 ```
 
-Команда собирает отдельный User ELF, встраивает его в ARM guest, компилирует небольшой AppKit frontend и открывает окно **Crosshair Shell0.1 — ARM QEMU**. Внутри работает `crosshair-blueangel-display-test` с настоящим ARM TCG: Shell, приложения, RGB565 rendering, системные вызовы и планировщик исполняются гостем. Окно получает свежие committed pixels через QMP `screendump`, показывает гостевые 240×320 в масштабе 2× по умолчанию и передаёт клавиши в существующий synthetic input FIFO. Это host adapter к проверенной модели; аппаратные ATI, клавиатура и сенсор PDA2k здесь не проверяются.
+Команда собирает отдельный User ELF, встраивает его в ARM guest, компилирует небольшой AppKit frontend и открывает окно **Crosshair Shell0.1 — ARM QEMU**. Внутри работает `crosshair-blueangel-display-test` с настоящим ARM TCG: Shell, приложения, RGB565 rendering, системные вызовы и планировщик исполняются гостем. Окно получает свежие committed pixels через QMP `screendump`, показывает гостевые 240×320 в масштабе 2× по умолчанию и передаёт клавиши и координаты одиночных нажатий в существующий synthetic input FIFO. Это host adapter к проверенной модели; аппаратные ATI, клавиатура и сенсор PDA2k здесь не проверяются.
 
-Щёлкнуть внутри окна для фокуса. Стрелки меняют выделение, Enter запускает выбранное действие, Escape возвращает назад. F10 открывает Menu, Home возвращает Desktop, F1/F2 — левая/правая softkey, F3 переключает открытый экран. На MacBook для F-клавиш может требоваться Fn; Home обычно доступен через Fn+← ([стандартные сочетания Apple](https://support.apple.com/en-ie/102650)). В Launcher обычные символы вводят настоящий ограниченный поисковый запрос, Backspace удаляет символ; проверен и кириллический ввод. Изменённая тема действует до reset. Закрытие окна или ⌘Q завершает frontend и его QEMU; окно остаётся открытым до этого действия. `scripts/run-shell.sh` — короткий alias той же команды.
+Мышь работает как экспериментальный стилус: нажатие на ярлык Today/Настройки/Диагностика открывает экран; «Пуск» открывает отдельный Launcher. Можно нажимать строки программ, заголовок Back, нижние softkeys, пункты меню и кнопки диалога. Координаты вычисляются относительно фактического изображения гостя 240×320, с началом слева сверху; масштаб окна и поля вокруг изображения учитываются, нажатия вне изображения не отправляются. Frontend передаёт координаты настоящему ARM User Shell, где выполняется hit-testing. Он показывает только QEMU pixels и не рисует собственные элементы Shell.
+
+Стрелки меняют выделение, Enter запускает выбранное действие, Escape возвращает назад. F10 открывает Menu, Home возвращает Desktop, F1/F2 — левая/правая softkey, F3 переключает открытый экран. На MacBook для F-клавиш может требоваться Fn; Home обычно доступен через Fn+← ([стандартные сочетания Apple](https://support.apple.com/en-ie/102650)). В Launcher обычные символы вводят настоящий ограниченный поисковый запрос, Backspace удаляет символ; проверен и кириллический ввод. Изменённая тема действует до reset. Закрытие окна или ⌘Q завершает frontend и его QEMU; окно остаётся открытым до этого действия. `scripts/run-shell.sh` — короткий alias той же команды.
 
 Нужны прежние pinned Rust и QEMU display-test cache, а для окна — macOS AppKit и Swift compiler из Xcode Command Line Tools (`xcrun swiftc`). Новые Shell-команды через `scripts/shell-env.sh` находят стандартные `local/` caches и соседние caches публичного checkout; подготовленные `RUSTUP_HOME`/`QEMU_DISPLAY_TEST` сохраняют приоритет. Для чистой машины сначала выполнить существующие Rust/QEMU bootstrap-команды. Cocoa доступна в проверенном QEMU cache; выбранный frontend подключает keyboard events к synthetic FIFO и показывает фактический QEMU console framebuffer.
 
 ```sh
 scripts/test-shell.sh       # host Shell tests, ARM session/parity, native pipeline на macOS
-scripts/test-wave007.sh     # вся принятая цепочка Wave001–Wave006 и новый Shell
+scripts/test-wave007.sh     # сохранённая цепочка Wave001–Wave007
+scripts/test-wave007-1.sh   # полная цепочка плюс pointer, keyboard и update-cost checks
 scripts/run-crosshair-gui.sh --headless-test  # реальный ARM/QEMU input/frame pipeline без окна
 scripts/run-crosshair-gui.sh --window-test    # видимое окно и автоматические native keyDown events
+scripts/run-crosshair-gui.sh --pointer-window-test # mouseDown, клавиши и кириллица через AppKit в ARM
 ```
 
-На macOS `test-shell.sh` также кратко открывает настоящее окно и отправляет четыре `NSEvent keyDown` через AppKit: Launcher → About → Back → Home. Результат `gui/window-test-result.json` связывает этот маршрут с реальными ARM состояниями и QEMU frames. Автоматическое закрытие относится к `--window-test`; обычный запуск ожидает закрытия владельцем. Ручной ввод MacBook остаётся отдельной проверкой.
+На macOS `test-shell.sh` также кратко открывает настоящее окно и отправляет четыре `NSEvent keyDown` через AppKit: Launcher → About → Back → Home. Результат `gui/window-test-result.json` связывает этот маршрут с реальными ARM состояниями и QEMU frames. Автоматическое закрытие относится к `--window-test`; обычный запуск ожидает закрытия владельцем. Отдельный `--pointer-window-test` отправляет настоящие AppKit `mouseDown`/`mouseUp`, Escape, Enter, Home и кириллическую «О»; проверяет Today → Desktop → Launcher → поиск → About → Launcher → Desktop и точные координаты в User RAM. Автоматические события зарегистрированы как отправленные AppKit `NSEvent`; только в этих тестовых режимах посторонние физические клавиши/клики игнорируются, чтобы ввод владельца не менял проверяемый сценарий. Обычное интерактивное окно принимает ввод без этого фильтра. Эти тестовые режимы автоматически закрывают только собственное окно. Ручной ввод MacBook остаётся отдельной проверкой.
 
 Образы находятся в `target/artifacts/shell/{user-image,image}/`, гостевые PNG 240×320, raw RGB565, QEMU PPM, actual state journals и host pixel references — в `target/artifacts/shell/execution/`. `gui/pipeline-result.json` содержит native keymap/PPM decoder checks, проверку нескольких событий в одном pipe write и ARM delivery; `gui/session-result.json` записывается при закрытии интерактивного окна. Тесты очередей используют отдельный автоматический session; interactive adapter применяет bounded backpressure перед hardware FIFO и kernel queue. UI state и нарисованные экраны в frontend не дублируются. Размер flat image включает адресные промежутки и отдельно учитывается от выделенной RAM.
+
+Новые pointer captures и replay находятся в `target/artifacts/shell/pointer/`, native mouse-route — в `gui/pointer-window-test-result.json` и отдельном `gui/pointer-window-test/`. Координатный транспорт резервирует supplementary private-use Unicode scalars `0xF0000 + (y << 8) + x` внутри прежнего tag8 FIFO; это только соглашение эмуляторного адаптера. Модель QEMU, kernel event service и очереди не изменены. События за пределами 240×320 игнорируются до изменения UI counters; malformed wire values проверяются отдельно. Это не формат контроллера сенсора Blue Angel.
+
+### Обои и измерение перерисовки
+
+Статические обои 240×320 преобразованы при сборке в закреплённую палитру RGB565 и построчный RLE. Исходный PNG, лицензия и provenance находятся в `shell/assets/wallpaper/`; в госте работают только read-only palette/row table/packets и прежний единственный framebuffer. Полный PNG/SVG decoder в ARM не добавлен.
+
+```sh
+python3 shell/tools/generate_wallpaper.py --check
+python3 shell/tools/test_generate_wallpaper.py -v
+local/icon-tools/bin/python shell/tools/generate_wallpaper.py --regenerate-check
+```
+
+`SHELL_RENDER_METRICS` сохраняет восемь фактических User counters: decoded packets/pixels, written wallpaper pixels/runs, dirty rectangles/pixels, full/rendered flags. Pointer harness сопоставляет их с host execution, проверяет частичную перерисовку Desktop focus и отсутствие декодирования/перерисовки для пустых нажатий. Это стоимость software composition; kernel по-прежнему публикует полный RGB565 framebuffer 153600 байт на законченный render. Значения не являются CPU cycles или аппаратной задержкой дисплея.
 
 ### Иконки Shell
 

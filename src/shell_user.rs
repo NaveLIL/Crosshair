@@ -63,12 +63,29 @@ static mut SHELL_USER_RECORD: [u32; 44] = [0; 44];
 static mut SHELL_METRICS: [u32; 12] = [0; 12];
 #[unsafe(no_mangle)]
 static mut SHELL_TRACE: [u32; 32 * 64] = [0; 32 * 64];
+/// Last render's bounded work counters, not a second frame or a kernel ABI.
+#[unsafe(no_mangle)]
+static mut SHELL_RENDER_METRICS: [u32; 8] = [0; 8];
 unsafe fn call(n: u32, a: u32, b: u32, c: u32, d: u32) -> u32 {
     // SAFETY: assembly follows AAPCS, saves r4/r7/LR, SVC is the only privilege
     // boundary. Kernel validates all raw arguments; no references span copyout.
     unsafe { shell_svc(n, a, b, c, d) }
 }
 fn decode(w: u32) -> Action {
+    // The unchanged synthetic FIFO accepts logical keys and Unicode only.
+    // Supplementary private-use scalars transport a synthetic tap. The host
+    // reserves this range from text; Shell rejects coordinates beyond 240x320.
+    // This is an emulator adapter convention, not a Blue Angel sensor protocol.
+    if w >> 24 == 8 {
+        let scalar = w & 0xffffff;
+        if (0x0f0000..=0x10ffff).contains(&scalar) {
+            let packed = scalar - 0x0f0000;
+            return Action::Pointer {
+                x: (packed & 0xff) as u16,
+                y: (packed >> 8) as u16,
+            };
+        }
+    }
     Action::Key(match w >> 24 {
         1 => Event::Up,
         2 => Event::Down,
@@ -129,7 +146,7 @@ pub extern "C" fn shell_user_main() -> ! {
         );
         let mut surface = Surface::new(pixels, 240, 320, 240).unwrap();
         let mut shell = Shell::new(BuildInfo {
-            version: "0.1.0 / Wave007",
+            version: "0.1.1 / Wave007.1",
             architecture: "ARMv5TE",
             environment: "QEMU synthetic",
         });
@@ -141,13 +158,33 @@ pub extern "C" fn shell_user_main() -> ! {
                 shell.handle(decode(wire));
             }
             let rendered = shell.render(&mut surface);
+            let render_metrics = shell.render_stats().words();
+            // SAFETY: fixed exclusive own User data; host observation only.
+            core::ptr::copy_nonoverlapping(
+                render_metrics.as_ptr(),
+                addr_of_mut!(SHELL_RENDER_METRICS).cast::<u32>(),
+                8,
+            );
             if rendered {
+                // The current broker publishes the entire fixed framebuffer.
+                // Surface may report several disjoint dirty rectangles, but
+                // one full publication already covers all of them. Keep the
+                // renderer API and its retry semantics; do not copy pixels.
+                let mut published = false;
                 surface
                     .present(|_, _, _| {
+                        if published {
+                            return Ok(());
+                        }
                         // Compiler memory clobber publishes pixel stores before SVC.
                         asm!("", options(nostack, preserves_flags));
                         let result = call(3, FB, BYTES, 0, 320 << 16 | 240);
-                        if result == 0 { Ok(()) } else { Err(()) }
+                        if result == 0 {
+                            published = true;
+                            Ok(())
+                        } else {
+                            Err(())
+                        }
                     })
                     .unwrap();
             }

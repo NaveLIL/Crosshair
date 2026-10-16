@@ -8,6 +8,64 @@ private let screenWidth = 240
 private let screenHeight = 320
 private let rgbBytes = screenWidth * screenHeight * 3
 private let maximumPPMBytes = rgbBytes + 4096
+private let pointerScalarBase: UInt32 = 0xf0000
+private let automatedEventMarker: Int64 = 0x435248525450
+private struct AutomatedEventSignature: Hashable {
+    let type: UInt
+    let timestamp: TimeInterval
+    let keyCode: UInt16
+    init(_ event: NSEvent) {
+        type = event.type.rawValue
+        timestamp = event.timestamp
+        keyCode = event.type == .keyDown ? event.keyCode : 0
+    }
+}
+@MainActor private var queuedAutomatedEvents: Set<AutomatedEventSignature> = []
+
+@MainActor private func postAutomatedEvent(_ event: NSEvent) {
+    // Explicit test windows may be focused while the owner types elsewhere.
+    // Mark only our posted events, so unrelated physical input cannot alter an
+    // automated trace. Normal live windows apply no such filter.
+    event.cgEvent?.setIntegerValueField(.eventSourceUserData, value: automatedEventMarker)
+    // Keep the original NSEvent: recreating a mouse event from CGEvent loses
+    // its NSWindow-relative routing. AppKit may copy posted events, so match
+    // their preserved type/timestamp/keycode fields in this bounded registry.
+    if event.type == .keyDown || event.type == .leftMouseDown {
+        queuedAutomatedEvents.insert(AutomatedEventSignature(event))
+    }
+    NSApplication.shared.postEvent(event, atStart: false)
+}
+
+// AppKit points and NSImage drawing use the same aspect-fit rectangle. Keeping
+// this calculation shared prevents resize/letterbox offsets from becoming
+// guest coordinates. The guest coordinate origin is the top-left pixel.
+private func contentRectangle(in bounds: NSRect) -> NSRect? {
+    guard bounds.origin.x.isFinite, bounds.origin.y.isFinite,
+          bounds.width.isFinite, bounds.height.isFinite,
+          bounds.width > 0, bounds.height > 0 else { return nil }
+    let scale = min(bounds.width / CGFloat(screenWidth), bounds.height / CGFloat(screenHeight))
+    let size = NSSize(width: CGFloat(screenWidth) * scale, height: CGFloat(screenHeight) * scale)
+    return NSRect(x: bounds.minX + (bounds.width - size.width) / 2,
+                  y: bounds.minY + (bounds.height - size.height) / 2,
+                  width: size.width, height: size.height)
+}
+
+private func logicalPoint(_ point: NSPoint, in bounds: NSRect) -> (Int, Int)? {
+    guard point.x.isFinite, point.y.isFinite, let rectangle = contentRectangle(in: bounds),
+          point.x >= rectangle.minX, point.x < rectangle.maxX,
+          point.y > rectangle.minY, point.y <= rectangle.maxY else { return nil }
+    let x = Int(floor((point.x - rectangle.minX) * CGFloat(screenWidth) / rectangle.width))
+    let y = Int(floor((rectangle.maxY - point.y) * CGFloat(screenHeight) / rectangle.height))
+    guard x >= 0, x < screenWidth, y >= 0, y < screenHeight else { return nil }
+    return (x, y)
+}
+
+private func pointerWire(x: Int, y: Int) -> UInt32? {
+    guard x >= 0, x < screenWidth, y >= 0, y < screenHeight else { return nil }
+    // A reserved supplementary PUA scalar passes the unchanged Unicode FIFO.
+    // Addition preserves the ninth Y bit; OR with0xf0000 would lose it.
+    return 0x08000000 | (pointerScalarBase + UInt32(y << 8) + UInt32(x))
+}
 
 private enum ViewerError: Error, CustomStringConvertible {
     case invalid(String)
@@ -105,7 +163,7 @@ private func eventWires(keyCode: UInt16, characters: String) -> [UInt32] {
         let value = scalar.value
         // AppKit function-key scalars are not printable text. The four PUA
         // controls above are emitted only by the explicit keycode mapping.
-        guard value >= 0x20 && value != 0x7f && !(0xe000...0xf8ff).contains(value) else { return nil }
+        guard value >= 0x20 && value != 0x7f && !(0xe000...0xf8ff).contains(value) && !(pointerScalarBase...0x10ffff).contains(value) else { return nil }
         return UInt32(8 << 24) | value
     }
 }
@@ -117,13 +175,17 @@ private func emit(_ line: String) {
 @MainActor
 private final class GuestView: NSView {
     private let framePath: String
+    private let automated: Bool
     private var image: NSImage?
     private var previousRGB: Data?
     private var timer: Timer?
+    private(set) var ignoredTestInputs = 0
     override var acceptsFirstResponder: Bool { true }
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 
-    init(path: String) {
+    init(path: String, automated: Bool = false) {
         framePath = path
+        self.automated = automated
         super.init(frame: NSRect(x: 0, y: 0, width: CGFloat(screenWidth), height: CGFloat(screenHeight)))
         autoresizingMask = [.width, .height]
         timer = Timer.scheduledTimer(timeInterval: 0.05, target: self,
@@ -151,21 +213,40 @@ private final class GuestView: NSView {
         NSColor.black.setFill()
         bounds.fill()
         guard let image else { return }
-        let scale = min(bounds.width / CGFloat(screenWidth), bounds.height / CGFloat(screenHeight))
-        let size = NSSize(width: CGFloat(screenWidth) * scale, height: CGFloat(screenHeight) * scale)
-        let destination = NSRect(x: (bounds.width - size.width) / 2,
-                                 y: (bounds.height - size.height) / 2,
-                                 width: size.width, height: size.height)
+        guard let destination = contentRectangle(in: bounds) else { return }
         NSGraphicsContext.current?.imageInterpolation = .none
         image.draw(in: destination, from: .zero, operation: .copy, fraction: 1)
     }
 
+    override func mouseDown(with event: NSEvent) {
+        guard acceptsInput(event) else { return }
+        // NSEvent locations are window points (already independent of backing
+        // scale). Only taps inside the actual guest image enter the FIFO.
+        let point = convert(event.locationInWindow, from: nil)
+        guard let (x, y) = logicalPoint(point, in: bounds), let wire = pointerWire(x: x, y: y) else { return }
+        window?.makeFirstResponder(self)
+        emit("event \(wire)")
+    }
+
+    private func acceptsInput(_ event: NSEvent) -> Bool {
+        if !automated { return true }
+        let accepted = queuedAutomatedEvents.remove(AutomatedEventSignature(event)) != nil
+        if !accepted { ignoredTestInputs += 1 }
+        return accepted
+    }
+
     override func keyDown(with event: NSEvent) {
+        guard acceptsInput(event) else { return }
         guard !event.modifierFlags.contains(.command) else { super.keyDown(with: event); return }
         for wire in eventWires(keyCode: event.keyCode, characters: event.characters ?? "") {
             emit("event \(wire)")
         }
     }
+}
+
+private enum NativeTestEvent {
+    case key(UInt16, String)
+    case pointer(Int, Int)
 }
 
 @MainActor
@@ -174,11 +255,14 @@ private final class ApplicationDelegate: NSObject, NSApplicationDelegate, NSWind
     private var window: NSWindow?
     private var sentQuit = false
     private let windowTest: Bool
+    private let pointerWindowTest: Bool
     private var testTimer: Timer?
-    init(path: String, windowTest: Bool = false) { framePath = path; self.windowTest = windowTest }
+    init(path: String, windowTest: Bool = false, pointerWindowTest: Bool = false) {
+        framePath = path; self.windowTest = windowTest; self.pointerWindowTest = pointerWindowTest
+    }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let view = GuestView(path: framePath)
+        let view = GuestView(path: framePath, automated: windowTest || pointerWindowTest)
         let next = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 480, height: 640),
                             styleMask: [.titled, .closable, .miniaturizable, .resizable],
                             backing: .buffered, defer: false)
@@ -192,25 +276,62 @@ private final class ApplicationDelegate: NSObject, NSApplicationDelegate, NSWind
         next.makeKeyAndOrderFront(nil)
         next.makeFirstResponder(view)
         window = next
-        NSApplication.shared.activate(ignoringOtherApps: true)
-        if windowTest {
+        if !windowTest && !pointerWindowTest {
+            NSApplication.shared.activate(ignoringOtherApps: true)
+        }
+        if windowTest || pointerWindowTest {
             emit("window-ready \(next.isVisible ? 1 : 0)")
             // Only the explicit test flag schedules input and closes the window.
             // Events traverse NSApplication's normal key-window/first-responder
             // routing, then the same FIFO bridge as physical MacBook keys.
-            let codes: [UInt16] = [122, 36, 53, 115]
+            let events: [NativeTestEvent] = pointerWindowTest
+                ? [.pointer(40, 68), .key(53, ""), .pointer(25, 12), .key(31, "О"),
+                   .key(36, ""), .pointer(227, 12), .key(115, "")]
+                : [.key(122, ""), .key(36, ""), .key(53, ""), .key(115, "")]
+            // Regression fixture: unrelated text follows the normal AppKit
+            // route but is absent from the explicit test-event registry.
+            Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak next] _ in
+                MainActor.assumeIsolated {
+                    guard let next, let event = NSEvent.keyEvent(with: .keyDown, location: .zero,
+                        modifierFlags: [], timestamp: ProcessInfo.processInfo.systemUptime,
+                        windowNumber: next.windowNumber, context: nil, characters: "Т",
+                        charactersIgnoringModifiers: "Т", isARepeat: false, keyCode: 17) else { return }
+                    NSApplication.shared.postEvent(event, atStart: false)
+                }
+            }
             var step = 0
             testTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: true) { [weak self, weak next] timer in
                 MainActor.assumeIsolated {
                     guard let self, let next else { timer.invalidate(); return }
-                    if step == codes.count {
+                    if step == events.count {
+                        emit("automation-isolation \(view.ignoredTestInputs > 0 ? 1 : 0)")
                         timer.invalidate(); next.performClose(nil); return
                     }
-                    if let event = NSEvent.keyEvent(with: .keyDown, location: .zero,
-                        modifierFlags: [], timestamp: ProcessInfo.processInfo.systemUptime,
-                        windowNumber: next.windowNumber, context: nil, characters: "",
-                        charactersIgnoringModifiers: "", isARepeat: false, keyCode: codes[step]) {
-                        NSApplication.shared.postEvent(event, atStart: false)
+                    // Exactly representable integer timestamps survive AppKit
+                    // copies unchanged and cannot match concurrent physical
+                    // input, whose timestamps remain near the current uptime.
+                    let testTimestamp = floor(ProcessInfo.processInfo.systemUptime) + 1000 + Double(step)
+                    switch events[step] {
+                    case .key(let code, let characters):
+                        if let event = NSEvent.keyEvent(with: .keyDown, location: .zero,
+                            modifierFlags: [], timestamp: testTimestamp,
+                            windowNumber: next.windowNumber, context: nil, characters: characters,
+                            charactersIgnoringModifiers: characters, isARepeat: false, keyCode: code) {
+                            postAutomatedEvent(event)
+                        }
+                    case .pointer(let x, let y):
+                        guard let rectangle = contentRectangle(in: view.bounds) else { return }
+                        let point = NSPoint(x: rectangle.minX + (CGFloat(x) + 0.5) * rectangle.width / CGFloat(screenWidth),
+                                            y: rectangle.maxY - (CGFloat(y) + 0.5) * rectangle.height / CGFloat(screenHeight))
+                        let location = view.convert(point, to: nil)
+                        for type in [NSEvent.EventType.leftMouseDown, .leftMouseUp] {
+                            if let event = NSEvent.mouseEvent(with: type, location: location,
+                                modifierFlags: [], timestamp: testTimestamp,
+                                windowNumber: next.windowNumber, context: nil, eventNumber: step,
+                                clickCount: 1, pressure: type == .leftMouseDown ? 1 : 0) {
+                                postAutomatedEvent(event)
+                            }
+                        }
                     }
                     step += 1
                     _ = self
@@ -246,6 +367,41 @@ private func selfTest() throws {
           eventWires(keyCode: 0, characters: "\u{7f}\u{f700}") == [] else {
         throw ViewerError.invalid("Unicode mapping self-test failed")
     }
+    // Logical coordinates use half-open top/left pixel bounds, including the
+    // last pixel without admitting letterboxing, NaN, or out-of-range taps.
+    let rectangles = [NSRect(x: 0, y: 0, width: 240, height: 320),
+                      NSRect(x: 0, y: 0, width: 480, height: 640),
+                      NSRect(x: 0, y: 0, width: 640, height: 400),
+                      NSRect(x: 10, y: 20, width: 240, height: 400)]
+    for bounds in rectangles {
+        guard let rectangle = contentRectangle(in: bounds) else { throw ViewerError.invalid("Missing aspect-fit rectangle") }
+        for y in 0..<screenHeight {
+            for x in 0..<screenWidth {
+                let point = NSPoint(x: rectangle.minX + (CGFloat(x) + 0.5) * rectangle.width / CGFloat(screenWidth),
+                                    y: rectangle.maxY - (CGFloat(y) + 0.5) * rectangle.height / CGFloat(screenHeight))
+                guard let mapped = logicalPoint(point, in: bounds), mapped.0 == x, mapped.1 == y else {
+                    throw ViewerError.invalid("Scaled/letterboxed pointer coordinate mapping failed")
+                }
+                guard pointerWire(x: x, y: y) == 0x08000000 | (pointerScalarBase + UInt32(y << 8) + UInt32(x)) else {
+                    throw ViewerError.invalid("Pointer wire lost coordinate bits")
+                }
+            }
+        }
+        let outside = [NSPoint(x: rectangle.minX - 0.01, y: rectangle.midY),
+                       NSPoint(x: rectangle.maxX, y: rectangle.midY),
+                       NSPoint(x: rectangle.midX, y: rectangle.minY),
+                       NSPoint(x: rectangle.midX, y: rectangle.maxY + 0.01)]
+        for point in outside {
+            guard logicalPoint(point, in: bounds) == nil else { throw ViewerError.invalid("Letterbox/outside tap accepted") }
+        }
+    }
+    guard logicalPoint(NSPoint(x: CGFloat.nan, y: 0), in: rectangles[0]) == nil,
+          logicalPoint(.zero, in: .zero) == nil,
+          pointerWire(x: -1, y: 0) == nil, pointerWire(x: 240, y: 0) == nil,
+          pointerWire(x: 0, y: 320) == nil,
+          eventWires(keyCode: 0, characters: "\u{f0000}\u{103fef}\u{10ffff}") == [] else {
+        throw ViewerError.invalid("Invalid pointer or reserved text accepted")
+    }
     var header = Data("P6\n# QMP fixture\n240 320\n255\n".utf8)
     var pixels = Data(repeating: 0x5a, count: rgbBytes)
     pixels[0] = 10 // A raster-leading whitespace must not be skipped.
@@ -262,7 +418,7 @@ private func selfTest() throws {
         do { _ = try parsePPM(invalid) } catch { continue }
         throw ViewerError.invalid("Corrupted or truncated PPM accepted")
     }
-    print("PASS Crosshair GUI: key mapping, Unicode, bounded P6 parser and corrupted/truncated input")
+    print("PASS Crosshair GUI: key mapping, Unicode, pointer scale/letterbox/bounds, bounded P6 parser and corrupted/truncated input")
 }
 
 let arguments = CommandLine.arguments
@@ -274,13 +430,15 @@ if arguments.count == 2 && arguments[1] == "--self-test" {
         print("{\"width\":240,\"height\":320,\"rgb_bytes\":\(frame.rgb.count),\"rgb_fnv1a64\":\"\(String(format: "%016llx", frame.checksum))\"}")
     } catch { fputs("\(error)\n", stderr); exit(1) }
 } else if (arguments.count == 2 && !arguments[1].hasPrefix("--")) ||
-          (arguments.count == 3 && arguments[1] == "--window-test") {
+          (arguments.count == 3 && ["--window-test", "--pointer-window-test"].contains(arguments[1])) {
     // The executable's synchronous top-level entry runs on the main thread.
     // No AppKit object is constructed on a worker or the headless test paths.
     MainActor.assumeIsolated {
         let app = NSApplication.shared
         let testing = arguments.count == 3
-        let delegate = ApplicationDelegate(path: arguments[testing ? 2 : 1], windowTest: testing)
+        let delegate = ApplicationDelegate(path: arguments[testing ? 2 : 1],
+            windowTest: testing && arguments[1] == "--window-test",
+            pointerWindowTest: testing && arguments[1] == "--pointer-window-test")
         app.setActivationPolicy(.regular)
         app.delegate = delegate
         let menu = NSMenu()
@@ -294,6 +452,6 @@ if arguments.count == 2 && arguments[1] == "--self-test" {
         withExtendedLifetime(delegate) {}
     }
 } else {
-    fputs("Usage: crosshair-gui FRAME.ppm | --self-test | --inspect-ppm FRAME.ppm | --window-test FRAME.ppm\n", stderr)
+    fputs("Usage: crosshair-gui FRAME.ppm | --self-test | --inspect-ppm FRAME.ppm | --window-test FRAME.ppm | --pointer-window-test FRAME.ppm\n", stderr)
     exit(2)
 }

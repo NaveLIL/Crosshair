@@ -1,0 +1,10 @@
+test_exact_source_and_generated_binding (__main__.WallpaperTests) ... ok
+test_generated_bytes_metadata_or_generator_mismatch_fail (__main__.WallpaperTests) ... ok
+test_invalid_extents_offsets_and_row_lengths_fail (__main__.WallpaperTests) ... ok
+test_source_and_prompt_paths_and_hashes_fail_closed (__main__.WallpaperTests) ... ok
+test_uniform_and_alternating_extreme_rows_round_trip (__main__.WallpaperTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.409s
+
+OK

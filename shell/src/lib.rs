@@ -4,10 +4,12 @@
 //! allocator, framebuffer ownership, clock or invented device-status service.
 use crosshair_ui::{Surface, components::Event};
 pub mod fixtures;
+pub mod geometry;
 pub mod icons;
 mod render;
+pub mod wallpaper;
 
-pub const VERSION: &str = "0.1.0";
+pub const VERSION: &str = "0.1.1";
 pub const RUNTIME_VERSION: u32 = 1;
 pub const VALID_TIMER: u32 = 1;
 pub const VALID_TASKS: u32 = 2;
@@ -15,8 +17,9 @@ pub const VALID_MEMORY: u32 = 4;
 pub const VALID_INPUT: u32 = 8;
 pub const HISTORY_CAPACITY: usize = 8;
 pub const APP_COUNT: usize = 4;
-pub const DESKTOP_COUNT: usize = 6;
+pub const DESKTOP_COUNT: usize = 3;
 pub const QUERY_CAPACITY: usize = 16;
+pub const POINTER_SCALAR_BASE: u32 = 0x000f_0000;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct BuildInfo {
@@ -30,6 +33,50 @@ impl BuildInfo {
         architecture: "ARMv5TE",
         environment: "QEMU synthetic",
     };
+    pub const WAVE007_1: Self = Self {
+        version: "0.1.1 / Wave007.1",
+        architecture: "ARMv5TE",
+        environment: "QEMU synthetic",
+    };
+}
+
+/// Work performed by the most recent render call. Pixel counts describe
+/// software composition and Surface dirty bounds, not full-frame publication
+/// bytes, CPU cycles or physical display latency. A no-op clears all fields.
+#[repr(C)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub struct RenderStats {
+    pub wallpaper: wallpaper::DrawStats,
+    pub dirty_rects: u32,
+    pub dirty_pixels: u32,
+    pub full: u32,
+    pub rendered: u32,
+}
+impl RenderStats {
+    pub const ZERO: Self = Self {
+        wallpaper: wallpaper::DrawStats {
+            packets_decoded: 0,
+            pixels_decoded: 0,
+            pixels_written: 0,
+            runs_written: 0,
+        },
+        dirty_rects: 0,
+        dirty_pixels: 0,
+        full: 0,
+        rendered: 0,
+    };
+    pub const fn words(self) -> [u32; 8] {
+        [
+            self.wallpaper.packets_decoded,
+            self.wallpaper.pixels_decoded,
+            self.wallpaper.pixels_written,
+            self.wallpaper.runs_written,
+            self.dirty_rects,
+            self.dirty_pixels,
+            self.full,
+            self.rendered,
+        ]
+    }
 }
 
 /// Versioned kernel-supplied observation, not a writable kernel capability.
@@ -142,6 +189,8 @@ pub const APPS: [Screen; APP_COUNT] = [
     Screen::Settings,
     Screen::Today,
 ];
+pub const SHORTCUTS: [Screen; DESKTOP_COUNT] =
+    [Screen::Today, Screen::Settings, Screen::Diagnostics];
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Action {
@@ -150,6 +199,12 @@ pub enum Action {
     SoftLeft,
     SoftRight,
     SwitchTask,
+    /// One logical tap in the fixed guest pixel coordinate space. No press,
+    /// release, calibration, drag or host-window coordinates are implied.
+    Pointer {
+        x: u16,
+        y: u16,
+    },
 }
 impl Action {
     /// Test/integration action numbers, not physical key scan codes.
@@ -175,6 +230,13 @@ impl Action {
             Self::Key(Event::TextInput('\u{e001}')) => Self::SoftLeft,
             Self::Key(Event::TextInput('\u{e002}')) => Self::SoftRight,
             Self::Key(Event::TextInput('\u{e003}')) => Self::SwitchTask,
+            Self::Key(Event::TextInput(ch)) if ch as u32 >= POINTER_SCALAR_BASE => {
+                let point = ch as u32 - POINTER_SCALAR_BASE;
+                Self::Pointer {
+                    x: (point & 255) as u16,
+                    y: (point >> 8) as u16,
+                }
+            }
             _ => self,
         }
     }
@@ -227,6 +289,7 @@ impl Snapshot {
 const _: () = {
     assert!(core::mem::size_of::<RuntimeInfo>() == 48);
     assert!(core::mem::size_of::<Snapshot>() == 64);
+    assert!(core::mem::size_of::<RenderStats>() == 32);
 };
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -247,6 +310,8 @@ pub struct Shell {
     theme: u8,
     opened_mask: u8,
     dirty: bool,
+    desktop_dirty: u8,
+    render_stats: RenderStats,
     events_processed: u32,
     revision: u32,
     renders: u32,
@@ -270,6 +335,8 @@ impl Shell {
             theme: 0,
             opened_mask: 1,
             dirty: true,
+            desktop_dirty: 0x80,
+            render_stats: RenderStats::ZERO,
             events_processed: 0,
             revision: 0,
             renders: 0,
@@ -302,6 +369,9 @@ impl Shell {
     }
     pub const fn runtime(&self) -> RuntimeInfo {
         self.runtime
+    }
+    pub const fn render_stats(&self) -> RenderStats {
+        self.render_stats
     }
     pub fn query(&self) -> &[char] {
         &self.query[..self.query_len as usize]
@@ -339,6 +409,7 @@ impl Shell {
     }
     fn invalidate(&mut self) {
         self.dirty = true;
+        self.desktop_dirty = 0x80;
         self.revision = self.revision.wrapping_add(1);
     }
     fn open(&mut self, screen: Screen) {
@@ -387,14 +458,7 @@ impl Shell {
     }
     fn activate(&mut self) {
         match self.screen {
-            Screen::Desktop => match self.desktop_selected {
-                0 => self.open(Screen::Launcher),
-                1 => self.open(Screen::Today),
-                2 => self.open(Screen::Settings),
-                3 => self.open(Screen::Diagnostics),
-                4 => self.open(Screen::About),
-                _ => self.switch(),
-            },
+            Screen::Desktop => self.open(SHORTCUTS[self.desktop_selected as usize]),
             Screen::Launcher => {
                 if self.matches(APPS[self.launcher_selected as usize]) {
                     self.open(APPS[self.launcher_selected as usize]);
@@ -460,14 +524,110 @@ impl Shell {
             _ => {}
         }
     }
+    fn soft_left(&mut self) {
+        if self.overlay != 0 {
+            if self.overlay == 3 {
+                self.overlay_selected = 0;
+            }
+            self.activate_overlay();
+        } else if self.screen == Screen::Desktop {
+            self.open(Screen::Launcher);
+        } else if matches!(self.screen, Screen::About | Screen::Diagnostics) {
+            self.back();
+        } else {
+            self.activate();
+        }
+    }
+    fn pointer(&mut self, x: u16, y: u16) {
+        use geometry as g;
+        // Modal controls own the whole input surface. A tap can never pass
+        // through a dismissed overlay into a shortcut behind it.
+        if self.overlay != 0 {
+            if g::SOFT_LEFT.contains(x, y) {
+                self.soft_left();
+            } else if g::SOFT_RIGHT.contains(x, y) {
+                self.overlay = 0;
+            } else if self.overlay == 3 {
+                for (index, rect) in g::DIALOG_BUTTONS.into_iter().enumerate() {
+                    if rect.contains(x, y) {
+                        self.overlay_selected = index as u8;
+                        self.activate_overlay();
+                        break;
+                    }
+                }
+            } else {
+                let count = if self.overlay == 1 { 6 } else { 3 };
+                if let Some(index) = (0..count).find(|&i| g::menu_row(i).contains(x, y)) {
+                    self.overlay_selected = index as u8;
+                    self.activate_overlay();
+                } else {
+                    let height = 30 + count as u16 * 26;
+                    if !g::Rect::new(g::MENU.x, g::MENU.y, g::MENU.width, height).contains(x, y) {
+                        self.overlay = 0;
+                    }
+                }
+            }
+            return;
+        }
+        if g::START.contains(x, y) {
+            self.open(Screen::Launcher);
+        } else if self.screen != Screen::Desktop && g::APP_BACK.contains(x, y) {
+            self.back();
+        } else if g::SOFT_LEFT.contains(x, y) {
+            self.soft_left();
+        } else if g::SOFT_RIGHT.contains(x, y) {
+            self.menu();
+        } else {
+            match self.screen {
+                Screen::Desktop => {
+                    if let Some(index) = g::DESKTOP.iter().position(|r| r.contains(x, y)) {
+                        self.desktop_selected = index as u8;
+                        self.activate();
+                    }
+                }
+                Screen::Launcher => {
+                    let mut visible = 0;
+                    for (index, app) in APPS.into_iter().enumerate() {
+                        if self.matches(app) {
+                            if g::launcher_row(visible).contains(x, y) {
+                                self.launcher_selected = index as u8;
+                                self.activate();
+                                break;
+                            }
+                            visible += 1;
+                        }
+                    }
+                }
+                Screen::Today => {
+                    if let Some(index) = g::TODAY_ACTIONS.iter().position(|r| r.contains(x, y)) {
+                        self.today_selected = index as u8;
+                        self.activate();
+                    }
+                }
+                Screen::Settings => {
+                    if let Some(index) = g::SETTINGS.iter().position(|r| r.contains(x, y)) {
+                        self.settings_selected = index as u8;
+                        self.activate();
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
     /// Consumes one existing logical action. Event counters include ignored
     /// input, while redraw occurs only for visible changes. Private-use Unicode
     /// actions travel through the existing TextInput wire; no scan code coupling.
     pub fn handle(&mut self, action: Action) -> bool {
+        let action = action.semantic();
+        if matches!(action, Action::Pointer { x, y } if x >= geometry::WIDTH || y >= geometry::HEIGHT)
+        {
+            return false;
+        }
         let before = *self;
         self.events_processed = self.events_processed.wrapping_add(1);
-        let action = action.semantic();
-        if action == Action::Home {
+        if let Action::Pointer { x, y } = action {
+            self.pointer(x, y);
+        } else if action == Action::Home {
             self.home();
         } else if action == Action::SwitchTask {
             self.overlay = 0;
@@ -483,12 +643,7 @@ impl Shell {
                     self.overlay = 0
                 }
                 Action::Key(Event::Select) => self.activate_overlay(),
-                Action::SoftLeft => {
-                    if self.overlay == 3 {
-                        self.overlay_selected = 0;
-                    }
-                    self.activate_overlay();
-                }
+                Action::SoftLeft => self.soft_left(),
                 Action::Key(Event::Up) | Action::Key(Event::Left) => {
                     self.overlay_selected = (self.overlay_selected + count - 1) % count
                 }
@@ -501,13 +656,7 @@ impl Shell {
             match action {
                 Action::Key(Event::Back) => self.back(),
                 Action::Key(Event::Menu) | Action::SoftRight => self.menu(),
-                Action::SoftLeft => {
-                    if matches!(self.screen, Screen::About | Screen::Diagnostics) {
-                        self.back();
-                    } else {
-                        self.activate();
-                    }
-                }
+                Action::SoftLeft => self.soft_left(),
                 Action::Key(Event::Select) => self.activate(),
                 Action::Key(Event::Up) => self.move_focus(-1, 0),
                 Action::Key(Event::Down) => self.move_focus(1, 0),
@@ -542,18 +691,34 @@ impl Shell {
             || self.query != before.query
             || self.query_len != before.query_len;
         if changed || self.screen == Screen::Diagnostics {
-            self.invalidate();
+            if changed
+                && before.screen == Screen::Desktop
+                && self.screen == Screen::Desktop
+                && before.theme == self.theme
+            {
+                self.dirty = true;
+                if before.overlay != 0 || self.overlay != 0 {
+                    self.desktop_dirty |= 0x40;
+                    if before.overlay != 0 && self.overlay == 0 {
+                        self.desktop_dirty |= 0x20;
+                    }
+                } else {
+                    self.desktop_dirty |=
+                        (1 << before.desktop_selected) | (1 << self.desktop_selected);
+                }
+                self.revision = self.revision.wrapping_add(1);
+            } else {
+                self.invalidate();
+            }
         }
         changed
     }
     fn move_focus(&mut self, vertical: i8, horizontal: i8) {
         match self.screen {
             Screen::Desktop => {
-                let row = self.desktop_selected / 2;
-                let column = self.desktop_selected % 2;
-                let next_row = (row as i8 + vertical).clamp(0, 2) as u8;
-                let next_column = (column as i8 + horizontal).clamp(0, 1) as u8;
-                self.desktop_selected = next_row * 2 + next_column;
+                self.desktop_selected = (self.desktop_selected as i8 + vertical + horizontal)
+                    .clamp(0, DESKTOP_COUNT as i8 - 1)
+                    as u8;
             }
             Screen::Launcher => {
                 let direction = vertical + horizontal;
@@ -587,11 +752,29 @@ impl Shell {
     /// existing Surface owns clipping, RGB565 pixels and dirty-rectangle retry.
     pub fn render(&mut self, surface: &mut Surface<'_>) -> bool {
         if !self.dirty {
+            self.render_stats = RenderStats::ZERO;
             return false;
         }
         self.renders = self.renders.wrapping_add(1);
-        render::draw(self, surface);
+        let full = !(self.screen == Screen::Desktop && self.desktop_dirty & 0x80 == 0);
+        let wallpaper = if !full {
+            render::redraw_desktop_focus(self, surface, self.desktop_dirty)
+        } else {
+            render::draw(self, surface)
+        };
+        self.render_stats = RenderStats {
+            wallpaper,
+            dirty_rects: surface.dirty_rects().len() as u32,
+            dirty_pixels: surface
+                .dirty_rects()
+                .iter()
+                .map(|r| (r.width() * r.height()) as u32)
+                .sum(),
+            full: u32::from(full),
+            rendered: 1,
+        };
         self.dirty = false;
+        self.desktop_dirty = 0;
         true
     }
 }

@@ -50,7 +50,24 @@ def wire(action):
     return ((action + 1) << 24) if action <= 6 else (8 << 24) | (0xE000 + action - 7)
 
 
-def await_stable(memory, symbols, user_symbols, events, process, timeout=30):
+def pointer_wire(x, y):
+    if not 0 <= x < 240 or not 0 <= y < 320:
+        raise ValueError("logical pointer outside240x320 guest image")
+    return 0x08000000 | (0xF0000 + (y << 8) + x)
+
+
+def pointer_coordinates(value):
+    """Decode only the reserved pointer carrier; keep arbitrary text distinct."""
+    if value >> 24 != 8 or not 0xF0000 <= (value & 0xFFFFFF) <= 0x10FFFF:
+        return None
+    point = (value & 0xFFFFFF) - 0xF0000
+    x, y = point & 255, point >> 8
+    return (x, y) if x < 240 and y < 320 else None
+
+
+def await_stable(memory, symbols, user_symbols, events, process, timeout=30, shell_events=None):
+    if shell_events is None:
+        shell_events = events
     deadline = time.monotonic() + timeout
     while True:
         r = record(memory, symbols["CROSSHAIR_SHELL_RECORD"])
@@ -60,7 +77,7 @@ def await_stable(memory, symbols, user_symbols, events, process, timeout=30):
             tasks = task_records(memory, symbols["TASKS"])
             if tasks[1]["state"] == 4:
                 u = user_record(memory, user_symbols)
-                if u["state"] == 2 and u["snapshot"]["events_processed"] == events:
+                if u["state"] == 2 and u["snapshot"]["events_processed"] == shell_events:
                     # TCG may finish a frame between the first header read and
                     # Waiting observation. Re-read publication fields rather
                     # than interpreting a torn live snapshot as guest failure.

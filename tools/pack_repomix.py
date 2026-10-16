@@ -50,6 +50,7 @@ def public_inventory():
         require(not relative.is_absolute() and ".." not in relative.parts and "\n" not in name and "\r" not in name,
                 "Unsafe public filename: " + name)
         require(relative.parts[0] not in DENIED_TOP and "__pycache__" not in relative.parts
+                and relative.name != ".DS_Store"
                 and not relative.name.startswith("repomix-output") and relative.suffix.lower() not in DENIED_SUFFIX,
                 "Private/cache/generated binary unexpectedly tracked or unignored: " + name)
         require(not path.is_symlink(), "Symlinks are not packed: " + name)
@@ -63,8 +64,10 @@ def public_inventory():
         if relative.suffix.lower() in IMAGE_TYPES:
             asset = {"path": name, "media_type": IMAGE_TYPES[relative.suffix.lower()], **original[name]}
             if relative.suffix.lower() == ".raw565":
-                require(name.startswith("reports/wave007/frames/") and len(data) == 240 * 320 * 2,
-                        "Only bounded verified Wave007 framebuffer captures may use raw565: " + name)
+                require(any(name.startswith(prefix) for prefix in
+                            ("reports/wave007/frames/", "reports/wave007-1/frames/"))
+                        and len(data) == 240 * 320 * 2,
+                        "Only bounded verified Shell framebuffer captures may use raw565: " + name)
                 asset.update(width=240, height=320, stride_pixels=240, pixel_format="RGB565_LE")
             images.append(asset)
         else:
@@ -100,14 +103,21 @@ def verify_pack(package, texts):
 
 
 def main():
-    parser = argparse.ArgumentParser(__doc__)
-    parser.add_argument("--check-only", action="store_true", help="Verify existing output against current public files without repacking")
+    parser = argparse.ArgumentParser(description=__doc__)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--check-only", action="store_true", help="Verify existing output against current public files without repacking")
+    mode.add_argument("--manifest-only", action="store_true", help="Refresh binary asset inventory before committing, without creating a pack")
     args = parser.parse_args()
+    text, images, original, asset_data = public_inventory()
+    if args.manifest_only:
+        (ROOT / ASSETS).write_bytes(asset_data)
+        require(public_inventory()[3] == asset_data, "Binary assets changed while manifest was being written")
+        print(f"Refreshed {ASSETS}: {len(images)} public image assets; no pack created")
+        return
     command = shutil.which("repomix")
     require(command is not None, "Install Repomix1.18.0 explicitly; pack script does not install dependencies")
     require(subprocess.check_output([command, "--version"], text=True).strip() == VERSION,
             "Need pinned Repomix1.18.0; refusing an unverified CLI version")
-    text, images, original, asset_data = public_inventory()
     pack_path, manifest_path = OUTPUT / "crosshair-public.json", OUTPUT / "manifest.json"
     if not args.check_only:
         (ROOT / ASSETS).write_bytes(asset_data)

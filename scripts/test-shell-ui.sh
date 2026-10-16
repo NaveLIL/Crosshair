@@ -11,8 +11,11 @@ out="$CROSSHAIR_ROOT/target/artifacts/shell/host"
 mkdir -p "$out"
 python3 shell/tools/generate_icons.py --check 2>&1 | tee "$out/icon-check.log"
 python3 shell/tools/test_generate_icons.py -v 2>&1 | tee "$out/icon-tests.log"
+python3 shell/tools/generate_wallpaper.py --check 2>&1 | tee "$out/wallpaper-check.log"
+python3 shell/tools/test_generate_wallpaper.py -v 2>&1 | tee "$out/wallpaper-tests.log"
 if [[ -x "$CROSSHAIR_ROOT/local/icon-tools/bin/python" ]]; then
     "$CROSSHAIR_ROOT/local/icon-tools/bin/python" shell/tools/generate_icons.py --regenerate-check 2>&1 | tee "$out/icon-regenerate.log"
+    "$CROSSHAIR_ROOT/local/icon-tools/bin/python" shell/tools/generate_wallpaper.py --regenerate-check 2>&1 | tee "$out/wallpaper-regenerate.log"
 fi
 neutral=$(mktemp -d /tmp/crosshair-shell-tests.XXXXXX)
 trap 'rm -rf "$neutral"' EXIT

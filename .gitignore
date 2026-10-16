@@ -16,3 +16,4 @@ __pycache__/
 *.cab
 *.exe
 *.dll
+.DS_Store

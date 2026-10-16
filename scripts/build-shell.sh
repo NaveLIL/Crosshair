@@ -3,6 +3,7 @@
 set -euo pipefail
 source "$(dirname -- "$0")/shell-env.sh"
 python3 shell/tools/generate_icons.py --check
+python3 shell/tools/generate_wallpaper.py --check
 sysroot=$(rustc --print sysroot)
 host=$(rustc -vV | sed -n 's/^host: //p')
 llvm="$sysroot/lib/rustlib/$host/bin"

@@ -30,8 +30,8 @@ ARTIFACTS = ROOT / "target/artifacts/shell"
 IMAGE, USER_IMAGE, OUT = ARTIFACTS / "image", ARTIFACTS / "user-image", ARTIFACTS / "execution"
 # First24: the shared meaningful session. Remaining actions exercise every key,
 # clamped focus, launcher context cancellation, selection restoration and text.
-CANONICAL = [8,8,5,7,1,8,8,1,8,9,7,3,8,5,6,8,1,8,10,5,7,6,1,8,
-             0,2,1,3,4,5,6,5,7,0,2,4,(8<<24)|0x041E,4,7,4,(8<<24)|8,3,2,7]
+CANONICAL = [8,8,5,7,1,4,8,1,8,9,7,3,4,5,6,8,1,8,10,5,7,6,1,8,
+             0,2,1,3,4,5,6,5,7,0,2,8,(8<<24)|0x041E,4,7,8,(8<<24)|8,3,2,7]
 EXPECTED_SCREENS = [2,3,2,0,0,5,5,5,5,5,0,0,4,0,0,1,1,4,5,4,0,0,0,2,
                     2,2,2,2,5,2,2,2,0,0,0,2,2,3,0,2,2,2,2,0]
 KEYFRAMES = {0,1,2,4,6,7,9,10,13,15,16,18,19,24,29,33,37,38,44}
@@ -100,7 +100,7 @@ def check_tables(memory, symbols, r):
     return evidence
 
 
-def check_state(memory, image, user, r, u, tasks, events, scenario):
+def check_state(memory, image, user, r, u, tasks, events, scenario, shell_events=None):
     symbols, user_symbols = image["symbols"], user["symbols"]
     for key, value in {"magic": 0x53484C4C, "version": 1, "stage": 2, "error": 0,
                        "events_delivered": events, "queue_len": 0, "queue_capacity": 4,
@@ -117,7 +117,7 @@ def check_state(memory, image, user, r, u, tasks, events, scenario):
     equal(0x01040000 <= context["sp"] <= 0x01048000 and context["sp"] % 8 == 0, True, "Shell User stack is bounded and AAPCS aligned")
     equal(memory.readl(physical(context["pc"] - 4)), 0xEF000000, "actual waiting instruction was ARM SVC0")
     equal((u["magic"], u["version"], u["state"]), (0x5553484C, 1, 2), "stable unprivileged observation ABI")
-    equal(u["snapshot"]["events_processed"], events, "actual User Shell consumed each admitted logical event")
+    equal(u["snapshot"]["events_processed"], events if shell_events is None else shell_events, "actual User Shell consumed each admitted logical event")
     equal(u["snapshot"]["renders"], r["frames"], "each completed User render is one privileged presentation")
     equal(u["probe_returns"], [value & 0xFFFFFFFF for value in PROBE_RETURNS], "actual User negative API return stores")
     equal(u["metrics"]["version"], 1, "versioned kernel diagnostics snapshot")
@@ -359,6 +359,8 @@ def main():
                                    "tools/framebuffer_png.py","tools/smoke_tasks.py","tools/smoke_e2a.py","tools/verify_image.py",
                                    "scripts/env.sh","scripts/shell-env.sh",
                                    "scripts/build-shell.sh","scripts/test-shell.sh","scripts/test-shell-ui.sh","scripts/test-wave007.sh",
+                                   "scripts/test-shell-pointer.sh","scripts/test-wave007-1.sh","tools/smoke_shell_pointer.py",
+                                   "tools/run_shell.py","tools/crosshair_gui.swift","tools/test_shell_input.py",
                                    "crosshair-emulator/qemu/crosshair-blueangel-display-test.c",
                                    "crosshair-emulator/qemu/crosshair-blueangel-e2b.c","crosshair-emulator/qemu/crosshair-blueangel-e2a.c")]
     result["source_sha256"]={str(path.relative_to(ROOT)):sha(path.read_bytes())for path in sorted(set(sources))if path.is_file()}

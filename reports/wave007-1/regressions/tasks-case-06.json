@@ -1,0 +1,471 @@
+{
+  "result": "PASS",
+  "selector": 6,
+  "name": "yield_exit_lifecycle",
+  "machine": "crosshair-blueangel-e2b",
+  "accelerator": "tcg",
+  "image_sha256": {
+    "crosshair-tasks.elf": "9fd5faf486b7acd6308c09768c8ae87f9a85135340c4960f905add7c10019eba",
+    "vectors.bin": "01d24cc9d926bff09df0f1785ce577ec1029e8cccdaa84797cf43b7e20d32d63",
+    "crosshair-tasks.bin": "a099bf581c3cb85ed9b25d3926250643deeed5d8818ec125b7c742527d40becb"
+  },
+  "boots": [
+    {
+      "boot": 1,
+      "pre_entry_poison": 2779096485,
+      "record": {
+        "magic": 1413567307,
+        "version": 1,
+        "stage": 3,
+        "error": 0,
+        "scenario": 6,
+        "ticks": 2,
+        "switches": 2,
+        "current": 4294967295,
+        "midr": 1761945859,
+        "sctlr": 121,
+        "ttbr": 2684403712,
+        "dacr": 1,
+        "pid": 0,
+        "pic_mask_final": 0,
+        "timer_oier_final": 0,
+        "timer_ossr_final": 0,
+        "last_irq_frame": 2684459536,
+        "last_irq_handler_cpsr": 1610613202,
+        "last_svc_frame": 2684455392,
+        "last_svc_handler_cpsr": 1610612947,
+        "last_abort_frame": 0,
+        "last_undef_frame": 0,
+        "fault_tick": 0,
+        "tlb_switches": 5,
+        "canary_ok": 1,
+        "terminal_reason": 2,
+        "irq_from_a": 2,
+        "irq_from_b": 0,
+        "last_fault_handler_cpsr": 0,
+        "first_irq_a_pc": 16777276,
+        "first_irq_b_pc": 0,
+        "healthy_counter_at_fault": 0
+      },
+      "tasks": [
+        {
+          "id": 1,
+          "state": 2,
+          "dispatches": 4,
+          "preemptions": 2,
+          "svc_count": 2,
+          "copies": 0,
+          "yields": 1,
+          "exit_code": 42,
+          "fault_kind": 0,
+          "fault_lr": 0,
+          "fault_psr": 0,
+          "dfsr": 0,
+          "dfar": 0,
+          "ifsr": 0,
+          "fault_pc": 0,
+          "fault_opcode": 0,
+          "context": {
+            "r0": 42,
+            "r1": 16781312,
+            "r2": 102,
+            "r3": 6,
+            "r4": 20,
+            "r5": 21,
+            "r6": 22,
+            "r7": 0,
+            "r8": 24,
+            "r9": 25,
+            "r10": 26,
+            "r11": 27,
+            "r12": 28,
+            "sp": 16793544,
+            "lr": 30,
+            "pc": 16777628,
+            "cpsr": 1610612816,
+            "kind": 2,
+            "raw_lr": 16777628,
+            "pad": 0
+          }
+        },
+        {
+          "id": 2,
+          "state": 2,
+          "dispatches": 1,
+          "preemptions": 0,
+          "svc_count": 321,
+          "copies": 64,
+          "yields": 0,
+          "exit_code": 43,
+          "fault_kind": 0,
+          "fault_lr": 0,
+          "fault_psr": 0,
+          "dfsr": 0,
+          "dfar": 0,
+          "ifsr": 0,
+          "fault_pc": 0,
+          "fault_opcode": 0,
+          "context": {
+            "r0": 43,
+            "r1": 0,
+            "r2": 16781312,
+            "r3": 32,
+            "r4": 132,
+            "r5": 133,
+            "r6": 134,
+            "r7": 0,
+            "r8": 136,
+            "r9": 137,
+            "r10": 138,
+            "r11": 139,
+            "r12": 140,
+            "sp": 16793544,
+            "lr": 142,
+            "pc": 16777640,
+            "cpsr": 1610612816,
+            "kind": 2,
+            "raw_lr": 16777640,
+            "pad": 0
+          }
+        }
+      ],
+      "registers": "\r\nCPU#0\r\nR00=00000000 R01=a00091ec R02=fff0bdc0 R03=0000000a\r\nR04=00000014 R05=00000015 R06=00000016 R07=00000000\r\nR08=00000018 R09=00000019 R10=0000001a R11=0000001b\r\nR12=00000000 R13=a0018a30 R14=a0008440 R15=a0008234\r\nPSR=600000d3 -ZC- A svc32\r\nFPSCR: 00000000\r\n",
+      "live_checkpoint": null,
+      "verification": {
+        "contexts": [
+          {
+            "context_physical_instruction": 2686452124,
+            "context_opcode": "0xeaffffff",
+            "register_sentinels_verified": true,
+            "stack_sentinels_verified": true,
+            "saved_cpsr": 1610612816
+          },
+          {
+            "context_physical_instruction": 2687500712,
+            "context_opcode": "0xea000002",
+            "register_sentinels_verified": true,
+            "stack_sentinels_verified": true,
+            "saved_cpsr": 1610612816
+          }
+        ],
+        "user_data": [
+          {
+            "counter": 250023,
+            "accumulator": 1191104204,
+            "copyret": 0,
+            "copypsr": 0,
+            "last_syscall_err": 0,
+            "lifecycle_marker": 102,
+            "zero_length_ret": 0,
+            "bad_immediate_ret": 0,
+            "workload_error": 0
+          },
+          {
+            "counter": 32,
+            "accumulator": 528,
+            "copyret": 15,
+            "copypsr": 1610612816,
+            "last_syscall_err": 0,
+            "lifecycle_marker": 0,
+            "zero_length_ret": 0,
+            "bad_immediate_ret": 4294967258,
+            "workload_error": 0
+          }
+        ],
+        "page_tables": [
+          {
+            "task": 0,
+            "l1_physical": 2684403712,
+            "l2_physical": 2684436480,
+            "user_virtual_base": 16777216,
+            "code_descriptor": 2686454434,
+            "data_descriptor": 2686459890,
+            "guard_descriptor": 0,
+            "stack_descriptor": 2686468082,
+            "physical_base": 2686451712,
+            "l1_sha256": "507276da7bc1e4758561e1330186a3e4606aa5f2f9e824e93855b81e40d108ad",
+            "l2_sha256": "695b0d924a18f990b3ba1a9062d8cfc13153707484ba0bffd84d8634790b481e"
+          },
+          {
+            "task": 1,
+            "l1_physical": 2684420096,
+            "l2_physical": 2684437504,
+            "user_virtual_base": 16777216,
+            "code_descriptor": 2687503010,
+            "data_descriptor": 2687508466,
+            "guard_descriptor": 0,
+            "stack_descriptor": 2687516658,
+            "physical_base": 2687500288,
+            "l1_sha256": "842f1826a11fa4ef1eef835ed8d09cd9e1964f1320d3b8b2bd888432e166d362",
+            "l2_sha256": "47b71f1a5f1420a3b81e91c454b88c8e8275236ea6f8bc89a8514ade52e2f823"
+          }
+        ],
+        "code": {
+          "code_pages": [
+            {
+              "task": 0,
+              "physical": 2686451712,
+              "bytes": 456,
+              "sha256": "6c04c2a83afdbab730827d8b4a640565d85ac707f2a4b44ed8a6b2436f1da4f5"
+            },
+            {
+              "task": 1,
+              "physical": 2687500288,
+              "bytes": 476,
+              "sha256": "adeb1deb3ddd72ed0b8273905e03080253550ede065d6307c03864b5b81f752f"
+            }
+          ],
+          "busy_no_svc": {
+            "physical_start": 2686451772,
+            "physical_end": 2686451956,
+            "instruction_words": 46,
+            "sha256": "1c01f451571fce00c2d822b0cba76572ff61e79170d646315deef02b12b2209c"
+          }
+        }
+      }
+    },
+    {
+      "boot": 2,
+      "pre_entry_poison": 2779096485,
+      "record": {
+        "magic": 1413567307,
+        "version": 1,
+        "stage": 3,
+        "error": 0,
+        "scenario": 6,
+        "ticks": 2,
+        "switches": 2,
+        "current": 4294967295,
+        "midr": 1761945859,
+        "sctlr": 121,
+        "ttbr": 2684403712,
+        "dacr": 1,
+        "pid": 0,
+        "pic_mask_final": 0,
+        "timer_oier_final": 0,
+        "timer_ossr_final": 0,
+        "last_irq_frame": 2684459536,
+        "last_irq_handler_cpsr": 1610613202,
+        "last_svc_frame": 2684455392,
+        "last_svc_handler_cpsr": 1610612947,
+        "last_abort_frame": 0,
+        "last_undef_frame": 0,
+        "fault_tick": 0,
+        "tlb_switches": 5,
+        "canary_ok": 1,
+        "terminal_reason": 2,
+        "irq_from_a": 2,
+        "irq_from_b": 0,
+        "last_fault_handler_cpsr": 0,
+        "first_irq_a_pc": 16777448,
+        "first_irq_b_pc": 0,
+        "healthy_counter_at_fault": 0
+      },
+      "tasks": [
+        {
+          "id": 1,
+          "state": 2,
+          "dispatches": 4,
+          "preemptions": 2,
+          "svc_count": 2,
+          "copies": 0,
+          "yields": 1,
+          "exit_code": 42,
+          "fault_kind": 0,
+          "fault_lr": 0,
+          "fault_psr": 0,
+          "dfsr": 0,
+          "dfar": 0,
+          "ifsr": 0,
+          "fault_pc": 0,
+          "fault_opcode": 0,
+          "context": {
+            "r0": 42,
+            "r1": 16781312,
+            "r2": 102,
+            "r3": 6,
+            "r4": 20,
+            "r5": 21,
+            "r6": 22,
+            "r7": 0,
+            "r8": 24,
+            "r9": 25,
+            "r10": 26,
+            "r11": 27,
+            "r12": 28,
+            "sp": 16793544,
+            "lr": 30,
+            "pc": 16777628,
+            "cpsr": 1610612816,
+            "kind": 2,
+            "raw_lr": 16777628,
+            "pad": 0
+          }
+        },
+        {
+          "id": 2,
+          "state": 2,
+          "dispatches": 1,
+          "preemptions": 0,
+          "svc_count": 321,
+          "copies": 64,
+          "yields": 0,
+          "exit_code": 43,
+          "fault_kind": 0,
+          "fault_lr": 0,
+          "fault_psr": 0,
+          "dfsr": 0,
+          "dfar": 0,
+          "ifsr": 0,
+          "fault_pc": 0,
+          "fault_opcode": 0,
+          "context": {
+            "r0": 43,
+            "r1": 0,
+            "r2": 16781312,
+            "r3": 32,
+            "r4": 132,
+            "r5": 133,
+            "r6": 134,
+            "r7": 0,
+            "r8": 136,
+            "r9": 137,
+            "r10": 138,
+            "r11": 139,
+            "r12": 140,
+            "sp": 16793544,
+            "lr": 142,
+            "pc": 16777640,
+            "cpsr": 1610612816,
+            "kind": 2,
+            "raw_lr": 16777640,
+            "pad": 0
+          }
+        }
+      ],
+      "registers": "\r\nCPU#0\r\nR00=00000000 R01=a00091ec R02=fff0bdc0 R03=0000000a\r\nR04=00000014 R05=00000015 R06=00000016 R07=00000000\r\nR08=00000018 R09=00000019 R10=0000001a R11=0000001b\r\nR12=00000000 R13=a0018a30 R14=a0008440 R15=a0008234\r\nPSR=600000d3 -ZC- A svc32\r\nFPSCR: 00000000\r\n",
+      "live_checkpoint": null,
+      "verification": {
+        "contexts": [
+          {
+            "context_physical_instruction": 2686452124,
+            "context_opcode": "0xeaffffff",
+            "register_sentinels_verified": true,
+            "stack_sentinels_verified": true,
+            "saved_cpsr": 1610612816
+          },
+          {
+            "context_physical_instruction": 2687500712,
+            "context_opcode": "0xea000002",
+            "register_sentinels_verified": true,
+            "stack_sentinels_verified": true,
+            "saved_cpsr": 1610612816
+          }
+        ],
+        "user_data": [
+          {
+            "counter": 295262,
+            "accumulator": 640298993,
+            "copyret": 0,
+            "copypsr": 0,
+            "last_syscall_err": 0,
+            "lifecycle_marker": 102,
+            "zero_length_ret": 0,
+            "bad_immediate_ret": 0,
+            "workload_error": 0
+          },
+          {
+            "counter": 32,
+            "accumulator": 528,
+            "copyret": 15,
+            "copypsr": 1610612816,
+            "last_syscall_err": 0,
+            "lifecycle_marker": 0,
+            "zero_length_ret": 0,
+            "bad_immediate_ret": 4294967258,
+            "workload_error": 0
+          }
+        ],
+        "page_tables": [
+          {
+            "task": 0,
+            "l1_physical": 2684403712,
+            "l2_physical": 2684436480,
+            "user_virtual_base": 16777216,
+            "code_descriptor": 2686454434,
+            "data_descriptor": 2686459890,
+            "guard_descriptor": 0,
+            "stack_descriptor": 2686468082,
+            "physical_base": 2686451712,
+            "l1_sha256": "507276da7bc1e4758561e1330186a3e4606aa5f2f9e824e93855b81e40d108ad",
+            "l2_sha256": "695b0d924a18f990b3ba1a9062d8cfc13153707484ba0bffd84d8634790b481e"
+          },
+          {
+            "task": 1,
+            "l1_physical": 2684420096,
+            "l2_physical": 2684437504,
+            "user_virtual_base": 16777216,
+            "code_descriptor": 2687503010,
+            "data_descriptor": 2687508466,
+            "guard_descriptor": 0,
+            "stack_descriptor": 2687516658,
+            "physical_base": 2687500288,
+            "l1_sha256": "842f1826a11fa4ef1eef835ed8d09cd9e1964f1320d3b8b2bd888432e166d362",
+            "l2_sha256": "47b71f1a5f1420a3b81e91c454b88c8e8275236ea6f8bc89a8514ade52e2f823"
+          }
+        ],
+        "code": {
+          "code_pages": [
+            {
+              "task": 0,
+              "physical": 2686451712,
+              "bytes": 456,
+              "sha256": "6c04c2a83afdbab730827d8b4a640565d85ac707f2a4b44ed8a6b2436f1da4f5"
+            },
+            {
+              "task": 1,
+              "physical": 2687500288,
+              "bytes": 476,
+              "sha256": "adeb1deb3ddd72ed0b8273905e03080253550ede065d6307c03864b5b81f752f"
+            }
+          ],
+          "busy_no_svc": {
+            "physical_start": 2686451772,
+            "physical_end": 2686451956,
+            "instruction_words": 46,
+            "sha256": "1c01f451571fce00c2d822b0cba76572ff61e79170d646315deef02b12b2209c"
+          }
+        }
+      }
+    }
+  ],
+  "command": [
+    "<workspace>/../qemu-e2b/bin/qemu-system-arm",
+    "-machine",
+    "crosshair-blueangel-e2b",
+    "-cpu",
+    "pxa260",
+    "-accel",
+    "tcg",
+    "-S",
+    "-display",
+    "none",
+    "-monitor",
+    "none",
+    "-serial",
+    "stdio",
+    "-nic",
+    "none",
+    "-device",
+    "loader,file=<artifacts>/tasks/image/crosshair-tasks.elf,cpu-num=0",
+    "-qmp",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest-log",
+    "<artifacts>/tasks-tests/case-06/memory-server.log",
+    "-d",
+    "guest_errors"
+  ],
+  "uart_utf8": "CROSSHAIR TASKS \u2014 PREEMPTION COMPLETE\nCROSSHAIR TASKS \u2014 PREEMPTION COMPLETE\n"
+}

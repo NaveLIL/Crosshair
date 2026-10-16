@@ -2,6 +2,8 @@
 
 Собственная ОС на Rust для i-mate PDA2k / HTC Blue Angel, Intel XScale PXA263 (ARMv5TE). Цель — самостоятельное ядро, аппаратная клавиатура и сенсор, приложения, звонки/SMS и надёжный сон.
 
+**Wave007.1 / Pocket PC Desktop:** свободное рабочее пространство с серо-синими обоями240×320, компактным «Пуск», тремя небольшими ярлыками и отдельными Launcher/Today. Мышь macOS передаёт логические taps в настоящий ARM Shell; общая геометрия отвечает за hit-testing и keyboard focus. Фон восстанавливается частично, без второго framebuffer или runtime PNG/SVG. [Отчёт, PNG и память](reports/WAVE_007_1.md), [ресурсы](docs/UI_ASSET_SYSTEM.md#wave0071-static-wallpaper), [навигация](docs/SHELL_NAVIGATION.md). Команда запуска прежняя: `scripts/run-crosshair-gui.sh`.
+
 **Wave007 / Crosshair Shell0.1:** отдельная ARM User-задача с настоящими Desktop, Today, Launcher с поиском, About, Diagnostics, Settings, меню, диалогом и переключением тем. Один RGB565 framebuffer, прежний `crosshair-ui`, kernel-controlled Present/Metrics/WaitEvent и вытесняемый Busy User. [Отчёт и кадры](reports/WAVE_007.md), [архитектура](docs/SHELL_ARCHITECTURE.md), [навигация](docs/SHELL_NAVIGATION.md).
 
 Системные значки — закреплённый поднабор [Tabler Icons](https://github.com/tabler/tabler-icons) с сохранённой MIT-лицензией:18 SVG преобразуются при сборке в54 окрашиваемые темой маски12/16/24px,2196B read-only данных и0B дополнительного постоянного mutable state. [Каталог, происхождение и воспроизводимая генерация](docs/UI_ASSET_SYSTEM.md); SVG-движок в ОС не добавляется.

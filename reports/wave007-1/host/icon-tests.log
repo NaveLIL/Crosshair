@@ -1,0 +1,11 @@
+test_all_truncated_svg_prefixes_fail_safely (__main__.IconInputTests) ... ok
+test_changed_svg_and_license_fail_before_render (__main__.IconInputTests) ... ok
+test_complete_pinned_catalog_and_output (__main__.IconInputTests) ... ok
+test_duplicate_id_and_path_escape_rejected (__main__.IconInputTests) ... ok
+test_generated_corruption_rejected (__main__.IconInputTests) ... ok
+test_hostile_or_unbounded_xml_never_reaches_rasterizer (__main__.IconInputTests) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.124s
+
+OK
