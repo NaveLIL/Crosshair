@@ -340,5 +340,287 @@ fn scenario_has_reviewable_selection_scroll_and_pixel_golden() {
             hash = (hash ^ byte as u64).wrapping_mul(0x100000001b3);
         }
     }
-    assert_eq!(hash, 10739668449275078947, "UI0.2 reviewed raw565 golden");
+    assert_eq!(
+        hash, 6602604234790396534,
+        "Design System0.1 intentional themed raw565 golden"
+    );
+}
+
+#[test]
+fn theme_tokens_geometry_and_font_contract_are_exact() {
+    use crosshair_ui::{
+        font,
+        theme::{colors as c, layout as l},
+    };
+    assert_eq!(
+        [
+            c::BACKGROUND.0,
+            c::SURFACE.0,
+            c::INK.0,
+            c::MUTED.0,
+            c::HEADER.0,
+            c::SYSTEM.0,
+            c::SELECTED.0,
+            c::FOCUS.0,
+            c::EDGE.0,
+            c::SOFTKEY.0,
+            c::WHITE.0,
+            c::SCROLL_TRACK.0,
+            c::SCROLL_THUMB.0
+        ],
+        [
+            0xe73c, 0xf79e, 0x1946, 0x5b4e, 0x2a4b, 0x1946, 0xc6fb, 0x21e8, 0x9cf3, 0xdedb, 0xffff,
+            0xc638, 0x7452
+        ]
+    );
+    assert_eq!((l::WIDTH, l::HEIGHT), (240, 320));
+    assert_eq!(l::SYSTEM_TOP + l::SYSTEM_HEIGHT, l::HEADER_TOP);
+    assert_eq!(l::HEADER_TOP + l::HEADER_HEIGHT, l::SEARCH_TOP);
+    assert!(l::SEARCH_TOP + l::SEARCH_HEIGHT <= l::LIST_TOP);
+    assert!(l::LIST_TOP + l::ROW_PITCH * VISIBLE_ROWS as u16 <= l::STATUS_TOP);
+    assert_eq!(l::STATUS_TOP + l::STATUS_HEIGHT, l::SOFTKEY_TOP);
+    assert_eq!(l::SOFTKEY_TOP + l::SOFTKEY_HEIGHT, l::HEIGHT);
+    assert_eq!(l::SOFTKEY_WIDTH * 2, l::WIDTH);
+    assert!(l::PAGE_LEFT + l::ROW_WIDTH < l::SCROLL_X);
+    assert!(l::SCROLL_X + l::SCROLL_WIDTH <= l::WIDTH);
+    assert_eq!(
+        (
+            l::FONT_ADVANCE as usize,
+            l::FONT_HEIGHT as usize,
+            l::LINE_HEIGHT as usize
+        ),
+        (font::ADVANCE, font::HEIGHT, font::LINE_HEIGHT)
+    );
+}
+
+#[test]
+fn shared_fixture_capture_states_cover_all_views_with_one_render_path() {
+    use crosshair_ui::{
+        fixtures::{CAPTURE_STEPS, SCENARIO},
+        theme::colors as c,
+    };
+    assert_eq!(SCENARIO.len(), 37);
+    assert_eq!(
+        CAPTURE_STEPS,
+        [0, 10, 11, 12, 15, 17, 20, 21, 24, 25, 26, 37]
+    );
+    let palette = [
+        c::BACKGROUND,
+        c::SURFACE,
+        c::INK,
+        c::MUTED,
+        c::HEADER,
+        c::SYSTEM,
+        c::SELECTED,
+        c::FOCUS,
+        c::EDGE,
+        c::SOFTKEY,
+        c::WHITE,
+        c::SCROLL_TRACK,
+        c::SCROLL_THUMB,
+        c::TEST_RED,
+        c::TEST_GREEN,
+        c::TEST_BLUE,
+    ];
+    let mut pixels = vec![0; 240 * 320];
+    let mut surface = Surface::new(&mut pixels, 240, 320, 240).unwrap();
+    let mut screen = AppsScreen::new();
+    let mut views = [false; 3];
+    let mut captured = 0;
+    for state in 0..=SCENARIO.len() {
+        if state > 0 {
+            screen.handle(SCENARIO[state - 1]);
+        }
+        if !CAPTURE_STEPS.contains(&state) {
+            continue;
+        }
+        screen.render(&mut surface);
+        assert!(
+            surface
+                .pixels()
+                .iter()
+                .all(|p| palette.iter().any(|c| c.0 == *p))
+        );
+        assert_eq!(surface.pixels()[0], c::SYSTEM.0);
+        assert_eq!(surface.pixels()[20 * 240], c::HEADER.0);
+        assert!(!surface.dirty_rects().is_empty());
+        views[match screen.view() {
+            View::List => 0,
+            View::Action(_) => 1,
+            View::Menu => 2,
+        }] = true;
+        captured += 1;
+        surface.present(|_, _, _| Ok::<(), ()>(())).unwrap();
+        assert!(surface.dirty_rects().is_empty());
+    }
+    assert_eq!(captured, 12);
+    assert!(views.into_iter().all(|v| v));
+}
+
+#[test]
+fn separate_boundary_fixture_starts_fresh_and_exercises_unicode_capacity() {
+    use crosshair_ui::fixtures::{BOUNDARY_CAPTURE_STEPS, BOUNDARY_SCENARIO};
+    assert_eq!(BOUNDARY_SCENARIO.len(), 27);
+    assert_eq!(BOUNDARY_CAPTURE_STEPS, [0, 2, 3, 6, 23, 24, 26, 27]);
+    let mut screen = AppsScreen::new();
+    for (index, event) in BOUNDARY_SCENARIO.into_iter().enumerate() {
+        let changed = screen.handle(event);
+        invariant(&screen);
+        match index + 1 {
+            1 => assert!(!changed),
+            2 => {
+                assert_eq!(screen.filter(), &['Ё']);
+                assert_eq!(screen.match_count(), 0);
+            }
+            3 => assert!(screen.filter().is_empty()),
+            6 => assert_eq!(screen.filter(), &['Й', 'Ъ', 'Ь']),
+            23 => assert_eq!(screen.filter(), &['А'; FILTER_CAPACITY]),
+            24 => {
+                assert!(!changed);
+                assert_eq!(screen.filter().len(), FILTER_CAPACITY);
+            }
+            26 => assert_eq!(screen.view(), View::Menu),
+            _ => {}
+        }
+    }
+    // Compare logical state, not inactive buffer storage after a cleared filter.
+    assert_eq!(
+        (
+            screen.view(),
+            screen.focus(),
+            screen.selected_item(),
+            screen.scroll()
+        ),
+        (View::List, Focus::List, Some(0), 0)
+    );
+    assert!(screen.filter().is_empty());
+    assert_eq!(screen.opened_count(), 0);
+}
+
+#[test]
+fn state_icon_roles_and_planned_control_geometry_form_a_bounded_contract() {
+    use crosshair_ui::theme::{colors as c, layout as l};
+    assert_eq!(
+        (
+            c::DISABLED.0,
+            c::DISABLED_SURFACE.0,
+            c::PRESSED.0,
+            c::ACTIVE.0,
+            c::WARNING.0,
+            c::ERROR.0
+        ),
+        (0x5b4e, 0xe73c, 0xc6fb, 0x21e8, 0xfd20, 0xf986)
+    );
+    assert_eq!(
+        (
+            c::SYSTEM_ICON,
+            c::SYSTEM_ICON_DISABLED,
+            c::SYSTEM_ICON_ACTIVE,
+            c::SYSTEM_ICON_WARNING,
+            c::SYSTEM_ICON_ERROR
+        ),
+        (c::WHITE, c::EDGE, c::SELECTED, c::WARNING, c::ERROR)
+    );
+    assert_ne!(c::DISABLED, c::ACTIVE);
+    assert_eq!(
+        (
+            l::BORDER_WIDTH,
+            l::FOCUS_WIDTH,
+            l::ICON_SIZE,
+            l::ICON_PADDING
+        ),
+        (1, 2, 12, 2)
+    );
+    assert_eq!(l::ICON_SIZE + 2 * l::ICON_PADDING, l::SYSTEM_HEIGHT);
+    assert!(l::BUTTON_HEIGHT >= l::FONT_HEIGHT + 2 * l::BUTTON_PADDING);
+    assert!(l::INPUT_HEIGHT >= l::FONT_HEIGHT + 2 * l::INPUT_PADDING);
+    assert_eq!(
+        (l::BUTTON_MIN_WIDTH, l::INPUT_WIDTH, l::SCROLL_HIT_WIDTH),
+        (48, 224, 8)
+    );
+    assert!(l::PAGE_LEFT + l::ROW_WIDTH <= l::SCROLL_HIT_X);
+    assert_eq!(l::SCROLL_HIT_X + l::SCROLL_HIT_WIDTH, l::WIDTH);
+    assert!(l::DIALOG_X + l::DIALOG_WIDTH <= l::WIDTH);
+    assert!(l::DIALOG_Y >= l::HEADER_TOP + l::HEADER_HEIGHT);
+    assert!(l::DIALOG_Y + l::DIALOG_HEIGHT <= l::SOFTKEY_TOP);
+    let inner_width = l::DIALOG_WIDTH - 2 * l::DIALOG_PADDING;
+    let button_width = (inner_width - l::DIALOG_BUTTON_GAP) / 2;
+    assert_eq!(button_width, 96);
+    assert!(button_width >= l::BUTTON_MIN_WIDTH);
+    assert_eq!(
+        l::DIALOG_HEIGHT
+            - l::DIALOG_HEADER_HEIGHT
+            - l::DIALOG_FOOTER_HEIGHT
+            - 2 * l::DIALOG_PADDING,
+        8 * l::LINE_HEIGHT
+    );
+}
+
+#[test]
+fn date_time_and_russian_labels_render_fixed_advance_with_active_disabled_ink() {
+    use crosshair_ui::{
+        font,
+        theme::{colors as c, layout as l},
+    };
+    const W: usize = 96;
+    const H: usize = 64;
+    const STRIDE: usize = 100;
+    let mut memory = vec![0xa55a; STRIDE * H + 4];
+    let mut surface = Surface::new(&mut memory[2..2 + STRIDE * H], W, H, STRIDE).unwrap();
+    surface.fill(c::SURFACE);
+    let cases = [
+        ("23:59", 2usize, c::ACTIVE),
+        ("23:59", 18, c::DISABLED),
+        ("16.10.2026", 34, c::ACTIVE),
+        ("ЁЙЪЬёйъь", 50, c::DISABLED),
+    ];
+    assert_eq!(l::FONT_ADVANCE, 6);
+    for (text, y, color) in cases {
+        assert!(text.chars().all(|ch| font::glyph(ch).is_some()));
+        surface.text(3, y as i32, text, color);
+    }
+    // Two renderings of the actual time label differ only in the named role.
+    for y in 0..font::HEIGHT {
+        for x in 0..W {
+            let top = surface.pixels()[(2 + y) * STRIDE + x];
+            let bottom = surface.pixels()[(18 + y) * STRIDE + x];
+            assert_eq!(
+                bottom,
+                if top == c::ACTIVE.0 {
+                    c::DISABLED.0
+                } else {
+                    c::SURFACE.0
+                }
+            );
+        }
+    }
+    let mut ink = [0usize; 4];
+    for y in 0..H {
+        for x in 0..STRIDE {
+            let pixel = surface.pixels()[y * STRIDE + x];
+            if x >= W {
+                assert_eq!(pixel, 0xa55a);
+                continue;
+            }
+            if pixel == c::SURFACE.0 {
+                continue;
+            }
+            let row = cases
+                .iter()
+                .position(|(_, top, _)| *top <= y && y < *top + font::HEIGHT)
+                .expect("ink beyond label height");
+            let (text, _, color) = cases[row];
+            let reserved = (text.chars().count() - 1) * font::ADVANCE + l::FONT_INK_WIDTH as usize;
+            assert!(
+                3 <= x && x < 3 + reserved,
+                "ink beyond fixed-advance text bounds"
+            );
+            assert_eq!(pixel, color.0);
+            ink[row] += 1;
+        }
+    }
+    assert!(ink.into_iter().all(|count| count > 0));
+    drop(surface);
+    assert_eq!(&memory[..2], &[0xa55a; 2]);
+    assert_eq!(&memory[memory.len() - 2..], &[0xa55a; 2]);
 }

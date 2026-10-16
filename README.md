@@ -8,7 +8,9 @@
 
 **Wave003 / E2B:** GPIO90 с особой семантикой86–89, CP15/MMU alias, маскированный pending и реальные GPIO IRQ проверены QTest/TCG на отдельной экспериментальной плате. **UI0.2:** компоненты, логические события, видимый фокус и прокручиваемый тестовый экран «Приложения» прошли19 host-тестов и20000 детерминированных операций. [Итоговый протокол и RAM](reports/WAVE_003.md), [CPU/GPIO audit](docs/E2B_CPU_GPIO_AUDIT.md), [UI0.2](docs/UI_0.2.md).
 
-Программный RGB565 renderer240×320 с кириллицей и dirty rectangles остаётся независимым от дисплея. UI собран для ARMv5TE; исполнение экрана проверено на host, физического LCD driver пока нет. [Основа UI0.1](docs/UI_0.1.md).
+Программный RGB565 renderer240×320 с кириллицей и dirty rectangles остаётся независимым от дисплея. До Wave004 экран исполнялся на host с ARM compile-only проверкой; аппаратного LCD driver пока нет. [Основа UI0.1](docs/UI_0.1.md).
+
+**Wave004 / First Integrated Display:** тот же `crosshair-ui` теперь исполняется внутри ARMv5TE guest на отдельной `crosshair-blueangel-display-test`. Гостевой RGB565 framebuffer и настоящая графическая консоль QEMU совпали с host PNG:23 pixel comparisons,101 событие,3 boot/reset. Backend явно synthetic/test-only, не ATI W3200. [Протокол и RAM](reports/WAVE_004.md), [дизайн-система](docs/UI_DESIGN_SYSTEM.md), [навигация](docs/UI_NAVIGATION.md), [экраны](docs/UI_SCREENS.md), [историческая спецификация W3200](docs/ATI_W3200_SPEC.md).
 
 Blue Angel имеет отдельный собираемый HaRET flat-image адаптер; физического запуска и готовых аппаратных драйверов пока нет. QEMU VersatilePB не эмулирует Blue Angel.
 

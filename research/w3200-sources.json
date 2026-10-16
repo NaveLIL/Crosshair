@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "purpose": "Primary historical source metadata for docs/ATI_W3200_SPEC.md; no third-party implementation or manufacturer binary included.",
+  "license_note": "PXADroid Linux files are GPL-2.0-only where their headers specify GPL version 2; see the pinned COPYING and individual headers. HaRET retains its upstream GPL terms; see pinned COPYING and file headers. Metadata does not relicense source code.",
+  "sources": [
+    {
+      "source": "K",
+      "commit": "3712fd6f197113f19959eba85b3628b202e30d64",
+      "path": "arch/arm/mach-pxa/blueangel.c",
+      "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/arch/arm/mach-pxa/blueangel.c",
+      "bytes": 32335,
+      "sha256": "1fe00b4f1335e9a42dd5d6cba1486620535a7e0d273730276afa745d07a88aac",
+      "git_blob_sha1": "0e612a1b6d6635fec82cc8fb6b8c8206bb59cb33"
+    },
+    {
+      "source": "K",
+      "commit": "3712fd6f197113f19959eba85b3628b202e30d64",
+      "path": "arch/arm/mach-pxa/include/mach/blueangel.h",
+      "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/arch/arm/mach-pxa/include/mach/blueangel.h",
+      "bytes": 4626,
+      "sha256": "d95699b022db39290e4aa7dae67225768a85696b2698b3fb229b972d9443db65",
+      "git_blob_sha1": "adce4b748a4cfb9331bcac77ad3cbc8440027006"
+    },
+    {
+      "source": "K",
+      "commit": "3712fd6f197113f19959eba85b3628b202e30d64",
+      "path": "arch/arm/mach-pxa/include/mach/addr-map.h",
+      "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/arch/arm/mach-pxa/include/mach/addr-map.h",
+      "bytes": 1173,
+      "sha256": "0722cf1489a13d3445ffce5c4cb5be2b861677e4037df5822d3cbf54b9837f81",
+      "git_blob_sha1": "bbf9df37ad4b6cf540166d23c1a3e0690b6b7176"
+    },
+    {
+      "source": "K",
+      "commit": "3712fd6f197113f19959eba85b3628b202e30d64",
+      "path": "drivers/video/w100fb.c",
+      "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/drivers/video/w100fb.c",
+      "bytes": 54509,
+      "sha256": "8feed2f0ba7af48389d24cfc161457443e2329a26a95e65924274d1ca3107da7",
+      "git_blob_sha1": "c684b61fa1f60410d609ebc21412bdb82ff6d659"
+    },
+    {
+      "source": "K",
+      "commit": "3712fd6f197113f19959eba85b3628b202e30d64",
+      "path": "drivers/video/w100fb.h",
+      "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/drivers/video/w100fb.h",
+      "bytes": 25103,
+      "sha256": "79d69efa369457d2ba469b2b58459a5fbaf8184fcb72c606df12c61fc057d93a",
+      "git_blob_sha1": "fa550c5048a87499c5b9f249b4a9671a8d3307d9"
+    },
+    {
+      "source": "K",
+      "commit": "3712fd6f197113f19959eba85b3628b202e30d64",
+      "path": "include/video/w100fb.h",
+      "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/include/video/w100fb.h",
+      "bytes": 3837,
+      "sha256": "5bfc69e7ba21c29c2c03b243ed991a8b054accfe5090bab7028a038e07bef234",
+      "git_blob_sha1": "4bc6e08fafba051887a8b1513ece53f29fe3ca82"
+    },
+    {
+      "source": "K",
+      "commit": "3712fd6f197113f19959eba85b3628b202e30d64",
+      "path": "COPYING",
+      "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/COPYING",
+      "bytes": 18693,
+      "sha256": "af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7",
+      "git_blob_sha1": "ca442d313d86dc67e0a2e5d584b465bd382cbf5c"
+    },
+    {
+      "source": "H",
+      "commit": "d585ee6ad903e0e6ad1dc943a3157e86db43ddf7",
+      "path": "src/video.cpp",
+      "url": "https://github.com/KevinOConnor/haret/blob/d585ee6ad903e0e6ad1dc943a3157e86db43ddf7/src/video.cpp",
+      "bytes": 3698,
+      "sha256": "e1f55a25221bc571cf2363d08249985c1d1b05b1f9758ac0321d0b4ec1dce6b6",
+      "git_blob_sha1": "1606b031e1fbd791b0bad105fc540b2e8c68e678"
+    },
+    {
+      "source": "H",
+      "commit": "d585ee6ad903e0e6ad1dc943a3157e86db43ddf7",
+      "path": "COPYING",
+      "url": "https://github.com/KevinOConnor/haret/blob/d585ee6ad903e0e6ad1dc943a3157e86db43ddf7/COPYING",
+      "bytes": 18691,
+      "sha256": "0d7259feae5a7282c808e573622997e6abfb44f414457c0fba28841f702000c4",
+      "git_blob_sha1": "2a7e338ec2fc6aac461a11fe8049799e65639166"
+    }
+  ]
+}

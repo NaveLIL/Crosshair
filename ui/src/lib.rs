@@ -3,7 +3,9 @@
 //! Bounded software drawing. This crate allocates no framebuffer and touches no MMIO.
 
 pub mod components;
+pub mod fixtures;
 pub mod font;
+pub mod theme;
 
 pub const MAX_WIDTH: usize = 240;
 pub const MAX_HEIGHT: usize = 320;

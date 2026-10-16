@@ -1,0 +1,19 @@
+{
+  "schema":"crosshair-ui-frames-v1",
+  "theme":"0.1",
+  "pixel_format":"RGB565_LE",
+  "frames":[
+    {"state":0,"file":"step-00.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x0c721dafcd4b30a6","view":"List","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0},
+    {"state":10,"file":"step-10.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x61c1b085a4bb1ed0","view":"List","focus":"List","selected_item":10,"scroll":3,"matches":16,"filter_len":0,"opened":0},
+    {"state":11,"file":"step-11.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0xc1be1e644e6a4d95","view":"Action(10)","focus":"LeftSoftkey","selected_item":10,"scroll":3,"matches":16,"filter_len":0,"opened":1},
+    {"state":12,"file":"step-12.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x9ca606bdaa6ec92f","view":"Menu","focus":"List","selected_item":10,"scroll":3,"matches":16,"filter_len":0,"opened":1},
+    {"state":15,"file":"step-15.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0xa1a014c0095ffcc8","view":"List","focus":"List","selected_item":1,"scroll":0,"matches":2,"filter_len":1,"opened":1},
+    {"state":17,"file":"step-17.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x6f88eab1fd5c5001","view":"Action(4)","focus":"LeftSoftkey","selected_item":4,"scroll":0,"matches":2,"filter_len":1,"opened":2},
+    {"state":20,"file":"step-20.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x03a03f7e7199418e","view":"List","focus":"RightSoftkey","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":2},
+    {"state":21,"file":"step-21.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x9ca606bdaa6ec92f","view":"Menu","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":2},
+    {"state":24,"file":"step-24.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x0a9e5dde8977cf26","view":"List","focus":"LeftSoftkey","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":2},
+    {"state":25,"file":"step-25.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x2367e22c04223335","view":"Action(0)","focus":"LeftSoftkey","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":3},
+    {"state":26,"file":"step-26.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x0c721dafcd4b30a6","view":"List","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":3},
+    {"state":37,"file":"step-37.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x5ba12991c72be276","view":"List","focus":"List","selected_item":11,"scroll":4,"matches":16,"filter_len":0,"opened":3}
+  ]
+}

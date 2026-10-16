@@ -33,6 +33,9 @@ trap 'rm -rf "$neutral"' EXIT
 ) 2>&1 | tee "$out/tests.log"
 python3 "$root/tools/framebuffer_png.py" "$out/primitives.raw565" "$out/primitives.png"
 python3 "$root/tools/framebuffer_png.py" "$out/ui02apps.raw565" "$out/ui02apps.png"
+for raw in "$out"/design-system/step-*.raw565 "$out"/design-system/boundary-step-*.raw565; do
+    python3 "$root/tools/framebuffer_png.py" "$raw" "${raw%.raw565}.png"
+done
 font_checked=false
 if [[ -f "$out/cozette-source.bdf" ]]; then
     python3 "$root/ui/tools/subset_font.py" --input "$out/cozette-source.bdf" --check \
@@ -90,6 +93,28 @@ for stem in ['primitives', 'ui02apps']:
 trace = json.loads((out / 'ui02-input-trace.json').read_text())
 assert len(trace['events']) == 37 and trace['physical_input'] is False
 assert trace['events'][-1]['selected_item'] == 11 and trace['events'][-1]['scroll'] == 4
+assert hashlib.sha256((out / 'ui02-input-trace.json').read_bytes()).hexdigest() == '4eda390806a0b35041730f7448c8bd1ef8dae282ced8a90c616179b40638e2c5', 'Canonical UI0.2 logical trace must stay unchanged'
+frames = json.loads((out / 'design-system/frames.json').read_text())
+assert frames['pixel_format'] == 'RGB565_LE' and frames['theme'] == '0.1'
+assert [f['state'] for f in frames['frames']] == [0,10,11,12,15,17,20,21,24,25,26,37]
+boundary = json.loads((out / 'design-system/boundary-frames.json').read_text())
+assert [f['state'] for f in boundary['frames']] == [0,2,3,6,23,24,26,27]
+boundary_trace = json.loads((out / 'design-system/boundary-trace.json').read_text())
+assert len(boundary_trace['events']) == 27
+assert boundary_trace['events'][0]['changed'] is False
+assert boundary_trace['events'][22]['filter_len'] == 16 and boundary_trace['events'][23]['changed'] is False
+all_frames = frames['frames'] + boundary['frames']
+for frame in all_frames:
+    assert (frame['width'], frame['height'], frame['stride'], frame['bytes']) == (240,320,240,153600)
+    raw = (out / 'design-system' / frame['file']).read_bytes()
+    assert len(raw) == frame['bytes']
+    value = 0xcbf29ce484222325
+    for byte in raw: value = ((value ^ byte) * 0x100000001b3) & 0xffffffffffffffff
+    assert value == int(frame['fnv1a64'], 16), frame['file']
+    png = (out / 'design-system' / frame['file'].replace('.raw565','.png')).read_bytes()
+    assert png[:8] == b'\x89PNG\r\n\x1a\n' and struct.unpack('>II', png[16:24]) == (240,320)
+assert boundary['frames'][0]['fnv1a64'] == frames['frames'][0]['fnv1a64']
+assert boundary['frames'][4]['fnv1a64'] == boundary['frames'][5]['fnv1a64'], 'Ignored 17th character must leave pixels unchanged'
 def layout(arch):
     chunks = []
     sections = re.findall(r'SectionData \(\n(.*?)\n\s*\)', (out / ('layout-' + arch + '.txt')).read_text(), re.S)
@@ -110,7 +135,7 @@ assert layouts['armv5te']['usize'] == 4 and layouts['armv5te']['char'] == 4
 summaries = re.findall(r'test result: ok\. (\d+) passed; (\d+) failed;', (out / 'tests.log').read_text())
 assert summaries and all(int(failed) == 0 for _, failed in summaries)
 host_tests = sum(int(passed) for passed, _ in summaries)
-assert host_tests >= 19, 'All original 11 plus at least 8 UI0.2 tests are required'
+assert host_tests >= 22, 'Original renderer/state/stress plus theme/fixture/boundary tests are required'
 paths = sorted(p for p in (root / 'ui').rglob('*') if p.is_file() and '__pycache__' not in p.parts)
 paths += [root / 'scripts/test-ui.sh', root / 'tools/framebuffer_png.py']
 result = {'result': 'PASS', 'host_tests': host_tests, 'armv5te_library_compiled': True,
@@ -119,11 +144,18 @@ result = {'result': 'PASS', 'host_tests': host_tests, 'armv5te_library_compiled'
           'arm_code_objects_verified': len(objects),
           'font_regeneration_checked': sys.argv[2] == 'true',
           'ui02_scenario_events': len(trace['events']), 'property_test_operations': 20000,
+          'theme': '0.1', 'shared_capture_states': [f['state'] for f in frames['frames']],
+          'boundary_events': len(boundary_trace['events']),
+          'boundary_capture_states': [f['state'] for f in boundary['frames']],
           'memory_layout': layouts,
           'source_sha256': {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},
           'artifacts_sha256': {name: hashlib.sha256((out / name).read_bytes()).hexdigest()
                               for name in ['primitives.raw565', 'primitives.png', 'ui02apps.raw565', 'ui02apps.png',
-                                           'ui02-input-trace.json', 'memory-layout.json', 'arm-lib-report.txt']}}
+                                           'ui02-input-trace.json', 'memory-layout.json', 'arm-lib-report.txt',
+                                           'design-system/frames.json', 'design-system/boundary-frames.json',
+                                           'design-system/boundary-trace.json'] +
+                                          ['design-system/' + f['file'] for f in all_frames] +
+                                          ['design-system/' + f['file'].replace('.raw565','.png') for f in all_frames]}}
 (out / 'validation.json').write_text(json.dumps(result, indent=2) + '\n')
-print(f'PASS: {host_tests} host tests, 20000 property operations, two PNG240x320, real ARMv5TE compile/layout')
+print(f'PASS: {host_tests} host tests, 20000 property operations, 20 themed captures, real ARMv5TE compile/layout')
 PY

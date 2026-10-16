@@ -1,5 +1,31 @@
 # Сборка Crosshair
 
+## Wave004: UI внутри ARM guest
+
+Используются прежние Rust nightly-2025-03-01 и отдельный QEMU9.2 overlay. Новый cache `local/qemu-display-test` требует pixman (на Linux: `libpixman-1-dev`; macOS: `pixman` через pkg-config); прежние E1/E2A/E2B caches не меняются. Native Cocoa backend компилируется на macOS, но фактически проверен headless `-display none` с настоящей QEMU graphical console и QMP screendump.
+
+```sh
+scripts/bootstrap-qemu-display-test.sh
+# Короткий самостоятельный цикл: host references нужны до guest parity test.
+scripts/test-ui.sh
+scripts/test-display.sh
+# Или единый запуск всех принятых регрессий и интеграции:
+scripts/test-wave004.sh
+```
+
+`QEMU_DISPLAY_TEST=/absolute/path/to/qemu-display-test/bin/qemu-system-arm` выбирает внешний cache. Остальные `QEMU_SYSTEM_ARM`, `QEMU_PXA`, `QEMU_BLUEANGEL`, `QEMU_E2B` и `RUSTUP_HOME` сохраняют значения из предыдущих этапов. На этой волне все исполнения проведены на macOS x86_64; WSL2/Linux путь предусмотрен скриптами, нового WSL-прогона нет.
+
+`scripts/build-display-test.sh` создаёт `target/artifacts/display-test/image/`: ARM ELF, flat RAM image,64B vectors, machine-code/size/attributes reports. `tools/smoke_display.py` запускает TCG, replay через отдельный synthetic FIFO, сохраняет guest `.raw565/.png`, actual QEMU `.ppm` и JSON результатов в `target/artifacts/display-test/execution/`. Эталонный экран после37 событий: `canonical-37.png`, `canonical-37.raw565`, `canonical-37.ppm`. Capture содержит настоящие гостевые пиксели; это не host mockup и не фотография PDA.
+
+```sh
+mkdir -p target/artifacts/wave004
+scripts/test-wave004.sh >target/artifacts/wave004/all-tests.log 2>&1
+python3 tools/collect_wave004_evidence.py
+# Внешний cache: добавить --qemu-cache /absolute/path/to/qemu-display-test
+```
+
+Collector работает после exit0; `test-display.sh` автоматически выполняет негативную missing-reference check перед положительным replay. Новые text evidence сохраняются в `reports/wave004/`; прежние отчёты не перезаписываются. Собственные ELF/PNG/raw и полные QTest memory protocols остаются локальными; их hashes записаны в evidence. Команды не обращаются к PDA2k, ROM или физическим накопителям.
+
 ## Wave003: E2B и UI0.2
 
 Сохраняются закреплённые nightly-2025-03-01 и QEMU9.1/9.2. Новый overlay собирается в отдельном `local/qemu-e2b`, не изменяя runtime E1/E2A:

@@ -16,7 +16,11 @@ e2a = ["pxa-reference"]
 e2a-mmio-test = ["e2a"]
 e2b = []
 e2b-negative-test = ["e2b"]
+display-test = ["dep:crosshair-ui"]
 panic-test = []
+
+[dependencies]
+crosshair-ui = { path = "ui", optional = true }
 
 [[bin]]
 name = "crosshair-boot"
@@ -36,6 +40,13 @@ bench = false
 name = "crosshair-e2b"
 path = "src/e2b.rs"
 required-features = ["e2b"]
+test = false
+bench = false
+
+[[bin]]
+name = "crosshair-display-test"
+path = "src/display_test.rs"
+required-features = ["display-test"]
 test = false
 bench = false
 

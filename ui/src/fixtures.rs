@@ -1,0 +1,78 @@
+//! Shared deterministic input fixture. A host and ARM guest replay the same
+//! logical actions through AppsScreen; this is not a physical key-code mapping.
+use crate::components::Event;
+
+pub const SCENARIO: [Event; 37] = [
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Select,
+    Event::Menu,
+    Event::Back,
+    Event::Back,
+    Event::TextInput('Ц'),
+    Event::Down,
+    Event::Select,
+    Event::Back,
+    Event::Back,
+    Event::Right,
+    Event::Select,
+    Event::Down,
+    Event::Select,
+    Event::Left,
+    Event::Select,
+    Event::Back,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+    Event::Down,
+];
+
+/// State number, not event index: 0 is initial; n is after the first n events.
+pub const CAPTURE_STEPS: [usize; 12] = [0, 10, 11, 12, 15, 17, 20, 21, 24, 25, 26, 37];
+
+/// Separate reset-to-new-state boundary replay; never appended to SCENARIO.
+pub const BOUNDARY_SCENARIO: [Event; 27] = [
+    Event::Up,
+    Event::TextInput('Ё'),
+    Event::TextInput('\u{8}'),
+    Event::TextInput('Й'),
+    Event::TextInput('Ъ'),
+    Event::TextInput('Ь'),
+    Event::Back,
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::TextInput('А'),
+    Event::Back,
+    Event::Menu,
+    Event::Back,
+];
+pub const BOUNDARY_CAPTURE_STEPS: [usize; 8] = [0, 2, 3, 6, 23, 24, 26, 27];

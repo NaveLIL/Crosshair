@@ -7,6 +7,8 @@
 | UI0.1 / software primitives | RGB565240×320, кириллица, bounded dirty regions, host pixel tests | Независимый software layer; [контракт](docs/UI_0.1.md), не аппаратный LCD |
 | E2B / GPIO и CPU audit | GPIO90, CP15/MMU, direction/AF/edge/IRQ/reset/error coverage | Проверено QTest и TCG; [Wave003](reports/WAVE_003.md), CPU260 proxy, без hardware accuracy claim |
 | UI0.2 / интерактивный слой | Компоненты, фокус, события, выбор/прокрутка без heap | 19 host-тестов, 20000 stress-операций, ARM compile-only; [контракт](docs/UI_0.2.md) |
+| Wave004 / integrated display | Та же UI library исполняется в ARM guest, observable240×320 RGB565 и test input | 3boot/101events/23exact pixel comparisons; [протокол](reports/WAVE_004.md), synthetic test-only, не ATI |
+| UI Design System0.1 | Центральные RGB565/geometry, навигация и контракты будущих приложений | [Дизайн](docs/UI_DESIGN_SYSTEM.md), [навигация](docs/UI_NAVIGATION.md), [экраны](docs/UI_SCREENS.md); один законченный AppsScreen |
 | M1 / ROM и QWERTY | Проверяемый PE QwertyKey.dll, хеши, imports/exports и воспроизводимый decoder | Синтетические parser tests проверены; исходный ROM для полного повторения отсутствует |
 | Blue Angel / аппаратный boot | Доказанные HaRET/RAM/CPU/diagnostic contracts, затем отдельно разрешённое испытание | Собираемый RAM-only adapter; физически не проверен |
 | Ввод/экран | Собственный ATI LCD, TSC2200 и ASIC3 QWERTY drivers | Исследование |

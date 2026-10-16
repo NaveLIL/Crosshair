@@ -1,5 +1,7 @@
 # Crosshair Boot 0.1: контракт загрузки
 
+Wave004 adds a separate **test-only display** guest, not an ATI boot path. The inherited ARM entry/vectors/16KiB SVC and4KiB IRQ stacks execute a Rust binary linked directly with the existing `crosshair-ui`. Its guarded153600B framebuffer lives in ordinary synthetic RAM; a synchronous PRESENT copies it into QEMU's real graphical console. MMU/cache stay off, IRQ/FIQ masked. Separate polled FIFO delivers logical actions, never physical scan codes. The exact PA/register contracts and execution proof are in [Wave004](reports/WAVE_004.md); [historical W3200 facts](docs/ATI_W3200_SPEC.md) define a different, unimplemented device.
+
 Две отдельные конфигурации: **VersatilePB/ARM926** для исполняемого теста и **Blue Angel/PXA263** для собираемого HaRET-адаптера. Успех первой не является подтверждением второй. Конкретные результаты исполнения и хеши — [отчёт](reports/BOOT_0.1.md).
 
 ## VersatilePB

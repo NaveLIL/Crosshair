@@ -1,5 +1,7 @@
 # Архитектура · исследовательский проект
 
+Wave004 links the same dependency-free UI into an ARMv5TE guest. Only the test BSP owns framebuffer RAM, MMIO publication and a serialized logical input FIFO; UI code still has no device access. QEMU's synthetic display synchronously copies the one guest framebuffer into host console storage. That host storage is not a second guest framebuffer. RGB565/geometry and semantic input remain explicit boundaries for a future ATI/input driver. [Measured integration and limits](reports/WAVE_004.md), [central theme](ui/src/theme.rs), [native UI standard](docs/UI_DESIGN_SYSTEM.md).
+
 Wave003 добавляет отдельный GPL host GPIO subset в `crosshair-blueangel-e2b`, не меняя E2A C model. Собственный MIT test guest проверяет функциональную MMU и GPIO IRQ; это эксперимент CPU260, без аппаратной точности cache/CP14/PXA263. [Границы и результаты](reports/WAVE_003.md).
 
 UI0.2 сохраняет `no_std`, `forbid(unsafe_code)` и borrowed RGB565 surface. Компоненты и машина состояний потребляют логические события через ограниченную FIFO, без драйвера ввода или обязательного heap. State+queue добавляют112B, второй framebuffer не нужен; при изменении экрана пока перерисовывается полный кадр. [Состояния, память и будущий ввод](docs/UI_0.2.md).

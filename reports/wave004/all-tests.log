@@ -1,0 +1,160 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.21s
+Verified ELF32 ARM EABI5 v5TE: entry=0x10000, image RAM=17200 bytes
+Artifacts: <workspace>/target/artifacts/versatilepb
+CROSSHAIR BOOT 0.1 — HELLO FROM RUST
+PASS: real ARM926 execution, UART, SVC/stack, boot record and controlled idle
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
+Verified ELF32 ARM EABI5 v5TE: entry=0x10000, image RAM=17040 bytes
+Artifacts: <workspace>/target/artifacts/versatilepb-panic
+CROSSHAIR PANIC — HALTED
+PASS: real ARM926 execution, UART, SVC/stack, boot record and controlled idle
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
+Verified ELF32 ARM EABI5 v5TE: entry=0xa0008000, image RAM=17104 bytes
+Artifacts: <workspace>/target/artifacts/blueangel
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.08s
+Verified ELF32 ARM EABI5 v5TE: entry=0x10000, image RAM=17200 bytes
+Artifacts: <workspace>/target/artifacts/versatilepb
+test_allowlist_rejects_traversal (test_inspect_blueangel.CabTests) ... ok
+test_duplicate_entry_rejected (test_inspect_blueangel.CabTests) ... ok
+test_existing_directory_preserved (test_inspect_blueangel.CabTests) ... ok
+test_invalid_cab_rejected (test_inspect_blueangel.CabTests) ... ok
+test_missing_entry_rejected (test_inspect_blueangel.CabTests) ... ok
+test_real_libarchive_reads_synthetic_cab (test_inspect_blueangel.CabTests) ... ok
+test_truncated_cab_data_rejected (test_inspect_blueangel.CabTests) ... ok
+test_unexpected_length_rejected_before_output (test_inspect_blueangel.CabTests) ... ok
+test_wrong_hash_rejected_without_output_or_input_change (test_inspect_blueangel.CommandTests) ... ok
+test_every_truncated_prefix_is_rejected (test_inspect_blueangel.InventoryTests) ... ok
+test_invalid_names (test_inspect_blueangel.InventoryTests) ... ok
+test_invalid_region_and_entry_ranges (test_inspect_blueangel.InventoryTests) ... ok
+test_no_supported_regions_is_not_a_success (test_inspect_blueangel.InventoryTests) ... ok
+test_unsupported_region_stays_explicitly_excluded (test_inspect_blueangel.InventoryTests) ... ok
+test_unterminated_name (test_inspect_blueangel.InventoryTests) ... ok
+test_valid_synthetic_inventory (test_inspect_blueangel.InventoryTests) ... ok
+test_little_endian_known_answer_and_round_trip (test_inspect_blueangel.XorTests) ... ok
+test_rejects_key_outside_word (test_inspect_blueangel.XorTests) ... ok
+test_rejects_partial_word (test_inspect_blueangel.XorTests) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.124s
+
+OK
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
+Verified ELF32 ARM EABI5 v5TE: entry=0xa0008000, image RAM=21680 bytes
+Reference guest (not for a PDA): <workspace>/target/artifacts/pxa-reference
+PASS connex: UART, three real timer IRQs, exception return to SVC, two stacks, terminal idle
+PASS verdex: UART, three real timer IRQs, exception return to SVC, two stacks, terminal idle
+PASS mainstone: UART, three real timer IRQs, exception return to SVC, two stacks, terminal idle
+PASS connex: QTest UART, 3686400 Hz, OIER/W1C, PIC mask/routing, 32-bit rollover; LIMITATION: timer state survives system_reset; guest CPU never executed
+PASS verdex: QTest UART, 3250000 Hz, OIER/W1C, PIC mask/routing, 32-bit rollover; LIMITATION: timer state survives system_reset; guest CPU never executed
+PASS mainstone: QTest UART, 3250000 Hz, OIER/W1C, PIC mask/routing, 32-bit rollover; LIMITATION: timer state survives system_reset; guest CPU never executed
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
+Verified ELF32 ARM EABI5 v5TE: entry=0xa0008000, image RAM=21672 bytes
+E2A emulator-only guest: <workspace>/target/artifacts/e2a/normal
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.09s
+Verified ELF32 ARM EABI5 v5TE: entry=0xa0008000, image RAM=21528 bytes
+E2A emulator-only guest: <workspace>/target/artifacts/e2a/mmio-test
+PASS E2A boot + system_reset reboot
+PASS E2A unsupported_timer_register
+PASS E2A read_only_pic_write
+PASS E2A unsupported_byte_width
+PASS E2A unmapped_address
+PASS E2A QTest: UART, exact frequency, IRQ/FIQ transitions, W1C, rollover, full reset, invalid-MMIO side effects
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (<workspace>/target/ui-host/x86_64-apple-darwin/debug/deps/crosshair_ui-7cd524f1e2301aa5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/components.rs (<workspace>/target/ui-host/x86_64-apple-darwin/debug/deps/components-883c2ad073702424)
+
+running 13 tests
+test fifo_wraparound_and_overflow_have_explicit_backpressure ... ok
+test state_icon_roles_and_planned_control_geometry_form_a_bounded_contract ... ok
+test softkey_focus_and_menu_are_fully_keyboard_accessible ... ok
+test keyboard_scroll_selection_and_real_preview_back_navigation ... ok
+test theme_tokens_geometry_and_font_contract_are_exact ... ok
+test cyrillic_filter_is_bounded_case_insensitive_and_scalar_based ... ok
+test component_ink_stays_inside_its_bounds_and_focus_is_visible ... ok
+test date_time_and_russian_labels_render_fixed_advance_with_active_disabled_ink ... ok
+test separate_boundary_fixture_starts_fresh_and_exercises_unicode_capacity ... ok
+test scenario_has_reviewable_selection_scroll_and_pixel_golden ... ok
+test shared_fixture_capture_states_cover_all_views_with_one_render_path ... ok
+test seeded_ten_thousand_events_replay_and_preserve_focus_scroll_bounds ... ok
+test seeded_ten_thousand_draws_preserve_guards_and_cover_every_changed_pixel ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+     Running tests/surface.rs (<workspace>/target/ui-host/x86_64-apple-darwin/debug/deps/surface-579fadc87b2846e2)
+
+running 11 tests
+test failed_present_keeps_all_regions_until_complete_success ... ok
+test dirty_overflow_retains_every_changed_pixel ... ok
+test clipped_rectangles_preserve_stride_padding_and_outer_guards ... ok
+test far_rectangles_and_empty_strokes_do_not_dirty_or_wrap ... ok
+test invalid_surfaces_never_access_the_buffer ... ok
+test line_golden_and_extreme_clipping_are_bounded ... ok
+test font_contains_complete_russian_and_preserves_ink_overhang ... ok
+test rgb565_primary_colors_and_quantization ... ok
+test strokes_keep_the_interior_and_clip_without_filling_it ... ok
+test utf8_fallback_newline_and_edge_clipping ... ok
+test full_frame_pixel_golden ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests crosshair_ui
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `release` profile [optimized] target(s) in 0.00s
+     Running `<workspace>/target/ui-host/x86_64-apple-darwin/release/examples/primitives <workspace>/target/artifacts/ui/primitives.raw565`
+RGB565 240x320: 153600 bytes, 1 dirty region(s), one framebuffer
+    Finished `release` profile [optimized] target(s) in 0.00s
+     Running `<workspace>/target/ui-host/x86_64-apple-darwin/release/examples/apps <workspace>/target/artifacts/ui/ui02apps.raw565 <workspace>/target/artifacts/ui/ui02-input-trace.json`
+UI Design System0.1 scenario: 37 events, item Some(11), scroll 4, opened 3; one 153600-byte framebuffer
+    Finished `release` profile [optimized] target(s) in 0.00s
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+PNG 240x320 RGB888 encoded from one RGB565 framebuffer
+{"glyphs": 163, "bitmap_bytes": 2119, "generated_sha256": "3f1fe3ff9efce3663c9b4736d1eafa59b10af776307624fceb35b2b34ea2e67e", "check": true}
+    Finished `release` profile [optimized] target(s) in 0.18s
+PASS: 24 host tests, 20000 property operations, 20 themed captures, real ARMv5TE compile/layout
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.19s
+Verified ELF32 ARM EABI5 v5TE: entry=0xa0008000, image RAM=69632 bytes
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.08s
+Verified ELF32 ARM EABI5 v5TE: entry=0xa0008000, image RAM=69632 bytes
+PASS E2B CP15/MMU/GPIO five IRQs + reset reboot
+PASS E2B unsupported_GPIO_offset
+PASS E2B write_read_only_GPLR
+PASS E2B byte_width_GPDR
+PASS E2B unsupported_CP14_CLKCFG
+PASS E2B unsupported_CP14_PWRMODE
+PASS E2B QTest: GPIO90 direction, AF, preload, edges/W1C, PIC IRQ/FIQ, reset, strict MMIO side effects, outputs/OE
+   Compiling crosshair-ui v0.2.0 (<workspace>/ui)
+   Compiling crosshair-boot v0.1.0 (<workspace>)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.63s
+Verified ELF32 ARM EABI5 v5TE: entry=0xa0008000, image RAM=195288 bytes
+PASS missing-reference regression: fail closed before QEMU, old outputs cannot pass
+PASS ARM display: three boots, 101 events, 23 exact guest/host/QEMU pixel comparisons, guards, reset, burst/rejection
+PASS display/input QTest: actual QEMU pixels, publication, RAM bounds, FIFO/Unicode/wrap/backpressure, reset, MMIO rejection

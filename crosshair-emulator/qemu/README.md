@@ -132,3 +132,79 @@ actual IRQ/FIQ/output/OE transitions, reset and invalid-access side effects.
 It writes JSON and protocol logs under `target/artifacts/e2b-qtest`. QTest does
 not expose `MemTxResult`; its invalid-access assertions concern diagnostics
 and state preservation, while actual CPU exceptions require the TCG harness.
+
+## Wave004 display/input test board
+
+`scripts/bootstrap-qemu-display-test.sh` creates the separate
+`local/qemu-display-test` cache (`CROSSHAIR_QEMU_DISPLAY_TEST_DIR` override).
+Machine **`crosshair-blueangel-display-test`** includes the unchanged E2B/E2A
+implementation units and adds two new GPL devices. Prior caches are preserved.
+Pixman is required; on macOS the variant also enables native Cocoa display.
+QMP `screendump` works with `-display none` and produces a real QEMU graphical
+console image. Its default PPM output needs no PNG library. Cocoa can show that
+same console interactively with `-display cocoa` on the verified macOS build.
+
+These MMIO addresses and registers are **new synthetic test protocols**. They
+are not ATI W3200 addresses, an LCD controller, a framebuffer initialization
+recipe for HTC, physical keyboard scan codes or touch coordinates. RAM, CPU260,
+GPIO, timer, PIC and diagnostic UART retain the E2B experimental contract.
+
+Stable QOM **`/machine/test-display`**, PA **`0x10000000`**, 4 KiB aperture:
+
+| Offset | Access | Test protocol |
+|---|---|---|
+| `00` | RW | Physical base of guest-owned framebuffer |
+| `04` | RO | Width240 pixels |
+| `08` | RO | Height320 pixels |
+| `0c` | RO | Stride480 bytes |
+| `10` | RO | Format identifier`0x565`, little-endian RGB565 |
+| `14` | R/command | Read generation; write exactly1 to publish |
+
+The base must be aligned to two bytes, and the full153600-byte span must lie
+within this board's RAM `[a0000000,a8000000)`. Bounds are checked without an
+overflowing address+length operation. Invalid base writes preserve the prior
+base. Reset base0 is deliberately invalid; PRESENT before a valid base fails.
+PRESENT synchronously reads the framebuffer, expands RGB565 by bit replication
+into QEMU's host RGB888 surface, then increments generation modulo2^32 and
+notifies the console. Guest RAM writes and console refresh/screendump alone do
+not publish new pixels. The UI borrows one guest framebuffer; QEMU's host
+presentation surface is separate emulator memory, not a second guest buffer.
+Reset clears base/generation and displays black while retaining ordinary RAM.
+No dirty rectangles, DMA, asynchronous transport, cache effects or display IRQ
+are part of this full-frame test protocol.
+
+Stable QOM **`/machine/logical-input`**, PA **`0x10001000`**, separate4 KiB aperture:
+
+| Offset | Access | Test protocol |
+|---|---|---|
+| `00` | RO | FIFO event count0..8 |
+| `04` | RO/destructive | Pop oldest event; return0 when empty |
+| `08` | WO | Host test-adapter injection |
+| `0c` | RO | Capacity8 |
+| `10` | RO | Saturating rejected-injection count |
+
+Packed events have tag in bits31..24: **1 Up,2 Down,3 Left,4 Right,5 Select,
+6 Back,7 Menu,8 TextInput**. Low24 bits must be zero for tags1..7; TextInput
+accepts Unicode scalar values0..10ffff excluding d800..dfff. The UI separately
+decides which characters it supports. Zero is never a valid event. A full FIFO
+or invalid packed payload rejects injection with `MEMTX_ERROR`, increments the
+saturating counter, and preserves all queued events. Valid events are never
+silently overwritten. Wrong widths/offsets/access directions return an error
+without popping events or modifying the rejection count. Reset clears the
+queue and counter. This polling channel has no IRQ or physical input backend.
+
+Both devices permit **aligned32-bit** MMIO only; unsupported accesses return
+`MEMTX_ERROR` via attrs callbacks without split-write side effects. Both reject
+migration. `python3 tools/qtest_display.py --qemu /absolute/path/to/qemu-system-arm`
+writes actual QMP PPM images, JSON and protocol logs under
+`target/artifacts/display-qtest`. It checks exact pixel expansion, publication,
+RAM range/guards, FIFO ordering/wrap/scalars/backpressure, reset, and invalid-MMIO
+diagnostics/state preservation. QTest does not expose transaction results or
+execute a guest; those limits remain distinct from the ARM execution harness.
+
+The graphical integration uses pinned QEMU9.2
+[`ui/console.c`](https://github.com/qemu/qemu/blob/ae35f033b874c627d81d51070187fbf55f0bf1a7/ui/console.c),
+[`include/ui/console.h`](https://github.com/qemu/qemu/blob/ae35f033b874c627d81d51070187fbf55f0bf1a7/include/ui/console.h)
+and [`ui/ui-qmp-cmds.c`](https://github.com/qemu/qemu/blob/ae35f033b874c627d81d51070187fbf55f0bf1a7/ui/ui-qmp-cmds.c).
+The display/input protocol and conversion code are new Crosshair host-side work;
+no OEM firmware or ATI driver is incorporated.

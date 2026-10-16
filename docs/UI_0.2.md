@@ -1,5 +1,7 @@
 # UI 0.2: components, logical input and a scrollable test screen
 
+This describes the accepted Wave003 baseline. Wave004 preserves its state/input API and adds central theme/geometry plus actual ARM guest execution: [Design System0.1](UI_DESIGN_SYSTEM.md), [integration proof](../reports/WAVE_004.md). The historical Apps golden below is deliberately superseded by that design change; primitive/font evidence remains unchanged.
+
 Implemented and host-tested in Wave 003. The dependency-free [UI crate](../ui/Cargo.toml) remains `no_std` and `forbid(unsafe_code)`. The existing [UI 0.1](UI_0.1.md) drawing/dirty/present contract, all eleven earlier tests, font bytes, upstream MIT notice and original pixel golden remain unchanged. The renderer is compiled for ARMv5TE; this screen has not executed on the physical PDA or an emulated LCD.
 
 ## Components and application state
