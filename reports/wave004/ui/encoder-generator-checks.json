@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "checks": [
+    "PNG signature/dimensions/CRCs/320rows and primary pixels",
+    "wrong font hash rejected without output",
+    "same input/output font rejected and source unchanged",
+    "short raw565 rejected before output"
+  ],
+  "png_sha256": "cc3a69ef0153137847354369347612fb1810f78679eadc1bbd5c28aff32f3880"
+}

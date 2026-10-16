@@ -1,0 +1,33 @@
+{
+  "schema":"crosshair-ui-input-trace-v1",
+  "physical_input":false,
+  "events":[
+    {"step":0,"event":{"kind":"Up"},"changed":false,"view":"List","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0},
+    {"step":1,"event":{"kind":"TextInput","text":"Ё"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":1,"opened":0},
+    {"step":2,"event":{"kind":"TextInput","text":"\u0008"},"changed":true,"view":"List","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0},
+    {"step":3,"event":{"kind":"TextInput","text":"Й"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":1,"opened":0},
+    {"step":4,"event":{"kind":"TextInput","text":"Ъ"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":2,"opened":0},
+    {"step":5,"event":{"kind":"TextInput","text":"Ь"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":3,"opened":0},
+    {"step":6,"event":{"kind":"Back"},"changed":true,"view":"List","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0},
+    {"step":7,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":1,"scroll":0,"matches":7,"filter_len":1,"opened":0},
+    {"step":8,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":2,"opened":0},
+    {"step":9,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":3,"opened":0},
+    {"step":10,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":4,"opened":0},
+    {"step":11,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":5,"opened":0},
+    {"step":12,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":6,"opened":0},
+    {"step":13,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":7,"opened":0},
+    {"step":14,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":8,"opened":0},
+    {"step":15,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":9,"opened":0},
+    {"step":16,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":10,"opened":0},
+    {"step":17,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":11,"opened":0},
+    {"step":18,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":12,"opened":0},
+    {"step":19,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":13,"opened":0},
+    {"step":20,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":14,"opened":0},
+    {"step":21,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":15,"opened":0},
+    {"step":22,"event":{"kind":"TextInput","text":"А"},"changed":true,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":16,"opened":0},
+    {"step":23,"event":{"kind":"TextInput","text":"А"},"changed":false,"view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":16,"opened":0},
+    {"step":24,"event":{"kind":"Back"},"changed":true,"view":"List","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0},
+    {"step":25,"event":{"kind":"Menu"},"changed":true,"view":"Menu","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0},
+    {"step":26,"event":{"kind":"Back"},"changed":true,"view":"List","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0}
+  ]
+}

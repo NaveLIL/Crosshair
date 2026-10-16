@@ -40,3 +40,5 @@ E2A: узкое сравнение CPU с Intel PXA26x Developer’s Manual27863
 UI bitmap font: MIT Cozette v.1.30.0, pinned source/release hash, полный copyright notice и детерминированный subset — [provenance](ui/third_party/cozette/PROVENANCE.json), [font license](ui/third_party/cozette/LICENSE).
 
 Wave003: [E2B CP14/CP15/reset/GPIO audit](docs/E2B_CPU_GPIO_AUDIT.md) содержит точные разделы Intel278638-002, encodings, закреплённые QEMU/PXADroid commits и повторно сверенные SHA-256 четырёх CPU/MMU source files. Source contract, интерпретация GPIO gating и synthetic choices отделены от [реальных QTest/TCG результатов](reports/WAVE_003.md).
+
+Wave004: [ATI W3200 specification](docs/ATI_W3200_SPEC.md) и [девять pinned source hashes](research/w3200-sources.json) отделяют historical Linux/HaRET facts от unknown hardware properties. Собственный synthetic display/input backend не использует эти адреса и не выдаётся за W3200; [исполненные проверки](reports/WAVE_004.md) относятся к отдельному test-only contract.

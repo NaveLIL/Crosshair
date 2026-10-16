@@ -2,7 +2,7 @@ use core::arch::global_asm;
 
 // SAFETY: entry.S follows the linker memory contract, initializes an aligned
 // stack and BSS before entering Rust, and never returns through a foreign LR.
-#[cfg(not(any(feature = "pxa-reference", feature = "e2b")))]
+#[cfg(not(any(feature = "pxa-reference", feature = "e2b", feature = "display-test")))]
 global_asm!(include_str!("entry.S"));
 // SAFETY: this reference-only entry also installs the banked IRQ stack and
 // vectors. The synthetic QEMU flash segment is part of the ELF loader contract.
@@ -10,7 +10,7 @@ global_asm!(include_str!("entry.S"));
 global_asm!(include_str!("pxa_entry.S"), options(raw));
 // SAFETY: the E2B entry supplies the same two stacks, with distinct exception
 // vectors that pass the fault class, exception LR and SPSR to the Rust probe.
-#[cfg(feature = "e2b")]
+#[cfg(any(feature = "e2b", feature = "display-test"))]
 global_asm!(include_str!("e2b_entry.S"), options(raw));
 
 unsafe extern "C" {

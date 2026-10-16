@@ -1,0 +1,7 @@
+{
+  "result": "PASS",
+  "scope": "negative harness test",
+  "missing_required_reference_fails": true,
+  "fails_before_qemu_launch": true,
+  "stale_outputs_cannot_supply_success": true
+}

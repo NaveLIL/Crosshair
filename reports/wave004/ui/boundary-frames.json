@@ -1,0 +1,15 @@
+{
+  "schema":"crosshair-ui-frames-v1",
+  "theme":"0.1",
+  "pixel_format":"RGB565_LE",
+  "frames":[
+    {"state":0,"file":"boundary-step-00.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x0c721dafcd4b30a6","view":"List","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0},
+    {"state":2,"file":"boundary-step-02.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x02718636912bea08","view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":1,"opened":0},
+    {"state":3,"file":"boundary-step-03.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x0c721dafcd4b30a6","view":"List","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0},
+    {"state":6,"file":"boundary-step-06.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0xbb57ad812cb89b78","view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":3,"opened":0},
+    {"state":23,"file":"boundary-step-23.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0xa23b936706aabf4a","view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":16,"opened":0},
+    {"state":24,"file":"boundary-step-24.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0xa23b936706aabf4a","view":"List","focus":"List","selected_item":null,"scroll":0,"matches":0,"filter_len":16,"opened":0},
+    {"state":26,"file":"boundary-step-26.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x9ca606bdaa6ec92f","view":"Menu","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0},
+    {"state":27,"file":"boundary-step-27.raw565","width":240,"height":320,"stride":240,"bytes":153600,"fnv1a64":"0x0c721dafcd4b30a6","view":"List","focus":"List","selected_item":0,"scroll":0,"matches":16,"filter_len":0,"opened":0}
+  ]
+}

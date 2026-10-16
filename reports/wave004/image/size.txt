@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+  20691	      0	 174656	 195347	  2fb13	<workspace>/target/artifacts/display-test/image/crosshair-display-test.elf

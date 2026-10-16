@@ -1,0 +1,5 @@
+Supported machines are:
+crosshair-blueangel-display-test Crosshair display/input test (synthetic, not ATI or physical input)
+crosshair-blueangel-e2a Crosshair Blue Angel E2A (synthetic, incomplete, experimental PXA26x proxy)
+crosshair-blueangel-e2b Crosshair Blue Angel E2B (synthetic GPIO90, incomplete PXA26x proxy)
+none                 empty machine

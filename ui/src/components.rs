@@ -1,11 +1,16 @@
 //! Keyboard-driven components and a bounded, explicitly test-only applications screen.
 //! Physical key mapping, repeat timing, stylus calibration and display transport stay outside.
 
-use crate::{Rgb565, Surface};
+use crate::{
+    Rgb565, Surface,
+    theme::{colors::*, layout},
+};
+
+pub use crate::fixtures::SCENARIO;
 
 pub const FILTER_CAPACITY: usize = 16;
 pub const INPUT_CAPACITY: usize = 8;
-pub const VISIBLE_ROWS: usize = 8;
+pub const VISIBLE_ROWS: usize = layout::VISIBLE_ROWS;
 pub const ITEMS: [&str; 16] = [
     "Текст",
     "Цвета",
@@ -25,13 +30,6 @@ pub const ITEMS: [&str; 16] = [
     "Прямоугольники",
 ];
 
-const PAPER: Rgb565 = Rgb565::from_rgb(232, 238, 238);
-const INK: Rgb565 = Rgb565::from_rgb(24, 40, 48);
-const ACCENT: Rgb565 = Rgb565::from_rgb(40, 72, 88);
-const SELECTED: Rgb565 = Rgb565::from_rgb(184, 210, 218);
-const EDGE: Rgb565 = Rgb565::from_rgb(112, 136, 144);
-const WHITE: Rgb565 = Rgb565(0xffff);
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Area {
     pub x: i32,
@@ -41,13 +39,15 @@ pub struct Area {
 }
 
 fn label(surface: &mut Surface<'_>, area: Area, text: &str, color: Rgb565) {
-    if area.width < 8 || area.height < 13 {
+    if area.width < layout::FONT_INK_WIDTH || area.height < layout::FONT_HEIGHT {
         return;
     }
     // The last glyph may extend two pixels past its six-pixel advance.
     // Restrict ink to the component, independently of Surface's screen clipping.
-    let limit = (area.width as usize - 8) / 6 + 1;
-    let y = area.y.saturating_add((area.height as i32 - 13) / 2);
+    let limit = (area.width - layout::FONT_INK_WIDTH) as usize / layout::FONT_ADVANCE as usize + 1;
+    let y = area
+        .y
+        .saturating_add((area.height - layout::FONT_HEIGHT) as i32 / 2);
     for (index, ch) in text
         .chars()
         .take(limit)
@@ -56,7 +56,8 @@ fn label(surface: &mut Surface<'_>, area: Area, text: &str, color: Rgb565) {
     {
         let mut bytes = [0; 4];
         surface.text(
-            area.x.saturating_add(index as i32 * 6),
+            area.x
+                .saturating_add(index as i32 * layout::FONT_ADVANCE as i32),
             y,
             ch.encode_utf8(&mut bytes),
             color,
@@ -83,21 +84,16 @@ pub fn selection(surface: &mut Surface<'_>, area: Area, focused: bool) {
         SELECTED,
     );
     if focused {
-        surface.stroke_rect(
-            area.x,
-            area.y,
-            area.width as u32,
-            area.height as u32,
-            ACCENT,
-        );
-        let inner = inset(area, 1);
-        surface.stroke_rect(
-            inner.x,
-            inner.y,
-            inner.width as u32,
-            inner.height as u32,
-            ACCENT,
-        );
+        for amount in 0..layout::FOCUS_WIDTH {
+            let inner = inset(area, amount);
+            surface.stroke_rect(
+                inner.x,
+                inner.y,
+                inner.width as u32,
+                inner.height as u32,
+                FOCUS,
+            );
+        }
     }
 }
 
@@ -105,19 +101,31 @@ pub fn list_row(surface: &mut Surface<'_>, area: Area, text: &str, selected: boo
     if selected {
         selection(surface, area, focused);
     } else {
-        surface.fill_rect(area.x, area.y, area.width as u32, area.height as u32, PAPER);
+        surface.fill_rect(
+            area.x,
+            area.y,
+            area.width as u32,
+            area.height as u32,
+            SURFACE,
+        );
     }
-    label(surface, inset(area, 4), text, INK);
+    label(surface, inset(area, layout::LABEL_PADDING), text, INK);
 }
 
 pub fn button(surface: &mut Surface<'_>, area: Area, text: &str, focused: bool) {
-    surface.fill_rect(area.x, area.y, area.width as u32, area.height as u32, PAPER);
+    surface.fill_rect(
+        area.x,
+        area.y,
+        area.width as u32,
+        area.height as u32,
+        SOFTKEY,
+    );
     if focused {
         selection(surface, area, true);
     } else {
         surface.stroke_rect(area.x, area.y, area.width as u32, area.height as u32, EDGE);
     }
-    label(surface, inset(area, 4), text, INK);
+    label(surface, inset(area, layout::LABEL_PADDING), text, INK);
 }
 
 pub fn title_bar(surface: &mut Surface<'_>, area: Area, text: &str) {
@@ -126,9 +134,37 @@ pub fn title_bar(surface: &mut Surface<'_>, area: Area, text: &str) {
         area.y,
         area.width as u32,
         area.height as u32,
-        ACCENT,
+        HEADER,
     );
-    label(surface, inset(area, 4), text, WHITE);
+    let text_area = Area {
+        x: area.x.saturating_add(layout::HEADER_PADDING as i32),
+        width: area.width.saturating_sub(layout::HEADER_PADDING * 2),
+        ..area
+    };
+    label(surface, text_area, text, WHITE);
+}
+
+/// Static mode labels only. Time, battery and radio require proven data sources.
+pub fn system_strip(surface: &mut Surface<'_>) {
+    surface.fill_rect(
+        0,
+        layout::SYSTEM_TOP as i32,
+        layout::WIDTH as u32,
+        layout::SYSTEM_HEIGHT as u32,
+        SYSTEM,
+    );
+    surface.text(
+        layout::LABEL_PADDING as i32,
+        layout::SYSTEM_TEXT_Y as i32,
+        "Система",
+        WHITE,
+    );
+    surface.text(
+        layout::SYSTEM_RIGHT_X as i32,
+        layout::SYSTEM_TEXT_Y as i32,
+        "Тест",
+        WHITE,
+    );
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -143,9 +179,9 @@ pub fn bottom_softkeys(surface: &mut Surface<'_>, left: &str, right: &str, focus
         surface,
         Area {
             x: 0,
-            y: 296,
-            width: 120,
-            height: 24,
+            y: layout::SOFTKEY_TOP as i32,
+            width: layout::SOFTKEY_WIDTH,
+            height: layout::SOFTKEY_HEIGHT,
         },
         left,
         focus == Focus::LeftSoftkey,
@@ -153,10 +189,10 @@ pub fn bottom_softkeys(surface: &mut Surface<'_>, left: &str, right: &str, focus
     button(
         surface,
         Area {
-            x: 120,
-            y: 296,
-            width: 120,
-            height: 24,
+            x: layout::SOFTKEY_WIDTH as i32,
+            y: layout::SOFTKEY_TOP as i32,
+            width: layout::SOFTKEY_WIDTH,
+            height: layout::SOFTKEY_HEIGHT,
         },
         right,
         focus == Focus::RightSoftkey,
@@ -432,7 +468,8 @@ impl AppsScreen {
     /// Fixed 240x320 layout; smaller validated surfaces clip it safely. Full
     /// repaint on a state change uses one borrowed framebuffer, no hidden copy.
     pub fn render(&self, surface: &mut Surface<'_>) {
-        surface.fill(PAPER);
+        surface.fill(BACKGROUND);
+        system_strip(surface);
         let title = match self.view {
             View::List => "Приложения",
             View::Action(_) => "Проверка",
@@ -442,87 +479,152 @@ impl AppsScreen {
             surface,
             Area {
                 x: 0,
-                y: 0,
-                width: 240,
-                height: 24,
+                y: layout::HEADER_TOP as i32,
+                width: layout::WIDTH,
+                height: layout::HEADER_HEIGHT,
             },
             title,
         );
         match self.view {
             View::List => {
-                surface.text(8, 31, "Поиск:", INK);
+                surface.fill_rect(
+                    0,
+                    layout::SEARCH_TOP as i32,
+                    layout::WIDTH as u32,
+                    layout::SEARCH_HEIGHT as u32,
+                    SURFACE,
+                );
+                surface.text(
+                    layout::PAGE_LEFT as i32,
+                    layout::SEARCH_TEXT_Y as i32,
+                    "Поиск:",
+                    MUTED,
+                );
                 for (i, ch) in self.filter().iter().enumerate() {
                     let mut bytes = [0; 4];
-                    surface.text(52 + i as i32 * 6, 31, ch.encode_utf8(&mut bytes), INK);
+                    surface.text(
+                        layout::FILTER_X as i32 + i as i32 * layout::FONT_ADVANCE as i32,
+                        layout::SEARCH_TEXT_Y as i32,
+                        ch.encode_utf8(&mut bytes),
+                        INK,
+                    );
                 }
-                surface.text(8, 49, "Тестовый список", INK);
                 if self.match_count() == 0 {
                     if self.focus == Focus::List {
-                        selection(
-                            surface,
-                            Area {
-                                x: 8,
-                                y: 68,
-                                width: 224,
-                                height: 24,
-                            },
-                            true,
-                        );
+                        selection(surface, row_area(0), true);
                     }
-                    surface.text(12, 74, "Нет совпадений", INK);
+                    label(
+                        surface,
+                        inset(row_area(0), layout::LABEL_PADDING),
+                        "Нет совпадений",
+                        INK,
+                    );
                 }
                 for row in 0..VISIBLE_ROWS {
                     let position = self.scroll() + row;
                     if let Some(item) = self.item_at(position) {
                         list_row(
                             surface,
-                            Area {
-                                x: 8,
-                                y: 68 + row as i32 * 26,
-                                width: 224,
-                                height: 24,
-                            },
+                            row_area(row),
                             ITEMS[item as usize],
                             position == self.selected_position(),
                             self.focus == Focus::List,
                         );
                     }
                 }
+                scrollbar(surface, self.scroll(), self.match_count());
+                surface.fill_rect(
+                    0,
+                    layout::STATUS_TOP as i32,
+                    layout::WIDTH as u32,
+                    layout::STATUS_HEIGHT as u32,
+                    SURFACE,
+                );
                 number(
                     surface,
-                    8,
-                    280,
+                    layout::PAGE_LEFT as i32,
+                    layout::STATUS_TEXT_Y as i32,
                     if self.match_count() == 0 {
                         0
                     } else {
                         self.selected + 1
                     },
                 );
-                surface.text(26, 280, "/", INK);
-                number(surface, 38, 280, self.match_count() as u8);
+                surface.text(
+                    layout::STATUS_SLASH_X as i32,
+                    layout::STATUS_TEXT_Y as i32,
+                    "/",
+                    MUTED,
+                );
+                number(
+                    surface,
+                    layout::STATUS_TOTAL_X as i32,
+                    layout::STATUS_TEXT_Y as i32,
+                    self.match_count() as u8,
+                );
+                surface.text(
+                    layout::STATUS_HINT_X as i32,
+                    layout::STATUS_TEXT_Y as i32,
+                    "Тестовый список",
+                    MUTED,
+                );
                 bottom_softkeys(surface, "Открыть", "Меню", self.focus);
             }
             View::Action(item) => {
-                surface.text(8, 38, "Тестовый просмотр", INK);
-                surface.text(8, 60, ITEMS[item as usize], INK);
-                // This really draws a selected diagnostic preview. It does not
-                // pretend to launch an unimplemented phone/contact application.
+                surface.text(
+                    layout::PAGE_LEFT as i32,
+                    layout::ACTION_NAME_Y as i32,
+                    ITEMS[item as usize],
+                    INK,
+                );
+                surface.text(
+                    layout::PAGE_LEFT as i32,
+                    layout::ACTION_CAPTION_Y as i32,
+                    "Тестовый просмотр",
+                    MUTED,
+                );
+                // Real selected diagnostic previews, not phone/contact applications.
                 match item % 3 {
-                    0 => surface.text(12, 100, "Съешь ещё мягких булок.\nЁё Йй Ъъ Ьь", INK),
+                    0 => surface.text(
+                        layout::PREVIEW_X as i32,
+                        layout::PREVIEW_Y as i32,
+                        "Съешь ещё мягких булок.\nЁё Йй Ъъ Ьь",
+                        INK,
+                    ),
                     1 => {
-                        for (i, color) in [Rgb565(0xf800), Rgb565(0x07e0), Rgb565(0x001f)]
-                            .iter()
-                            .enumerate()
-                        {
-                            surface.fill_rect(12 + i as i32 * 72, 100, 64, 48, *color);
+                        for (i, color) in [TEST_RED, TEST_GREEN, TEST_BLUE].iter().enumerate() {
+                            surface.fill_rect(
+                                layout::PREVIEW_X as i32 + i as i32 * layout::COLOR_PITCH as i32,
+                                layout::PREVIEW_Y as i32,
+                                layout::COLOR_WIDTH as u32,
+                                layout::COLOR_HEIGHT as u32,
+                                *color,
+                            );
                         }
                     }
                     _ => {
-                        surface.stroke_rect(12, 100, 216, 70, ACCENT);
-                        surface.line(12, 100, 227, 169, INK);
+                        surface.stroke_rect(
+                            layout::PREVIEW_X as i32,
+                            layout::PREVIEW_Y as i32,
+                            layout::PREVIEW_WIDTH as u32,
+                            layout::PREVIEW_HEIGHT as u32,
+                            HEADER,
+                        );
+                        surface.line(
+                            layout::PREVIEW_X as i32,
+                            layout::PREVIEW_Y as i32,
+                            (layout::PREVIEW_X + layout::PREVIEW_WIDTH - 1) as i32,
+                            (layout::PREVIEW_Y + layout::PREVIEW_HEIGHT - 1) as i32,
+                            INK,
+                        );
                     }
                 }
-                surface.text(8, 250, "Назад — к списку", INK);
+                surface.text(
+                    layout::PAGE_LEFT as i32,
+                    layout::BACK_HINT_Y as i32,
+                    "Назад — к списку",
+                    MUTED,
+                );
                 bottom_softkeys(surface, "Назад", "Меню", self.focus);
             }
             View::Menu => {
@@ -533,10 +635,10 @@ impl AppsScreen {
                     list_row(
                         surface,
                         Area {
-                            x: 8,
-                            y: 48 + i as i32 * 30,
-                            width: 224,
-                            height: 26,
+                            x: layout::PAGE_LEFT as i32,
+                            y: layout::MENU_TOP as i32 + i as i32 * layout::MENU_PITCH as i32,
+                            width: layout::ROW_WIDTH,
+                            height: layout::MENU_ROW_HEIGHT,
                         },
                         text,
                         i == self.menu_selection(),
@@ -547,6 +649,40 @@ impl AppsScreen {
             }
         }
     }
+}
+
+fn row_area(row: usize) -> Area {
+    Area {
+        x: layout::PAGE_LEFT as i32,
+        y: layout::LIST_TOP as i32 + row as i32 * layout::ROW_PITCH as i32,
+        width: layout::ROW_WIDTH,
+        height: layout::ROW_HEIGHT,
+    }
+}
+
+fn scrollbar(surface: &mut Surface<'_>, first: usize, total: usize) {
+    if total <= VISIBLE_ROWS {
+        return;
+    }
+    let track = layout::SCROLL_HEIGHT as usize;
+    let thumb = (track * VISIBLE_ROWS / total)
+        .max(layout::SCROLL_MIN_THUMB as usize)
+        .min(track);
+    let top = (track - thumb) * first / (total - VISIBLE_ROWS);
+    surface.fill_rect(
+        layout::SCROLL_X as i32,
+        layout::LIST_TOP as i32,
+        layout::SCROLL_WIDTH as u32,
+        track as u32,
+        SCROLL_TRACK,
+    );
+    surface.fill_rect(
+        layout::SCROLL_X as i32,
+        layout::LIST_TOP as i32 + top as i32,
+        layout::SCROLL_WIDTH as u32,
+        thumb as u32,
+        SCROLL_THUMB,
+    );
 }
 
 fn accepted_text(ch: char) -> bool {
