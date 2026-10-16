@@ -4,7 +4,7 @@
 
 Implemented for the shared 240×320 RGB565 software renderer in Wave 004. The direction is a compact, practical evolution of a Pocket PC interface: gray surfaces, a blue application header, clear keyboard focus, short Russian labels and persistent bottom actions. Wave004 originally followed the written direction and Crosshair's existing gray-blue palette. On 16.10.2026 the owner supplied and approved the visual reference below as the primary artistic direction for the next functional Crosshair Shell 0.1; that approval does not change the historical Wave004 execution results or claim that the pictured shell is already implemented.
 
-The [theme](../ui/src/theme.rs) is the single source for exact colors and geometry. [Components](../ui/src/components.rs) and `AppsScreen::render` use these constants. Host fixtures and the ARM caller share that renderer; there is no separately drawn host mockup. The existing surface renderer, eleven primitive tests, font bytes and [font license](../ui/third_party/cozette/LICENSE) remain unchanged. See [navigation](UI_NAVIGATION.md) and [screens](UI_SCREENS.md) for behavior and implementation status.
+The [theme](../ui/src/theme.rs) supplies the shared exact colors and Wave004 diagnostic layout. [Components](../ui/src/components.rs) and `AppsScreen::render` preserve those constants. The new [Shell composition](../shell/src/render.rs) reuses that Surface/font/component/theme foundation with its own bounded Desktop/application geometry and two defined palette roles. Host fixtures and ARM callers share their respective renderer/state code; there is no separately drawn host mockup. The existing surface renderer, eleven primitive tests, font bytes and [font license](../ui/third_party/cozette/LICENSE) remain unchanged. See [diagnostic navigation](UI_NAVIGATION.md), [Shell navigation](SHELL_NAVIGATION.md) and [screens](UI_SCREENS.md) for behavior and implementation status.
 
 ## Approved visual reference for Crosshair Shell 0.1
 
@@ -18,11 +18,17 @@ The [theme](../ui/src/theme.rs) is the single source for exact colors and geomet
 | Preservation | Original bytes copied unchanged; source and repository copy have identical SHA-256. No image editing, resizing or palette conversion was performed |
 | Rights/publication | Owner approval records its use as a project reference and versioned repository asset. No separate image copyright licence was supplied or inferred; the MIT licence for Crosshair's own code does not automatically relicense external artwork. External publication of this asset is not performed by this documentation update |
 
-The reference governs the next shell's **artistic direction**, not a pixel-for-pixel copy or a replacement rendering engine. Carry forward the cold gray-blue palette, dark system bars, compact Pocket PC headers and lists, persistent bottom softkeys, uniform icon language and clear selection/focus. The Desktop should present an application grid; Today should be a separate screen rather than replacing the Desktop. Files, Settings, Applications, Phone, Messages and Console should share the same visual rules as their actual capabilities become available. Existing exact theme tokens below remain the implemented contract until a measured, tested visual update changes them.
+The reference governs the shell's **artistic direction**, not a pixel-for-pixel copy or a replacement rendering engine. Wave007 carries forward the cold gray-blue palette, dark system bars, compact Pocket PC headers and lists, persistent bottom softkeys, uniform icon language and clear selection/focus. Desktop presents an application grid; Today is a separate screen. Settings, Launcher, About and Diagnostics share these rules. Future Files, Phone, Messages and Console must retain them as their actual capabilities become available. The original exact theme tokens below remain unchanged.
 
-Shell 0.1 must be functional graphics on the existing shared renderer: real navigation, keyboard/stylus logical events and bounded screen/application state must drive what is drawn. Adapt the concept to 240×320 RGB565, the existing Cozette subset and an explicit RAM/stack/code budget. Reuse the current surface/components/event path; this reference does not call for an engine rewrite. A static wallpaper is optional and must preserve text/selection contrast and acceptable redraw CPU/memory cost; the reference's photographic background is not an unconditional asset or runtime requirement.
+Shell 0.1 is implemented as functional graphics on the existing shared renderer: real keyboard logical events, bounded screen/application state, menu/dialog transitions and theme choice drive the pixels. It adapts the concept to 240×320 RGB565, the existing Cozette subset and the explicit [User/kernel memory contract](SHELL_ARCHITECTURE.md). [Tabler Icons is the primary system-icon source](UI_ASSET_SYSTEM.md): a pinned18-icon MIT subset is converted at build time into12/16/24px monochrome masks and tinted by the theme; no reference-image pixels are copied into it. Physical stylus/hit testing is not implemented. A future static wallpaper remains optional and must preserve text/selection contrast and acceptable redraw CPU/memory cost; no wallpaper or engine rewrite is needed by the present shell.
 
-Pictured clocks, radio/battery bars, phone/messages, update notices and application entries are concept content. They do not establish working time, modem, network, power or storage services. The next shell must show actual available state and meaningful actions, with unavailable capabilities identified honestly; a dialler drawing must not claim a successful call. Wave006 remains the task-runtime step; saving this reference does not implement Shell 0.1 or alter its guest/runtime.
+Pictured clocks, radio/battery bars, phone/messages, update notices and application entries remain concept content. They do not establish working time, modem, network, power or storage services. Shell Today explicitly labels unavailable services; Diagnostics uses the kernel's actual supplied snapshot and actual local UI counters. A dialler drawing must never claim a successful call. Wave006 remains its separate task-runtime regression; Wave007 provides the new [User Mode Shell and execution evidence](../reports/WAVE_007.md).
+
+## Implemented Shell palette and composition
+
+The [Shell renderer](../shell/src/render.rs) uses `SYSTEM` for both compact system strip and bottom softkeys, `HEADER` for its28-pixel application title, and existing shared selection/button components for focus, menus and confirmation. Classic body roles are `BACKGROUND/SURFACE/INK/MUTED`; night roles are `SYSTEM/HEADER/WHITE/SELECTED`. The actual setting switches these body roles in memory and reset/cancel has explicit behavior; it does not modify the historical `ui::theme` constants or persist a configuration file.
+
+Desktop uses a2×3 grid of108×62 tiles at x8/124, y58/130/202, with24×24 Tabler masks and bounded Cozette labels. Launcher has a visible bounded query and only real built-ins. Informational screens keep a keyboard-reachable Back softkey; an empty filtered Launcher keeps search focus. Menus and the theme-reset dialog are genuine bounded overlays. The geometry/color tables below continue to specify the preserved Wave004 diagnostic AppsScreen; they are not a claim that Shell's different grid uses list-row coordinates. Full Shell navigation is documented [separately](SHELL_NAVIGATION.md).
 
 ## Color tokens
 
@@ -78,14 +84,14 @@ Typography is the existing [Cozette subset](../ui/third_party/cozette/PROVENANCE
 
 Component labels have four-pixel inset padding; the application title uses eight pixels horizontally. Selection/focus painting and text stay within the component rectangle. Negative and extreme coordinates are handled by the existing checked surface clipping. A long label is truncated without an invented ellipsis glyph or horizontal marquee.
 
-The following compact control specifications are also exact constants in `theme::layout`. They do not create an input editor, dialog manager, draggable scrollbar, icon set or hit-testing implementation.
+The following compact control specifications are also exact constants in `theme::layout`. The constants alone do not create an input editor, dialog manager, draggable scrollbar or hit-testing implementation. The separate Shell now implements its own bounded theme-reset dialog and [Tabler icon catalog](UI_ASSET_SYSTEM.md); hardware-status service integration remains absent.
 
 | Control/token contract | Exact dimensions | Status |
 | --- | --- | --- |
 | Border / focus / gap | `BORDER_WIDTH=1`, `FOCUS_WIDTH=2`, `CONTROL_GAP=4` | Existing one-pixel outlines/two-pixel focus; shared future tokens |
 | Button | Height 24, minimum width 48, internal padding 4; reserve eight-pixel last-glyph ink | Existing renderer; min-width policy and pressed/disabled interaction planned |
 | Single-line input | Width 224, height 24, padding 4; usable inner width 216/height16 | Planned editor; current search strip is a separate 20-pixel display/filter region |
-| System/small icon | 12×12, padding2 in a 16-pixel strip, text gap4 | Planned monochrome glyph assets; no hardware-status icon is drawn |
+| System/small icon | 12×12, padding2 in a 16-pixel strip, text gap4 | Monochrome Tabler masks implemented at12/16/24px; diagnostic strip/hardware-status icons are not drawn without real status services |
 | Scrollbar | Existing visual width3, minimum thumb8; planned hit region x `[232,240)` width8 | Position rendering implemented; stylus dragging/hit region planned |
 | Dialog | x12/y64, width216/height184, padding8; remains above softkeys | Planned modal surface, not an implemented overlay |
 | Dialog header/body/footer | Header24, footer32, eight 14-pixel body lines after vertical padding; inner width200 | Planned fixed layout; overflow must scroll or truncate explicitly |
@@ -101,7 +107,7 @@ For a future clock, the specified display form is 24-hour `HH:MM`, zero padded; 
 
 A real font-rendering test draws `23:59`, `16.10.2026` and `ЁЙЪЬёйъь` with the existing font. It checks thirteen-row bounds, six-pixel advance reservations, identical time-label masks in ACTIVE/DISABLED ink, untouched row padding and outer sentinels. Five-character time reserves32 ink pixels, ten-character date62 and eight Cyrillic scalars50. This proves label fit and color roles; it does not implement calendar validation, a formatter or a time source.
 
-## Memory and integration
+## Preserved diagnostic memory and integration
 
 The library remains dependency-free `no_std` with `forbid(unsafe_code)`, no allocation, floating point, MMIO or second framebuffer. The theme is compile-time constants and adds no mutable theme owner. The measured state profile is unchanged:
 
@@ -117,8 +123,10 @@ Sizes come from the actual host/ARM compile-only object probe, not assumed point
 
 Rendering currently repaints the full screen on a relevant state change. Dirty rectangles still clear only after every `present` callback succeeds, retaining all regions on failure. The backend must finish consuming pixels before returning success; asynchronous DMA requires a completion contract. Driver cache maintenance, transfer order, physical LCD timing and input interrupt synchronization remain outside the theme.
 
-## Validation and deliberate golden change
+## Preserved Wave004 validation and deliberate golden change
 
 `scripts/test-ui.sh` passed **24 host tests**, the existing 20000 deterministic stress operations, actual ARMv5TE/EABI5/no-hard-float code-object inspection, target layout extraction and pinned-font regeneration. The additional role/geometry and real date/time/Cyrillic label tests do not change screen rendering. The eleven primitive tests and UI 0.1 raw565 golden `5431880093368634183` are unchanged. The Apps screen golden deliberately changes from UI 0.2's `10739668449275078947` to **`6602604234790396534`**, reflecting this theme and geometry change, with the same logical input trace.
 
 The script produces twenty raw565/PNG captures from the shared canonical and boundary scenarios; selected final, menu, full-filter/empty-result and text-preview PNGs were actually inspected at 240×320. Generated files remain ignored under `target/artifacts/ui/design-system/`; no screenshot is presented as a physical PDA photograph. Host/ARM parity and guest execution are recorded separately by the Wave 004 integration report when actually tested.
+
+Wave007 adds [11 Shell state/render tests](../shell/src/tests.rs) covering navigation/history, menus, dialog/theme, text input, clipping/canaries, dirty/present failure, runtime validity and20,000 bounded burst actions, plus [two catalog/drawing tests](../shell/src/icons.rs) and [six SVG/binding tests](../shell/tools/test_generate_icons.py). [The replay exporter](../shell/examples/export.rs) writes actual240×320 PNG/raw565 and named Snapshot fields from the shared Shell code, accepting captured kernel metrics per event. Shell persistent size, ARM User allocations, framebuffer and privilege-boundary execution are measured separately in [Wave007](../reports/WAVE_007.md); they do not replace or silently revise the diagnostic object's table above.

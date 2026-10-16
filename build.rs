@@ -8,6 +8,8 @@ fn main() {
     let display = env::var_os("CARGO_FEATURE_DISPLAY_TEST").is_some();
     let security = env::var_os("CARGO_FEATURE_SECURITY_TEST").is_some();
     let tasks = env::var_os("CARGO_FEATURE_TASKS_TEST").is_some();
+    let shell = env::var_os("CARGO_FEATURE_SHELL_TEST").is_some();
+    let shell_user = env::var_os("CARGO_FEATURE_SHELL_USER").is_some();
     assert!(
         usize::from(versatile)
             + usize::from(blueangel)
@@ -16,6 +18,8 @@ fn main() {
             + usize::from(display)
             + usize::from(security)
             + usize::from(tasks)
+            + usize::from(shell)
+            + usize::from(shell_user)
             == 1,
         "select exactly one BSP"
     );
@@ -23,6 +27,10 @@ fn main() {
         "versatilepb"
     } else if blueangel {
         "blueangel"
+    } else if shell {
+        "shell"
+    } else if shell_user {
+        "shell-user"
     } else if tasks {
         "tasks"
     } else if security {
@@ -39,5 +47,6 @@ fn main() {
     println!("cargo:rustc-link-arg=-T{}", linker.display());
     println!("cargo:rerun-if-changed={}", linker.display());
     println!("cargo:rerun-if-changed=link/sections.ld");
+    println!("cargo:rerun-if-changed=target/artifacts/shell/user-image/crosshair-shell-user.bin");
     println!("cargo:rustc-link-arg=-L{}", root.join("link").display());
 }

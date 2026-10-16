@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+  25736	      0	 194912	 220648	  35de8	<artifacts>/shell/user-image/crosshair-shell-user.elf

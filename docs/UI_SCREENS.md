@@ -1,8 +1,25 @@
 # UI screens and implementation status
 
-The implemented surface is the [Design System 0.1](UI_DESIGN_SYSTEM.md) 240×320 diagnostic UI. It has three real view states: list, selected diagnostic preview and menu. It is not a complete desktop or a finished set of PDA applications. The written gray-blue direction was used; an image reference was not supplied for inspection.
+Crosshair now has two separate users of the same [Design System 0.1](UI_DESIGN_SYSTEM.md) 240×320 renderer: the preserved Wave004 diagnostic AppsScreen and the Wave007 functional User Mode Shell. The original Wave004 work followed the written gray-blue direction; the [image approved on 16.10.2026](UI_DESIGN_SYSTEM.md#approved-visual-reference-for-crosshair-shell-01) supplies the Shell's artistic direction. Physical display/input remain unverified.
 
-## Implemented screens
+## Implemented Shell 0.1 views
+
+The [Shell state machine](../shell/src/lib.rs) and [composition](../shell/src/render.rs) are `no_std`, bounded and independent of the privileged kernel. The separately linked [User adapter](../src/shell_user.rs) obtains input/metrics and presents one framebuffer through checked SVC services. [Architecture](SHELL_ARCHITECTURE.md), [navigation and host keys](SHELL_NAVIGATION.md), and [Wave007 execution evidence](../reports/WAVE_007.md) distinguish source-confirmed behavior from actual test results.
+
+| View | Functional content and interaction | State / current limit |
+| --- | --- | --- |
+| Desktop | Dark system/softkey bars and a real 2×3 icon grid: Applications, Today, Settings, Diagnostics, About, Switch | Keyboard focus persists across screen visits; all six tiles perform their named action |
+| Today | Explicit unavailable clock/power/connection state, actual supplied task/event summaries, links to Applications and Diagnostics | Separate view from Desktop; no invented appointments, notification counts or hardware status |
+| Launcher | Four implemented built-in screens; visible 16-scalar case-insensitive Latin/Cyrillic prefix query, selection, context menu and Select | Backspace erases; Back first clears query; empty results cannot launch a hidden entry; selection/query survive ordinary app visits |
+| About | Actual supplied build/version, ARMv5TE and synthetic-environment strings; own-code/font licence facts and hardware limit | Informational view; left softkey returns to caller |
+| Diagnostics | Kernel snapshot of ticks, context switches, task states, mapped working-RAM reservation and input counters; actual local UI event/frame counts | Only valid supplied groups show numbers; no free-heap/instantaneous stack/device measurements are implied |
+| Settings | Cold gray and night blue themes, actual in-memory toggle, reset confirmation with cancel | Theme affects real rendering and lasts until reboot; persistence and device/power settings absent |
+| System / Launcher menu | Reachable system screens or matching-app actions; own bounded overlay selection | Closing restores underlying screen focus; Home and opened-view switching remain available |
+| Reset dialog | Explicit Reset/Cancel buttons and keyboard selection | Only the volatile theme changes; no storage or physical operation |
+
+These built-ins currently share one Shell process and its saved UI state. They are functional screen applications, not separately loaded tasks or packages. A separate uncooperative User Busy workload exercises the scheduler concurrently. No Files/Phone/SMS/network placeholder is offered as an installed working application. [Tabler Icons](UI_ASSET_SYSTEM.md) supplies the primary system-icon subset, preserving its MIT notice and following the approved reference without embedding that image as the UI. The Mac viewer displays actual guest frames and forwards logical events; it does not implement the state machine on the host.
+
+## Preserved Wave004 diagnostic screens
 
 | View | Contents and geometry | Actions and state effect | Status |
 | --- | --- | --- | --- |
@@ -21,19 +38,19 @@ These rows define future scope and acceptance requirements. They are not additio
 
 | Planned screen | Required behavior and data boundary | Prerequisite / proof needed |
 | --- | --- | --- |
-| Home / Today | Compact date/time and only real summaries/notifications; direct keyboard entry to Applications; empty/unavailable sections say so; Menu and Back have stable root behavior | Real time, notification and application-lifetime sources; no appointments, unread counts or phone status are invented; planned |
-| Application catalog | Launch only applications that actually exist; preserve list position on return; keyboard filtering/focus remains complete | Application lifetime/navigation model and memory budget; current diagnostic catalog is not a process launcher |
+| Home / Today extensions | Add real date/time and notifications to the implemented Shell Today without changing root navigation | Trusted time/notification sources and application lifetime remain future work; the current explicit unavailable sections are functional |
+| Dynamic application catalog | Extend the implemented four-entry built-in Launcher to independently owned applications/packages | Loader/lifetime/authority/persistence contracts; the preserved Wave004 diagnostic catalog is a different test screen |
 | File Manager | Keyboard list of mounted locations/directories/files; Select enters/opens supported items, Back goes to parent, Menu offers only implemented actions; preserve path/selection on return; bounded path/name buffers | Storage/filesystem drivers, path validation, safe error reporting and persistence; begin read-only; rename/delete require explicit confirmation and tested write/recovery paths; planned |
 | Terminal | Fixed-cell text view with command line, bounded scrollback, wrapping, Backspace and keyboard scroll; nominal content x `[6,230)`, y `[44,296)` fits37 columns ×18 lines at the existing6-pixel advance/14-pixel line height | Owned kernel command interpreter and explicit buffer/output limits, UTF-8 scalar handling and unsupported-character fallback; no host shell, Linux/POSIX runtime or fabricated command output; planned |
 | Contacts | Browse/search, view details, edit bounded fields, confirm destructive changes; disclose save success only after storage commits | Owned data model, persistence/recovery, text editing; no ROM/user contacts are bundled |
 | Phone | Dial, incoming call, answer/reject, active-call and ended/error states; clear softkey meanings; keyboard access to each action | Proven modem protocol, audio routing, power policy and separate hardware authorization; a GSM test model must be identified as simulated |
 | SMS | Message list, detail, bounded compose, explicit pending/sent/failed states and retry; never equate queued UI work with network delivery | Modem SMS contract, encoding/length policy and persistent queue; no test message may reach a real network implicitly |
-| Settings | Input language/layout, display and time settings with Back/cancel/apply semantics | Proven capabilities and validation; no unverified power/charging register writes behind a UI toggle |
+| Settings extensions | Input language/layout, display and time settings with Back/cancel/apply semantics; preserve the implemented volatile theme toggle/reset | Proven capabilities and validation; no unverified power/charging register writes behind a UI toggle |
 | Date/time | 24-hour `HH:MM`, date `DD.MM.YYYY`, explicit unset/error state, keyboard-editable fields | Trusted RTC/time source, timezone policy, calendar validation and width/refresh tests; currently no clock widget |
-| Diagnostics | Show measured version/device/test facts and explicit unknowns; controlled export of logs | Proven sources, privacy filtering and owner-approved hardware observations; diagnostic preview labels alone are not drivers |
+| Diagnostics extensions | Add verified device facts and controlled export to the implemented kernel/UI-counter snapshot | Proven hardware sources, privacy filtering and owner-approved observations; current counters are synthetic-session measurements, not physical drivers |
 | Power/sleep | Show actual state, reliable resume and clear failure reporting | Tested hardware power/interrupt/wake contracts; no simulated battery indicator is shipped |
 
-The Settings hierarchy is fully specified below as **planned**. None of these sections is an implemented settings screen or permission to access physical hardware. Every section must show unsupported capabilities explicitly, preserve keyboard focus/Back navigation, and distinguish pending changes, applied changes and backend errors.
+The Settings hierarchy below remains **planned** beyond the implemented Shell theme selection/reset. These hardware/backend sections do not follow automatically from the theme screen and do not authorize physical access. Every section must show unsupported capabilities explicitly, preserve keyboard focus/Back navigation, and distinguish pending changes, applied changes and backend errors.
 
 | Settings section | Required controls/data | Required backend evidence |
 | --- | --- | --- |
@@ -49,8 +66,10 @@ Date/time belongs to a separate validated Settings flow: `HH:MM` and `DD.MM.YYYY
 
 All future screens retain hardware-QWERTY operation, visible focus and the same Back/Menu conventions unless a documented application requirement justifies a specific exception. Stylus is an additional path after calibration, not a replacement for keyboard reachability. Their storage, editing, modem and power failures must be represented as real state transitions; no static success page substitutes for a backend.
 
-## Evidence and remaining limits
+## Preserved Wave004 evidence and remaining hardware limits
 
 The shared fixtures contain 37 canonical and 27 independent boundary events, producing twelve and eight selected raw565/PNG captures. Paths and schemas are specified in [UI_NAVIGATION.md](UI_NAVIGATION.md). `scripts/test-ui.sh` checks the entire unchanged canonical state trace, both capture manifests, raw hashes/dimensions, 24 host tests, the 20000 existing stress operations and actual ARM object layout/code attributes. The role/geometry/date-time label additions preserve all twenty capture bytes and the themed golden. The changed themed Apps golden is intentional; the primitive/font baseline remains unchanged.
 
 Host captures prove actual software rendering at the specified dimensions. The separate [Wave004 integration](../reports/WAVE_004.md) now verifies real ARM execution, synthetic input burst/overflow/reset and all twenty canonical/boundary captures byte for byte, plus three burst checkpoints. No physical ATI W3200 screen, TSC2200 touch panel or sliding QWERTY has been exercised. The next integration boundary is proven hardware metadata and a separately specified real display/input backend.
+
+Wave007 keeps those fixtures unchanged and adds its own [host state/render tests](../shell/src/tests.rs), [frame replay exporter](../shell/examples/export.rs) and [ARM oracle](../tools/smoke_shell.py). Shell keyframes and actual kernel snapshots are compared through the same renderer; exact counts/hashes/allocations belong to [Wave007](../reports/WAVE_007.md). A host screenshot or the approved concept alone is not evidence of a User session or hardware operation.

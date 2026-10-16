@@ -19,10 +19,13 @@ e2b-negative-test = ["e2b"]
 display-test = ["dep:crosshair-ui"]
 security-test = []
 tasks-test = []
+shell-test = []
+shell-user = ["dep:crosshair-ui", "dep:crosshair-shell"]
 panic-test = []
 
 [dependencies]
 crosshair-ui = { path = "ui", optional = true }
+crosshair-shell = { path = "shell", optional = true }
 
 [[bin]]
 name = "crosshair-boot"
@@ -63,6 +66,20 @@ bench = false
 name = "crosshair-tasks"
 path = "src/tasks.rs"
 required-features = ["tasks-test"]
+test = false
+bench = false
+
+[[bin]]
+name = "crosshair-shell"
+path = "src/shell.rs"
+required-features = ["shell-test"]
+test = false
+bench = false
+
+[[bin]]
+name = "crosshair-shell-user"
+path = "src/shell_user.rs"
+required-features = ["shell-user"]
 test = false
 bench = false
 

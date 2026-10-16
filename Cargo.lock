@@ -6,6 +6,14 @@ version = 4
 name = "crosshair-boot"
 version = "0.1.0"
 dependencies = [
+ "crosshair-shell",
+ "crosshair-ui",
+]
+
+[[package]]
+name = "crosshair-shell"
+version = "0.1.0"
+dependencies = [
  "crosshair-ui",
 ]
 

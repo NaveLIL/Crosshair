@@ -1,0 +1,15 @@
+[package]
+name = "crosshair-shell"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+
+[dependencies]
+crosshair-ui = { path = "../ui" }
+
+[workspace]
+
+[profile.release]
+panic = "abort"
+opt-level = "s"

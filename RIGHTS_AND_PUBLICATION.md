@@ -4,6 +4,8 @@
 
 QEMU, HaRET и исторические Linux/PXADroid sources сохраняют собственные copyright/license notices. Проект ссылается на первоисточники и хеши; сторонние бинарники и полные reference trees не включены. Перенос реализации требует отдельной фиксации происхождения и совместимых условий.
 
+Системные значки Shell основаны на18 исходных SVG [Tabler Icons](https://github.com/tabler/tabler-icons), pinned commit `a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d`. Сохранены оригинальная [MIT-лицензия Paweł Kuna](shell/assets/tabler/LICENSE), [происхождение и хеши](shell/assets/tabler/PROVENANCE.json); производные bitmap masks сохраняют это указание. Собственный генератор — project MIT. [Cozette](ui/third_party/cozette/LICENSE) сохраняет отдельную лицензию шрифта. Утверждённый владельцем [визуальный reference](docs/UI_DESIGN_SYSTEM.md#approved-visual-reference-for-crosshair-shell-01) не получает лицензию Tabler или шрифта.
+
 В поставку не входят ROM/radio/bootloader binaries, фотографии и личные истории, пользовательские дампы, VM, установщики Windows, лицензирующие ключи, SIM/IMEI/контакты. Технические ROM file catalogs и hashes не являются публикацией самих бинарников.
 
 Первоначальный публичный снимок сформирован явным allowlist через `scripts/export-public.py` в отдельный checkout публичного origin/main. Дальнейшая разработка E2A/UI ведётся в этом чистом публичном checkout; старый export audit относится к принятому foundation snapshot. Локальная приватная история Git не переносится. Отчёты с нормализованными host paths обозначены как presentation copies; хеши guest outputs сохраняют исходное значение. [Export audit](reports/public-export-audit.json).

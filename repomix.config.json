@@ -1,0 +1,48 @@
+{
+  "input": {
+    "maxFileSize": 50000000
+  },
+  "output": {
+    "filePath": "target/artifacts/repomix/crosshair-public.json",
+    "style": "json",
+    "filePathStyle": "target-relative",
+    "parsableStyle": true,
+    "compress": false,
+    "headerText": "Complete current public Crosshair source, documentation and text evidence. Binary artwork is represented by docs/ASSET_MANIFEST.json; generated guests, caches and private history are excluded. Source and third-party licences remain in force.",
+    "fileSummary": true,
+    "directoryStructure": true,
+    "files": true,
+    "removeComments": false,
+    "removeEmptyLines": false,
+    "showLineNumbers": false,
+    "truncateBase64": false,
+    "copyToClipboard": false,
+    "git": {
+      "sortByChanges": false,
+      "includeDiffs": false,
+      "includeLogs": false
+    }
+  },
+  "ignore": {
+    "useGitignore": true,
+    "useDotIgnore": false,
+    "useDefaultPatterns": false,
+    "customPatterns": [
+      ".git/**",
+      "target/**",
+      "local/**",
+      "private/**",
+      "work/**",
+      "node_modules/**",
+      "**/__pycache__/**",
+      "**/*.pyc",
+      "repomix-output*"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  },
+  "tokenCount": {
+    "encoding": "o200k_base"
+  }
+}

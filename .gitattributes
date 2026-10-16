@@ -12,3 +12,5 @@ crosshair-emulator/evidence/**/qemu-uart.log -text whitespace=cr-at-eol
 # Preserve the actual tool output's trailing blank lines in Wave005 evidence.
 reports/wave005/crypto/compile.log whitespace=-blank-at-eof
 reports/wave005/image/policy-host-tests.log whitespace=-blank-at-eof
+# Framebuffer captures are exact binary RGB565 bytes, never normalized as text.
+*.raw565 binary

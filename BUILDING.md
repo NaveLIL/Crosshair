@@ -1,5 +1,41 @@
 # Сборка Crosshair
 
+## Wave007: User Shell и интерактивное окно macOS
+
+```sh
+scripts/run-crosshair-gui.sh
+```
+
+Команда собирает отдельный User ELF, встраивает его в ARM guest, компилирует небольшой AppKit frontend и открывает окно **Crosshair Shell0.1 — ARM QEMU**. Внутри работает `crosshair-blueangel-display-test` с настоящим ARM TCG: Shell, приложения, RGB565 rendering, системные вызовы и планировщик исполняются гостем. Окно получает свежие committed pixels через QMP `screendump`, показывает гостевые 240×320 в масштабе 2× по умолчанию и передаёт клавиши в существующий synthetic input FIFO. Это host adapter к проверенной модели; аппаратные ATI, клавиатура и сенсор PDA2k здесь не проверяются.
+
+Щёлкнуть внутри окна для фокуса. Стрелки меняют выделение, Enter запускает выбранное действие, Escape возвращает назад. F10 открывает Menu, Home возвращает Desktop, F1/F2 — левая/правая softkey, F3 переключает открытый экран. На MacBook для F-клавиш может требоваться Fn; Home обычно доступен через Fn+← ([стандартные сочетания Apple](https://support.apple.com/en-ie/102650)). В Launcher обычные символы вводят настоящий ограниченный поисковый запрос, Backspace удаляет символ; проверен и кириллический ввод. Изменённая тема действует до reset. Закрытие окна или ⌘Q завершает frontend и его QEMU; окно остаётся открытым до этого действия. `scripts/run-shell.sh` — короткий alias той же команды.
+
+Нужны прежние pinned Rust и QEMU display-test cache, а для окна — macOS AppKit и Swift compiler из Xcode Command Line Tools (`xcrun swiftc`). Новые Shell-команды через `scripts/shell-env.sh` находят стандартные `local/` caches и соседние caches публичного checkout; подготовленные `RUSTUP_HOME`/`QEMU_DISPLAY_TEST` сохраняют приоритет. Для чистой машины сначала выполнить существующие Rust/QEMU bootstrap-команды. Cocoa доступна в проверенном QEMU cache; выбранный frontend подключает keyboard events к synthetic FIFO и показывает фактический QEMU console framebuffer.
+
+```sh
+scripts/test-shell.sh       # host Shell tests, ARM session/parity, native pipeline на macOS
+scripts/test-wave007.sh     # вся принятая цепочка Wave001–Wave006 и новый Shell
+scripts/run-crosshair-gui.sh --headless-test  # реальный ARM/QEMU input/frame pipeline без окна
+scripts/run-crosshair-gui.sh --window-test    # видимое окно и автоматические native keyDown events
+```
+
+На macOS `test-shell.sh` также кратко открывает настоящее окно и отправляет четыре `NSEvent keyDown` через AppKit: Launcher → About → Back → Home. Результат `gui/window-test-result.json` связывает этот маршрут с реальными ARM состояниями и QEMU frames. Автоматическое закрытие относится к `--window-test`; обычный запуск ожидает закрытия владельцем. Ручной ввод MacBook остаётся отдельной проверкой.
+
+Образы находятся в `target/artifacts/shell/{user-image,image}/`, гостевые PNG 240×320, raw RGB565, QEMU PPM, actual state journals и host pixel references — в `target/artifacts/shell/execution/`. `gui/pipeline-result.json` содержит native keymap/PPM decoder checks, проверку нескольких событий в одном pipe write и ARM delivery; `gui/session-result.json` записывается при закрытии интерактивного окна. Тесты очередей используют отдельный автоматический session; interactive adapter применяет bounded backpressure перед hardware FIFO и kernel queue. UI state и нарисованные экраны в frontend не дублируются. Размер flat image включает адресные промежутки и отдельно учитывается от выделенной RAM.
+
+### Иконки Shell
+
+Основной каталог Shell использует выбранные Tabler Icons с сохранённой MIT лицензией и закреплённым upstream commit: `shell/assets/tabler/{LICENSE,PROVENANCE.json,selected/}`. Offline generator создаёт 54 монохромные 1bpp masks для 18 стабильных ID в размерах 12/16/24. В ARM image входят 2196 read-only байт masks; цвет задаёт текущая тема. SVG renderer и Python зависимости остаются инструментами подготовки на хосте.
+
+```sh
+python3 shell/tools/generate_icons.py --check
+python3 shell/tools/test_generate_icons.py -v
+# Полная сверка raster generation при установленном pinned host toolchain:
+local/icon-tools/bin/python shell/tools/generate_icons.py --regenerate-check
+```
+
+Обычная сборка проверяет входные SVG, лицензию, provenance и generated Rust через Python stdlib. Для повторного raster generation нужны версии из `requirements.lock.json` и native Cairo1.18.4; Python packages закреплены с hashes в `requirements.txt`. `--generate` намеренно обновляет generated Rust и выходные hashes. `test-shell-ui.sh` дополнительно выполняет полную сверку, когда `local/icon-tools` уже подготовлен. Общий `crosshair-ui` и его исторические pixel fixtures сохранены.
+
 ## Wave005: отдельный User/MMU/SVC guest
 
 Используются прежний Rust toolchain и **неизменённый E2B QEMU cache**; новая machine/overlay не нужна. `QEMU_E2B` выбирает существующий внешний cache как прежде. [Протокол](reports/WAVE_005.md), [security contract и ограничения](docs/SECURITY_MODEL.md), [модель угроз](docs/THREAT_MODEL.md).
