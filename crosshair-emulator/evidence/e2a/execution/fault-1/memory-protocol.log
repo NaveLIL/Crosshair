@@ -1,0 +1,4 @@
+> writel 0xa00083ec 0xa5a5a5a5
+< OK
+> readl 0xa00083ec
+< OK 0x00000000a5a5a5a5

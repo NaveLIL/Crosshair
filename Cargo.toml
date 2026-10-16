@@ -12,6 +12,8 @@ boot-image = []
 versatilepb = ["boot-image"]
 blueangel = ["boot-image"]
 pxa-reference = []
+e2a = ["pxa-reference"]
+e2a-mmio-test = ["e2a"]
 panic-test = []
 
 [[bin]]

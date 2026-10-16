@@ -1,4 +1,4 @@
-# Сборка Crosshair Boot 0.1
+# Сборка Crosshair
 
 Дополнение E1: собственный PXA reference guest и QTest на Connex/Verdex/Mainstone — [результаты](reports/E1_PXA_REFERENCE.md). Отдельные команды: `scripts/bootstrap-qemu-pxa.sh`, затем `scripts/test-pxa-reference.sh`. QEMU9.1 устанавливается в `local/qemu-pxa` независимо от QEMU9.2. Это тестовая база, не команда для Blue Angel.
 
@@ -90,3 +90,16 @@ gdb-multiarch target/artifacts/versatilepb/crosshair-boot.elf
 В GDB: `target remote 127.0.0.1:1234`, `break rust_main`, `continue`, `info registers`, `p CROSSHAIR_BOOT_RECORD`, `disassemble _start`. Номер порта привязан к loopback. Опция QEMU `-d guest_errors,unimp -D target/qemu-debug.log` сохраняет ошибки модели. Автотест использует QMP через временный Unix socket, останавливает CPU и проверяет PC/CPSR/SP/boot record без semihosting. Ручной GDB-сеанс пока не входит в подтверждённые результаты.
 
 `target/` и `local/` исключены из Git. После bootstrap и первого скачивания crates core можно пересобрать с `CARGO_NET_OFFLINE=true scripts/build.sh versatilepb`. Побайтовая идентичность ELF между разными хостами не утверждается: debug info содержит пути. Проверенная повторяемость одного хоста фиксируется в отчёте.
+
+## E2A и следующая волна
+
+```sh
+scripts/bootstrap-qemu-blueangel.sh
+scripts/test-e2a.sh
+# После установки обеих эталонных сборок и E2A — вся регрессия + UI:
+scripts/test-next-wave.sh
+```
+
+E2A использует собственный минимальный QEMU9.2 overlay в `local/qemu-blueangel`; QEMU9.1 reference и vanilla9.2 не меняются. Для внешних установок задать `QEMU_SYSTEM_ARM`, `QEMU_PXA`, `QEMU_BLUEANGEL` отдельными абсолютными путями. `CROSSHAIR_QEMU_BLUEANGEL_DIR` задаёт отдельный build/cache; прочие cache options описаны в [host model README](crosshair-emulator/qemu/README.md). Новый bootstrap реально выполнен на macOS; Linux/WSL пока подготовлен, но не проверен. На macOS копии необходимых host helpers и собственного QEMU очищаются от extended attributes и подписываются ad-hoc; глобальные настройки безопасности и baseline executables не меняются. [E2A report](reports/E2A_MINIMAL_BOARD.md).
+
+UI проверяется отдельно командой `scripts/test-ui.sh`: host tests запускаются из нейтрального временного каталога, чтобы kernel Cargo config с `build-std` не влиял на host target. Затем тот же библиотечный source компилируется под ARMv5TE. PNG/raw565 и текстовые проверки сохраняются в `target/artifacts/ui/`; [ограничения и память](docs/UI_0.1.md).

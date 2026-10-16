@@ -1,0 +1,30 @@
+{
+  "result": "PASS",
+  "host_tests": 11,
+  "armv5te_library_compiled": true,
+  "hardware_display_tested": false,
+  "framebuffer_bytes": 153600,
+  "dirty_capacity": 8,
+  "font_glyphs": 163,
+  "font_bitmap_bytes": 2119,
+  "arm_code_objects_verified": 1,
+  "font_regeneration_checked": true,
+  "source_sha256": {
+    "ui/Cargo.lock": "e7a5350ff9c517ddf5ec644970d6beeeb48f882f2f3c994bd880bdc91051671a",
+    "ui/Cargo.toml": "917b3337b54081d769c967eede1631049619ef5aa28b35d04074f581c027c0fa",
+    "ui/examples/primitives.rs": "998ce9abd6c560572b40bb5737d1c86d5f0c191632d6d8b771298800af0c41de",
+    "ui/src/font.rs": "3f1fe3ff9efce3663c9b4736d1eafa59b10af776307624fceb35b2b34ea2e67e",
+    "ui/src/lib.rs": "3081fc20abb73952bef03968f7780212439e9cd92a63bbaa9ab2b177dab0478c",
+    "ui/tests/surface.rs": "73e2251a7de3dc37e47f44ba95d16a2de9fca460e2ed436847a8989b232fc37e",
+    "ui/third_party/cozette/LICENSE": "5d7f0dad37ceef2dc1e9c23e85fbf18629c4eaffe9a919fa4f5b618b46766d23",
+    "ui/third_party/cozette/PROVENANCE.json": "5468337a1061c8d5f7f0a3cccaf6890ba21c35bed82ab5dc23c71b35a7a6b99e",
+    "ui/tools/subset_font.py": "ef250575266ec2e16d7ac7e8ac38913385ec46aac2abdffa25decc9e008dcbff",
+    "scripts/test-ui.sh": "5776135ecd17adb959eac3b1dd58594178fb0dd1c2e43ca4ee62025130d0862a",
+    "tools/framebuffer_png.py": "388219eee196bd78568939b4cbe05d99ac0114e8a808e8617aaafef55d98c37b"
+  },
+  "artifacts_sha256": {
+    "primitives.raw565": "631374c7c1b3a946e96807d38e4f5934ca48f3be07f22530f52dace5a27d278a",
+    "primitives.png": "cc3a69ef0153137847354369347612fb1810f78679eadc1bbd5c28aff32f3880",
+    "arm-lib-report.txt": "f28dd6b1f93ac34fba93c8cc83fb4bb275877e061e392bec3f1aef8812486dce"
+  }
+}

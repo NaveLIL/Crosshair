@@ -1,0 +1,3 @@
+Supported machines are:
+crosshair-blueangel-e2a Crosshair Blue Angel E2A (synthetic, incomplete, experimental PXA26x proxy)
+none                 empty machine

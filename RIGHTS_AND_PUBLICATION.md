@@ -6,4 +6,6 @@ QEMU, HaRET и исторические Linux/PXADroid sources сохраняю�
 
 В поставку не входят ROM/radio/bootloader binaries, фотографии и личные истории, пользовательские дампы, VM, установщики Windows, лицензирующие ключи, SIM/IMEI/контакты. Технические ROM file catalogs и hashes не являются публикацией самих бинарников.
 
-Публичный снимок формируется явным allowlist через `scripts/export-public.py` в отдельный checkout публичного origin/main. Локальная приватная история Git не переносится. Отчёты с нормализованными host paths обозначены как presentation copies; хеши guest outputs сохраняют исходное значение. [Export audit](reports/public-export-audit.json).
+Первоначальный публичный снимок сформирован явным allowlist через `scripts/export-public.py` в отдельный checkout публичного origin/main. Дальнейшая разработка E2A/UI ведётся в этом чистом публичном checkout; старый export audit относится к принятому foundation snapshot. Локальная приватная история Git не переносится. Отчёты с нормализованными host paths обозначены как presentation copies; хеши guest outputs сохраняют исходное значение. [Export audit](reports/public-export-audit.json).
+
+E2A host overlay имеет отдельную GPL-2.0-only область с сохранёнными notices и [полной лицензией](crosshair-emulator/qemu/COPYING.GPL-2.0). Это host QEMU code, не часть MIT ядра. Для новой волны проверяются точный Git diff, лицензионные границы и текстовые evidence; собственные исполняемые образы остаются локальными результатами воспроизводимой сборки.

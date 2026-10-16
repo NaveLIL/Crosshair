@@ -1,0 +1,8 @@
+{
+  "upstream_version": "9.2.0",
+  "upstream_commit": "ae35f033b874c627d81d51070187fbf55f0bf1a7",
+  "upstream_archive_sha256": "f859f0bc65e1f533d040bbe8c92bcfecee5af2c921a6687c652fb44d089bd894",
+  "overlay_sha256": "49e5b31e36f22240e2fd95035566085f0d8430d1abf6b30ef635d152e517ec32",
+  "qemu_sha256": "ea9dbd311573eda256ec3c4057305af0f8b73f8002e3ab922115c960acda1458",
+  "host_license": "GPL-2.0-only; see crosshair-emulator/qemu/COPYING.GPL-2.0"
+}

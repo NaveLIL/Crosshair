@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+   1201	      0	  20528	  21729	   54e1	<workspace>/target/artifacts/e2a/normal/crosshair-e2a.elf

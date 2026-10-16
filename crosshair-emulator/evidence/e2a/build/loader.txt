@@ -1,0 +1,8 @@
+loader options:
+  addr=<uint64>          -  (default: 0)
+  cpu-num=<uint32>       -  (default: 4294967295)
+  data-be=<bool>         -  (default: false)
+  data-len=<uint8>       -  (default: 0)
+  data=<uint64>          -  (default: 0)
+  file=<str>
+  force-raw=<bool>       -  (default: false)

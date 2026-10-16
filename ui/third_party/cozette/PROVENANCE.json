@@ -1,0 +1,24 @@
+{
+  "font": "Cozette",
+  "release": "v.1.30.0",
+  "source_commit": "d2282e728aa64949b0a1e6489920ceb0772944fa",
+  "source_url": "https://github.com/the-moonwitch/Cozette/releases/download/v.1.30.0/cozette.bdf",
+  "source_bytes": 683147,
+  "source_sha256": "8d740166af3a14053773ac7a8846bf288c8818a44f73ab28d4725d91b03a5639",
+  "license": "MIT",
+  "license_url": "https://github.com/the-moonwitch/Cozette/blob/d2282e728aa64949b0a1e6489920ceb0772944fa/LICENSE",
+  "license_sha256": "5d7f0dad37ceef2dc1e9c23e85fbf18629c4eaffe9a919fa4f5b618b46766d23",
+  "subset": [
+    "U+0020..U+007E",
+    "U+0401",
+    "U+0410..U+044F",
+    "U+0451",
+    "U+2014",
+    "U+FFFD"
+  ],
+  "glyphs": 163,
+  "normalization": "Preserve BDF ink offsets/baseline in 8x13 byte rows, MSB-left, advance6; reject any cropped ink.",
+  "generator": "ui/tools/subset_font.py",
+  "runtime_dependencies": [],
+  "full_bdf_committed": false
+}
