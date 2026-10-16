@@ -1,0 +1,5 @@
+QEMU upstream removal record: https://www.qemu.org/docs/master/about/removed-features.html
+versatilepb: available
+connex: absent
+verdex: absent
+mainstone: absent

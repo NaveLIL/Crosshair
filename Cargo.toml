@@ -1,0 +1,39 @@
+[package]
+name = "crosshair-boot"
+version = "0.1.0"
+edition = "2024"
+publish = false
+license = "MIT"
+build = "build.rs"
+
+[features]
+default = ["versatilepb"]
+boot-image = []
+versatilepb = ["boot-image"]
+blueangel = ["boot-image"]
+pxa-reference = []
+panic-test = []
+
+[[bin]]
+name = "crosshair-boot"
+path = "src/main.rs"
+test = false
+bench = false
+required-features = ["boot-image"]
+
+[[bin]]
+name = "crosshair-pxa-reference"
+path = "src/pxa_reference.rs"
+required-features = ["pxa-reference"]
+test = false
+bench = false
+
+[profile.release]
+panic = "abort"
+opt-level = "s"
+codegen-units = 1
+debug = 2
+lto = true
+
+[profile.dev]
+panic = "abort"

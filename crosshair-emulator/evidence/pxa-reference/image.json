@@ -1,0 +1,54 @@
+{
+  "entry": 2684387328,
+  "flags": 83886592,
+  "segments": [
+    {
+      "pa": 0,
+      "filesz": 64,
+      "memsz": 64,
+      "flags": 5
+    },
+    {
+      "pa": 2684387328,
+      "filesz": 1147,
+      "memsz": 1147,
+      "flags": 5
+    },
+    {
+      "pa": 2684388480,
+      "filesz": 0,
+      "memsz": 20528,
+      "flags": 6
+    }
+  ],
+  "symbols": {
+    "CROSSHAIR_PXA_RECORD": 2684388480,
+    "_ZN23crosshair_pxa_reference4arch4idle17hd79a0d2c9c7cbff5E": 2684387436,
+    "_ZN23crosshair_pxa_reference8pxa_uart13ReferenceUart4init17hf49520a7bb2a4f9cE": 2684387440,
+    "_ZN23crosshair_pxa_reference8pxa_uart13ReferenceUart4send17h678c1795f5f8c99aE": 2684387496,
+    "_ZN4core9panicking5panic17hac0b3160507ed839E": 2684388368,
+    "_ZN4core9panicking9panic_fmt17h94659d61375b856eE": 2684388364,
+    "_ZN83_$LT$$RF$mut$u20$I$u20$as$u20$core..iter..traits..exact_size..ExactSizeIterator$GT$3len17h6fc1747e9f68a475E": 2684388372,
+    "__bss_end": 2684388528,
+    "__bss_start": 2684388480,
+    "__image_end": 2684409008,
+    "__irq_stack_bottom": 2684404912,
+    "__irq_stack_top": 2684409008,
+    "__stack_bottom": 2684388528,
+    "__stack_top": 2684404912,
+    "_start": 2684387328,
+    "kernel_idle": 2684387432,
+    "reference_fault": 2684387412,
+    "reference_irq": 2684387396,
+    "reference_vectors": 0,
+    "rust_begin_unwind": 2684388324,
+    "rust_fault": 2684388320,
+    "rust_irq": 2684388164,
+    "rust_main": 2684387584
+  },
+  "sha256": {
+    "crosshair-pxa-reference.elf": "f747424ee67ab837414d94769bd10b87d9fefb93d0caa14e35f44964b5a32037",
+    "crosshair-pxa-reference.bin": "6fe8287d4c3f4376dd58fefee7241ebdfe41e37b82a69faddb588fda40481920",
+    "vectors.bin": "c743923832589ead31c43d6d30536907d49df0607b4e735b9a1e35d3ff35f2c5"
+  }
+}

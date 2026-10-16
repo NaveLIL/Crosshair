@@ -1,0 +1,40 @@
+{
+  "entry": 2684387328,
+  "flags": 83886592,
+  "segments": [
+    {
+      "pa": 2684387328,
+      "filesz": 492,
+      "memsz": 492,
+      "flags": 5
+    },
+    {
+      "pa": 2684387824,
+      "filesz": 4,
+      "memsz": 16608,
+      "flags": 6
+    }
+  ],
+  "symbols": {
+    "BLUEANGEL_RAM_LOG": 2684387832,
+    "CROSSHAIR_BOOT_RECORD": 2684387928,
+    "_ZN14crosshair_boot10DATA_CHECK17h8f874a5a8c587f63E": 2684387824,
+    "_ZN14crosshair_boot4arch4idle17h1b9fa5f98a2490f4E": 2684387388,
+    "_ZN4core9panicking5panic17hac0b3160507ed839E": 2684387748,
+    "_ZN4core9panicking9panic_fmt17h94659d61375b856eE": 2684387744,
+    "__bss_end": 2684388048,
+    "__bss_start": 2684387832,
+    "__image_end": 2684404432,
+    "__stack_bottom": 2684388048,
+    "__stack_top": 2684404432,
+    "_start": 2684387328,
+    "kernel_idle": 2684387384,
+    "rust_begin_unwind": 2684387636,
+    "rust_main": 2684387392
+  },
+  "sha256": {
+    "crosshair-boot.elf": "7b7b775c7957876ec4e48cc389b8bdbc7250dd47c1ea3e77debf5c1620f37e39",
+    "crosshair-boot.bin": "d90054cdd7017903dde4361ec613dfcbca825a33756676665063d3fa774fd77c",
+    "crosshair-haret.bin": "921805ebc20a3e15188b0c5797940781547b3e257edee78713c0feb39261680e"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-16",
+  "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+  "url": "https://api.github.com/repos/qemu/qemu/git/trees/fd1952d814da738ed107e05583b3e02ac11e88ff?recursive=1",
+  "response_sha256": "c53f61ef73727583525492243973739f5462f607312c47342cbcdd289bf6d153",
+  "truncated": false,
+  "path_count": 10836,
+  "matching_paths": [
+    "docs/system/arm/gumstix.rst",
+    "docs/system/arm/mainstone.rst",
+    "hw/arm/gumstix.c",
+    "hw/arm/mainstone.c",
+    "hw/arm/pxa2xx.c",
+    "hw/arm/pxa2xx_gpio.c",
+    "hw/arm/pxa2xx_pic.c",
+    "hw/display/pxa2xx_lcd.c",
+    "hw/dma/pxa2xx_dma.c",
+    "hw/input/pxa2xx_keypad.c",
+    "hw/input/tsc2005.c",
+    "hw/input/tsc210x.c",
+    "hw/pcmcia/pxa2xx.c",
+    "hw/sd/pxa2xx_mmci.c",
+    "hw/timer/pxa2xx_timer.c",
+    "include/hw/arm/pxa.h",
+    "include/hw/input/tsc2xxx.h"
+  ],
+  "scope": "Path-name search only; absence of a name does not prove absence of reusable infrastructure.",
+  "search_terms": [
+    "pxa",
+    "gumstix",
+    "mainstone",
+    "blueangel",
+    "asic3",
+    "w3200",
+    "w100",
+    "tsc2",
+    "calypso",
+    "tmio",
+    "uda1380"
+  ]
+}

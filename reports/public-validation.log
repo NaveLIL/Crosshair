@@ -1,0 +1,56 @@
+   Compiling compiler_builtins v0.1.148
+   Compiling core v0.0.0 (<workspace>/local/toolchains/rustup/toolchains/nightly-2025-03-01-x86_64-apple-darwin/lib/rustlib/src/rust/library/core)
+   Compiling crosshair-boot v0.1.0 (<workspace>/local/public-crosshair)
+   Compiling rustc-std-workspace-core v1.99.0 (<workspace>/local/toolchains/rustup/toolchains/nightly-2025-03-01-x86_64-apple-darwin/lib/rustlib/src/rust/library/rustc-std-workspace-core)
+    Finished `release` profile [optimized + debuginfo] target(s) in 14.41s
+Verified ELF32 ARM EABI5 v5TE: entry=0x10000, image RAM=17200 bytes
+Artifacts: <workspace>/local/public-crosshair/target/artifacts/versatilepb
+CROSSHAIR BOOT 0.1 — HELLO FROM RUST
+PASS: real ARM926 execution, UART, SVC/stack, boot record and controlled idle
+   Compiling crosshair-boot v0.1.0 (<workspace>/local/public-crosshair)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.00s
+Verified ELF32 ARM EABI5 v5TE: entry=0x10000, image RAM=17040 bytes
+Artifacts: <workspace>/local/public-crosshair/target/artifacts/versatilepb-panic
+CROSSHAIR PANIC — HALTED
+PASS: real ARM926 execution, UART, SVC/stack, boot record and controlled idle
+   Compiling crosshair-boot v0.1.0 (<workspace>/local/public-crosshair)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.00s
+Verified ELF32 ARM EABI5 v5TE: entry=0xa0008000, image RAM=17104 bytes
+Artifacts: <workspace>/local/public-crosshair/target/artifacts/blueangel
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.08s
+Verified ELF32 ARM EABI5 v5TE: entry=0x10000, image RAM=17200 bytes
+Artifacts: <workspace>/local/public-crosshair/target/artifacts/versatilepb
+test_allowlist_rejects_traversal (test_inspect_blueangel.CabTests) ... ok
+test_duplicate_entry_rejected (test_inspect_blueangel.CabTests) ... ok
+test_existing_directory_preserved (test_inspect_blueangel.CabTests) ... ok
+test_invalid_cab_rejected (test_inspect_blueangel.CabTests) ... ok
+test_missing_entry_rejected (test_inspect_blueangel.CabTests) ... ok
+test_real_libarchive_reads_synthetic_cab (test_inspect_blueangel.CabTests) ... ok
+test_truncated_cab_data_rejected (test_inspect_blueangel.CabTests) ... ok
+test_unexpected_length_rejected_before_output (test_inspect_blueangel.CabTests) ... ok
+test_wrong_hash_rejected_without_output_or_input_change (test_inspect_blueangel.CommandTests) ... ok
+test_every_truncated_prefix_is_rejected (test_inspect_blueangel.InventoryTests) ... ok
+test_invalid_names (test_inspect_blueangel.InventoryTests) ... ok
+test_invalid_region_and_entry_ranges (test_inspect_blueangel.InventoryTests) ... ok
+test_no_supported_regions_is_not_a_success (test_inspect_blueangel.InventoryTests) ... ok
+test_unsupported_region_stays_explicitly_excluded (test_inspect_blueangel.InventoryTests) ... ok
+test_unterminated_name (test_inspect_blueangel.InventoryTests) ... ok
+test_valid_synthetic_inventory (test_inspect_blueangel.InventoryTests) ... ok
+test_little_endian_known_answer_and_round_trip (test_inspect_blueangel.XorTests) ... ok
+test_rejects_key_outside_word (test_inspect_blueangel.XorTests) ... ok
+test_rejects_partial_word (test_inspect_blueangel.XorTests) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.116s
+
+OK
+   Compiling crosshair-boot v0.1.0 (<workspace>/local/public-crosshair)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.07s
+Verified ELF32 ARM EABI5 v5TE: entry=0xa0008000, image RAM=21680 bytes
+Reference guest (not for a PDA): <workspace>/local/public-crosshair/target/artifacts/pxa-reference
+PASS connex: UART, three real timer IRQs, exception return to SVC, two stacks, terminal idle
+PASS verdex: UART, three real timer IRQs, exception return to SVC, two stacks, terminal idle
+PASS mainstone: UART, three real timer IRQs, exception return to SVC, two stacks, terminal idle
+PASS connex: QTest UART, 3686400 Hz, OIER/W1C, PIC mask/routing, 32-bit rollover; LIMITATION: timer state survives system_reset; guest CPU never executed
+PASS verdex: QTest UART, 3250000 Hz, OIER/W1C, PIC mask/routing, 32-bit rollover; LIMITATION: timer state survives system_reset; guest CPU never executed
+PASS mainstone: QTest UART, 3250000 Hz, OIER/W1C, PIC mask/routing, 32-bit rollover; LIMITATION: timer state survives system_reset; guest CPU never executed

@@ -1,0 +1,292 @@
+> writeb 0x4010000c 0x80
+< OK
+> writeb 0x40100000 0x8
+< OK
+> writeb 0x40100004 0x0
+< OK
+> writeb 0x4010000c 0x3
+< OK
+> writeb 0x40100004 0x0
+< OK
+> readb 0x40100014
+< OK 0x0000000000000060
+> writeb 0x40100000 0x51
+< OK
+> readb 0x40100014
+< OK 0x0000000000000060
+> writel 0x40a0001c 0x0
+< OK
+> writel 0x40a00014 0xfff
+< OK
+> writel 0x40d00004 0x0
+< OK
+> writel 0x40d00008 0x0
+< OK
+> writel 0x40a00000 0x7fffffff
+< OK
+> writel 0x40a00004 0x7fffffff
+< OK
+> writel 0x40a00008 0x7fffffff
+< OK
+> writel 0x40a0000c 0x7fffffff
+< OK
+> writel 0x40a00010 0x0
+< OK
+> writel 0x40a00014 0xfff
+< OK
+> clock_step 0
+< OK 0
+> readl 0x40a00010
+< OK 0x0000000000000000
+> clock_step 1
+< OK 1
+> readl 0x40a00010
+< OK 0x0000000000000000
+> clock_step 999999999
+< OK 1000000000
+> readl 0x40a00010
+< OK 0x0000000000384000
+> writel 0x40a0001c 0x0
+< OK
+> writel 0x40a00014 0xfff
+< OK
+> writel 0x40d00004 0x0
+< OK
+> writel 0x40d00008 0x0
+< OK
+> writel 0x40a00000 0x7fffffff
+< OK
+> writel 0x40a00004 0x7fffffff
+< OK
+> writel 0x40a00008 0x7fffffff
+< OK
+> writel 0x40a0000c 0x7fffffff
+< OK
+> writel 0x40a00010 0x0
+< OK
+> writel 0x40a00014 0xfff
+< OK
+> writel 0x40a00000 0x1000
+< OK
+> clock_step 1111384
+< OK 1001111384
+> readl 0x40a00014
+< OK 0x0000000000000000
+> readl 0x40d00010
+< OK 0x0000000000000000
+> writel 0x40a0001c 0x1
+< OK
+> readl 0x40a00014
+< OK 0x0000000000000000
+> readl 0x40a00010
+< OK 0x0000000000001001
+> writel 0x40a00000 0x2001
+< OK
+> clock_step 1111384
+< OK 1002222768
+> readl 0x40a00014
+< OK 0x0000000000000001
+> readl 0x40d00010
+< OK 0x0000000004000000
+> readl 0x40d00000
+< OK 0x0000000000000000
+> readl 0x40d0000c
+< OK 0x0000000000000000
+> writel 0x40d00004 0x4000000
+< OK
+> readl 0x40d00000
+< OK 0x0000000004000000
+> readl 0x40d0000c
+< OK 0x0000000000000000
+> writel 0x40d00008 0x4000000
+< OK
+> readl 0x40d00000
+< OK 0x0000000000000000
+> readl 0x40d0000c
+< OK 0x0000000004000000
+> writel 0x40d00008 0x0
+< OK
+> readl 0x40d00000
+< OK 0x0000000004000000
+> readl 0x40d0000c
+< OK 0x0000000000000000
+> writel 0x40d00008 0x4000000
+< OK
+> writel 0x40d00004 0x0
+< OK
+> readl 0x40d00010
+< OK 0x0000000004000000
+> readl 0x40d0000c
+< OK 0x0000000000000000
+> writel 0x40d00004 0x4000000
+< OK
+> writel 0x40a0001c 0x0
+< OK
+> readl 0x40a00014
+< OK 0x0000000000000001
+> readl 0x40d0000c
+< OK 0x0000000004000000
+> writel 0x40a00014 0x0
+< OK
+> readl 0x40a00014
+< OK 0x0000000000000001
+> writel 0x40a00014 0x2
+< OK
+> readl 0x40a00014
+< OK 0x0000000000000001
+> writel 0x40a00014 0x1
+< OK
+> readl 0x40a00014
+< OK 0x0000000000000000
+> readl 0x40d00010
+< OK 0x0000000000000000
+> readl 0x40d0000c
+< OK 0x0000000000000000
+> writel 0x40a0001c 0x0
+< OK
+> writel 0x40a00014 0xfff
+< OK
+> writel 0x40d00004 0x0
+< OK
+> writel 0x40d00008 0x0
+< OK
+> writel 0x40a00000 0x7fffffff
+< OK
+> writel 0x40a00004 0x7fffffff
+< OK
+> writel 0x40a00008 0x7fffffff
+< OK
+> writel 0x40a0000c 0x7fffffff
+< OK
+> writel 0x40a00010 0x0
+< OK
+> writel 0x40a00014 0xfff
+< OK
+> writel 0x40a00000 0x1000
+< OK
+> writel 0x40a00004 0x1000
+< OK
+> writel 0x40a0001c 0x3
+< OK
+> clock_step 1111384
+< OK 1003334152
+> readl 0x40a00014
+< OK 0x0000000000000003
+> readl 0x40d00010
+< OK 0x000000000c000000
+> writel 0x40a00014 0x1
+< OK
+> readl 0x40a00014
+< OK 0x0000000000000002
+> readl 0x40d00010
+< OK 0x0000000008000000
+> writel 0x40a00014 0x2
+< OK
+> readl 0x40a00014
+< OK 0x0000000000000000
+> readl 0x40d00010
+< OK 0x0000000000000000
+> writel 0x40a0001c 0x0
+< OK
+> writel 0x40a00014 0xfff
+< OK
+> writel 0x40d00004 0x0
+< OK
+> writel 0x40d00008 0x0
+< OK
+> writel 0x40a00000 0x7fffffff
+< OK
+> writel 0x40a00004 0x7fffffff
+< OK
+> writel 0x40a00008 0x7fffffff
+< OK
+> writel 0x40a0000c 0x7fffffff
+< OK
+> writel 0x40a00010 0x0
+< OK
+> writel 0x40a00014 0xfff
+< OK
+> writel 0x40a00010 0xfffffff0
+< OK
+> writel 0x40a00000 0x10
+< OK
+> writel 0x40a0001c 0x1
+< OK
+> writel 0x40d00004 0x4000000
+< OK
+> clock_step 0
+< OK 1003334152
+> clock_step 1000000000
+< OK 2003334152
+> readl 0x40a00010
+< OK 0x0000000000383ff0
+> readl 0x40a00014
+< OK 0x0000000000000001
+> readl 0x40d00000
+< OK 0x0000000004000000
+> writel 0x40a00014 0x1
+< OK
+> writel 0x40a0001c 0x0
+< OK
+> writel 0x40a00014 0xfff
+< OK
+> writel 0x40d00004 0x0
+< OK
+> writel 0x40d00008 0x0
+< OK
+> writel 0x40a00000 0x7fffffff
+< OK
+> writel 0x40a00004 0x7fffffff
+< OK
+> writel 0x40a00008 0x7fffffff
+< OK
+> writel 0x40a0000c 0x7fffffff
+< OK
+> writel 0x40a00010 0x0
+< OK
+> writel 0x40a00014 0xfff
+< OK
+> writel 0x40a00000 0x1234
+< OK
+> writel 0x40a0001c 0x1
+< OK
+> writel 0x40d00004 0x4000000
+< OK
+> writel 0x40d00008 0x4000000
+< OK
+> clock_step 1264379
+< OK 2004598531
+> readl 0x40a00000
+< OK 0x0000000000001234
+> readl 0x40a00010
+< OK 0x0000000000001235
+> readl 0x40a0001c
+< OK 0x0000000000000001
+> readl 0x40a00014
+< OK 0x0000000000000001
+> readl 0x40d00004
+< OK 0x0000000004000000
+> readl 0x40d00008
+< OK 0x0000000004000000
+> readl 0x40d00010
+< OK 0x0000000004000000
+> clock_step 0
+< OK 2004598531
+> readl 0x40d00004
+< OK 0x0000000000000000
+> readl 0x40a00000
+< OK 0x0000000000001234
+> readl 0x40a00010
+< OK 0x0000000000001235
+> readl 0x40a0001c
+< OK 0x0000000000000001
+> readl 0x40a00014
+< OK 0x0000000000000001
+> readl 0x40d00004
+< OK 0x0000000000000000
+> readl 0x40d00008
+< OK 0x0000000000000000
+> readl 0x40d00010
+< OK 0x0000000000000000
+> clock_step 0
+< OK 2004598531

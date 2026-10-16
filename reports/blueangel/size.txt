@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+    492	      4	  16600	  17096	   42c8	<workspace>/target/artifacts/blueangel/crosshair-boot.elf

@@ -1,0 +1,4 @@
+Command: <workspace>/local/qemu/build/qemu-system-arm -machine connex -display none -serial none -monitor none -S
+Exit: 1
+qemu-system-arm: unsupported machine type: "connex"
+Use -machine help to list supported machines

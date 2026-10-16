@@ -1,0 +1,345 @@
+{
+  "retrieved_date": "2026-10-16",
+  "repository": "https://github.com/qemu/qemu",
+  "source_storage": "temporary research files outside repository; no code imported",
+  "versions": {
+    "v8.2.0": "1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6",
+    "v9.1.0": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+    "v9.2.0": "ae35f033b874c627d81d51070187fbf55f0bf1a7"
+  },
+  "files": [
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/arm/gumstix.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/arm/gumstix.c",
+      "bytes": 4040,
+      "sha256": "2a849029769196a26b89a13d45eb8d06d5051c077a8e400cae5cbf221e86f183"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/arm/mainstone.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/arm/mainstone.c",
+      "bytes": 5396,
+      "sha256": "405d5616d572a08bddb9c178422410a9a8c3beec2bf1916ae8d036f60678d197"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/arm/pxa2xx.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/arm/pxa2xx.c",
+      "bytes": 73949,
+      "sha256": "6feb7b7ad2db4ae5aad053da679e8e23f29f867bf517b0329dac641944c82d63"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/arm/Kconfig",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/arm/Kconfig",
+      "bytes": 13577,
+      "sha256": "de87a29f787c081a9faa942b4c5a4d433df52de110d2cced5199526fb7c42766"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/arm/meson.build",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/arm/meson.build",
+      "bytes": 5099,
+      "sha256": "185225fced4e69d4c92826eb35235daff6baafecac7920f66739dfccef242934"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "docs/system/arm/gumstix.rst",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/docs/system/arm/gumstix.rst",
+      "bytes": 470,
+      "sha256": "0fff7a50d07dd4533ffca6efd669f6a9307aca4375a8c3ef883aa6a345160a9c"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "docs/system/arm/mainstone.rst",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/docs/system/arm/mainstone.rst",
+      "bytes": 371,
+      "sha256": "3f36856d934d874e7bdb5057ced0bb5b15af18285a5f45f492e8d8b8ecb6c882"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/timer/pxa2xx_timer.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/timer/pxa2xx_timer.c",
+      "bytes": 17769,
+      "sha256": "5af832bf308cc9f53fe5d4ce32949ea05ea9c5566c1e46be911277c3969f9227"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/dma/pxa2xx_dma.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/dma/pxa2xx_dma.c",
+      "bytes": 17114,
+      "sha256": "46ee14a8c21c5d495ed353289f1aedba54da9b3dac65d4d9e647fc1d7d84c123"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/sd/pxa2xx_mmci.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/sd/pxa2xx_mmci.c",
+      "bytes": 16024,
+      "sha256": "08315c87a270160901fd1b7f764d0742a6e41e62a52adf9de1eaa4f519d4f274"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/display/pxa2xx_lcd.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/display/pxa2xx_lcd.c",
+      "bytes": 41559,
+      "sha256": "60318f59b6e9d2c68b08d35987b91b47ecb0a526b34571617a7a7c20198dcec3"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "target/arm/tcg/cpu32.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/target/arm/tcg/cpu32.c",
+      "bytes": 38601,
+      "sha256": "713f834ad1ed7e20f10cb07c2ded6b99c549d618b7298f7648b00bb34b68ade2"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/block/pflash_cfi01.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/block/pflash_cfi01.c",
+      "bytes": 34321,
+      "sha256": "75e7e253f57f725d728583b3f21f83f6b9001fb75adf19e999bb31301e253100"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/char/serial.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/char/serial.c",
+      "bytes": 35166,
+      "sha256": "4d591a0162c9402b3539712c74fe026f0c0ceb6f04d30776ac78dc60cf1b896c"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/sd/sd.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/sd/sd.c",
+      "bytes": 89210,
+      "sha256": "9bc2c00141db9faf94309ab1016ebb11f4cce3b32881be420d262d05f640ab77"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "docs/devel/qtest.rst",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/docs/devel/qtest.rst",
+      "bytes": 2846,
+      "sha256": "72b1ff32e73e3c57b22cf0ab04b9c1d0c973c5fbd04e021cf565a1a5258b5bd1"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "docs/devel/replay.rst",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/docs/devel/replay.rst",
+      "bytes": 14108,
+      "sha256": "7cef647a433fa6e8a2613d4626d013bd5e88229348b3ec737a668fe637604a2f"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "docs/devel/clocks.rst",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/docs/devel/clocks.rst",
+      "bytes": 21710,
+      "sha256": "57205840988d1e2103e4bb727ab2d583a1831cab7fbcae1b4e9f5095fc42a1fb"
+    },
+    {
+      "tag": "v8.2.0",
+      "commit": "1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6",
+      "path": "hw/arm/gumstix.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6/hw/arm/gumstix.c",
+      "bytes": 3997,
+      "sha256": "6cd19719aeaee345ca7d20a0a0eb8ce537396896408498a47ecd6e6fdb11ac0a"
+    },
+    {
+      "tag": "v8.2.0",
+      "commit": "1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6",
+      "path": "hw/arm/mainstone.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6/hw/arm/mainstone.c",
+      "bytes": 5383,
+      "sha256": "c717d8b5bb9ee01eb244c4023d9cfac578bad3efc43e2a9f1d1c7bb84ebf2a16"
+    },
+    {
+      "tag": "v8.2.0",
+      "commit": "1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6",
+      "path": "hw/arm/pxa2xx.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6/hw/arm/pxa2xx.c",
+      "bytes": 73895,
+      "sha256": "b9a3bb8fd1b47e26edb664df802a8599aff3e610fe27ba1c9f039133f6ed8c7c"
+    },
+    {
+      "tag": "v8.2.0",
+      "commit": "1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6",
+      "path": "hw/arm/Kconfig",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6/hw/arm/Kconfig",
+      "bytes": 12773,
+      "sha256": "840a716970161e7d9425abe97b734932a7c5b95e4856e484e693cc2e491a74f5"
+    },
+    {
+      "tag": "v8.2.0",
+      "commit": "1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6",
+      "path": "hw/arm/meson.build",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6/hw/arm/meson.build",
+      "bytes": 4543,
+      "sha256": "de0c8c1b7f2bc83ea0065c57e0f15e86e562b32699dc85319dbcf7b647fcd3d4"
+    },
+    {
+      "tag": "v8.2.0",
+      "commit": "1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6",
+      "path": "docs/system/arm/gumstix.rst",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6/docs/system/arm/gumstix.rst",
+      "bytes": 470,
+      "sha256": "0fff7a50d07dd4533ffca6efd669f6a9307aca4375a8c3ef883aa6a345160a9c"
+    },
+    {
+      "tag": "v8.2.0",
+      "commit": "1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6",
+      "path": "docs/system/arm/mainstone.rst",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/1600b9f46b1bd08b00fe86c46ef6dbb48cbe10d6/docs/system/arm/mainstone.rst",
+      "bytes": 371,
+      "sha256": "3f36856d934d874e7bdb5057ced0bb5b15af18285a5f45f492e8d8b8ecb6c882"
+    },
+    {
+      "tag": "v9.2.0",
+      "commit": "ae35f033b874c627d81d51070187fbf55f0bf1a7",
+      "path": "docs/about/removed-features.rst",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/ae35f033b874c627d81d51070187fbf55f0bf1a7/docs/about/removed-features.rst",
+      "bytes": 47120,
+      "sha256": "61c88839d78b8eec940eee35ca46addac4d75f91e9f0487f81d5efc0d522dd3e"
+    },
+    {
+      "tag": "v9.2.0",
+      "commit": "ae35f033b874c627d81d51070187fbf55f0bf1a7",
+      "path": "target/arm/tcg/cpu32.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/ae35f033b874c627d81d51070187fbf55f0bf1a7/target/arm/tcg/cpu32.c",
+      "bytes": 38601,
+      "sha256": "ce85d9368effdfd53c2709374cf01dabf764dfbf63372e026c75b13e45671c66"
+    },
+    {
+      "tag": "v9.2.0",
+      "commit": "ae35f033b874c627d81d51070187fbf55f0bf1a7",
+      "path": "hw/arm/Kconfig",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/ae35f033b874c627d81d51070187fbf55f0bf1a7/hw/arm/Kconfig",
+      "bytes": 12680,
+      "sha256": "83f4a199d414a05eb52023ecf295af3cd6ef9196605b00013e63fa915a98fb8e"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/arm/pxa2xx_pic.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/arm/pxa2xx_pic.c",
+      "bytes": 11226,
+      "sha256": "b8cc8542fddc3f9380ede0910ba38f93b4d284b4bdbdd136f3d3881e5b486745"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/arm/pxa2xx_gpio.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/arm/pxa2xx_gpio.c",
+      "bytes": 10630,
+      "sha256": "94661bb3c43ec85f37177367704205e141d532dabff351f8d07d8929a3ebcffd"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "include/hw/arm/pxa.h",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/include/hw/arm/pxa.h",
+      "bytes": 5319,
+      "sha256": "3ff5532373ddcc6d9443597d89de246b9998016cdd25f8bc28f5a05bac3e723c"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "system/qtest.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/system/qtest.c",
+      "bytes": 27709,
+      "sha256": "f84ec52dfdf715dbf673896c6a166cec058986028a991ddcfb5b6d8e22dd83f1"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/input/tsc210x.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/input/tsc210x.c",
+      "bytes": 33969,
+      "sha256": "ba1be6397f820b0df0b0aabb9c7def0b2632c5d8394e9ff92db8b0f43448e7d6"
+    },
+    {
+      "tag": "v9.1.0",
+      "commit": "fd1952d814da738ed107e05583b3e02ac11e88ff",
+      "path": "hw/input/tsc2005.c",
+      "url": "https://raw.githubusercontent.com/qemu/qemu/fd1952d814da738ed107e05583b3e02ac11e88ff/hw/input/tsc2005.c",
+      "bytes": 15167,
+      "sha256": "f349a966430f9a7967cdcd65f9dac3f89b586616222b84a12947f94bcb01250a"
+    }
+  ],
+  "blueangel_reference": {
+    "repository": "https://git.code.sf.net/p/pxadroid/pxakernel",
+    "commit": "3712fd6f197113f19959eba85b3628b202e30d64",
+    "files": [
+      {
+        "path": "arch/arm/mach-pxa/blueangel.c",
+        "bytes": 32335,
+        "sha256": "1fe00b4f1335e9a42dd5d6cba1486620535a7e0d273730276afa745d07a88aac",
+        "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/arch/arm/mach-pxa/blueangel.c"
+      },
+      {
+        "path": "arch/arm/mach-pxa/include/mach/blueangel.h",
+        "bytes": 4626,
+        "sha256": "d95699b022db39290e4aa7dae67225768a85696b2698b3fb229b972d9443db65",
+        "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/arch/arm/mach-pxa/include/mach/blueangel.h"
+      },
+      {
+        "path": "arch/arm/mach-pxa/htc_calypso.c",
+        "bytes": 6663,
+        "sha256": "4a0ac7cb3df6053732c86b8505b2b4c448a941b1cd89ff94c520d0e27e5f81a9",
+        "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/arch/arm/mach-pxa/htc_calypso.c"
+      },
+      {
+        "path": "drivers/mfd/asic3.c",
+        "bytes": 27388,
+        "sha256": "f071256212aff2ddca103e593258d04708d09d13d1835d2475832751704beec4",
+        "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/drivers/mfd/asic3.c"
+      },
+      {
+        "path": "drivers/input/keyboard/htc-asic-kbd.c",
+        "bytes": 5475,
+        "sha256": "002cc7474881676785e77ef56cc37bebb75860c44e9eb26a1f97adb4b080c21f",
+        "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/drivers/input/keyboard/htc-asic-kbd.c"
+      },
+      {
+        "path": "drivers/spi/tsc2X0X-core.c",
+        "bytes": 4756,
+        "sha256": "849392d594ed67772be8ed229b3439dab52626aecbf622ae7bc8ef496b58e11e",
+        "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/drivers/spi/tsc2X0X-core.c"
+      },
+      {
+        "path": "drivers/input/touchscreen/tsc2X0X_ts.c",
+        "bytes": 14944,
+        "sha256": "d0264900dc5cbe9de1df5c93e00de13720b67591afc1ce182ba8f3657d423844",
+        "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/drivers/input/touchscreen/tsc2X0X_ts.c"
+      },
+      {
+        "path": "drivers/video/w100fb.c",
+        "bytes": 54509,
+        "sha256": "8feed2f0ba7af48389d24cfc161457443e2329a26a95e65924274d1ca3107da7",
+        "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/drivers/video/w100fb.c"
+      },
+      {
+        "path": "sound/soc/pxa/blueangel.c",
+        "bytes": 13770,
+        "sha256": "9c3f0ea21883a742c1bfd0120c6cf1d10db64efd5f5fac1a208f80bf14d263cd",
+        "url": "https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/sound/soc/pxa/blueangel.c"
+      }
+    ],
+    "status": "read from immutable source; no physical validation"
+  }
+}

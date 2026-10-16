@@ -1,0 +1,135 @@
+
+<workspace>/target/artifacts/versatilepb-panic/crosshair-boot.elf:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00010000 <_start>:
+   10000: e321f0d3     	msr	CPSR_c, #211
+   10004: e59fd020     	ldr	sp, [pc, #0x20]         @ 0x1002c <_start+0x2c>
+   10008: e3a0b000     	mov	r11, #0
+   1000c: e59f301c     	ldr	r3, [pc, #0x1c]         @ 0x10030 <_start+0x30>
+   10010: e59f401c     	ldr	r4, [pc, #0x1c]         @ 0x10034 <_start+0x34>
+   10014: e3a05000     	mov	r5, #0
+   10018: e1530004     	cmp	r3, r4
+   1001c: 34835004     	strlo	r5, [r3], #4
+   10020: 3afffffc     	blo	0x10018 <_start+0x18>   @ imm = #-0x10
+   10024: eb000029     	bl	0x100d0 <rust_main>     @ imm = #0xa4
+   10028: ea000002     	b	0x10038 <kernel_idle>   @ imm = #0x8
+   1002c: 90 42 01 00  	.word	0x00014290
+   10030: 18 02 01 00  	.word	0x00010218
+   10034: 90 02 01 00  	.word	0x00010290
+
+00010038 <kernel_idle>:
+   10038: eafffffe     	b	0x10038 <kernel_idle>   @ imm = #-0x8
+
+0001003c <_ZN14crosshair_boot4arch4idle17h10f63e0407520eeeE>:
+   1003c: ebfffffd     	bl	0x10038 <kernel_idle>   @ imm = #-0xc
+
+00010040 <_ZN14crosshair_boot3bsp10diagnostic17ha73b97f5f00885dcE>:
+   10040: e92d4010     	push	{r4, lr}
+   10044: e59f0078     	ldr	r0, [pc, #0x78]         @ 0x100c4 <_ZN14crosshair_boot3bsp10diagnostic17ha73b97f5f00885dcE+0x84>
+   10048: e3a020ff     	mov	r2, #255
+   1004c: e3a01000     	mov	r1, #0
+   10050: e3822c07     	orr	r2, r2, #1792
+   10054: e59fc06c     	ldr	r12, [pc, #0x6c]        @ 0x100c8 <_ZN14crosshair_boot3bsp10diagnostic17ha73b97f5f00885dcE+0x88>
+   10058: e5801030     	str	r1, [r0, #0x30]
+   1005c: e5801038     	str	r1, [r0, #0x38]
+   10060: e5802044     	str	r2, [r0, #0x44]
+   10064: e3a0200d     	mov	r2, #13
+   10068: e5801048     	str	r1, [r0, #0x48]
+   1006c: e5802024     	str	r2, [r0, #0x24]
+   10070: e3a02001     	mov	r2, #1
+   10074: e59fe050     	ldr	lr, [pc, #0x50]         @ 0x100cc <_ZN14crosshair_boot3bsp10diagnostic17ha73b97f5f00885dcE+0x8c>
+   10078: e5802028     	str	r2, [r0, #0x28]
+   1007c: e3a02060     	mov	r2, #96
+   10080: e580202c     	str	r2, [r0, #0x2c]
+   10084: e3a02001     	mov	r2, #1
+   10088: e3822c01     	orr	r2, r2, #256
+   1008c: e5802030     	str	r2, [r0, #0x30]
+   10090: e7dc2001     	ldrb	r2, [r12, r1]
+   10094: e2811001     	add	r1, r1, #1
+   10098: e1a0300e     	mov	r3, lr
+   1009c: e5904018     	ldr	r4, [r0, #0x18]
+   100a0: e3140020     	tst	r4, #32
+   100a4: 0a000002     	beq	0x100b4 <_ZN14crosshair_boot3bsp10diagnostic17ha73b97f5f00885dcE+0x74> @ imm = #0x8
+   100a8: e2933001     	adds	r3, r3, #1
+   100ac: 28bd8010     	pophs	{r4, pc}
+   100b0: eafffff9     	b	0x1009c <_ZN14crosshair_boot3bsp10diagnostic17ha73b97f5f00885dcE+0x5c> @ imm = #-0x1c
+   100b4: e351001c     	cmp	r1, #28
+   100b8: e5802000     	str	r2, [r0]
+   100bc: 1afffff3     	bne	0x10090 <_ZN14crosshair_boot3bsp10diagnostic17ha73b97f5f00885dcE+0x50> @ imm = #-0x34
+   100c0: e8bd8010     	pop	{r4, pc}
+   100c4: 00 10 1f 10  	.word	0x101f1000
+   100c8: f4 01 01 00  	.word	0x000101f4
+   100cc: c0 bd f0 ff  	.word	0xfff0bdc0
+
+000100d0 <rust_main>:
+   100d0: e24dd010     	sub	sp, sp, #16
+   100d4: e59fe088     	ldr	lr, [pc, #0x88]         @ 0x10164 <rust_main+0x94>
+   100d8: e59e3004     	ldr	r3, [lr, #0x4]
+   100dc: e3530000     	cmp	r3, #0
+   100e0: 1a00001b     	bne	0x10154 <rust_main+0x84> @ imm = #0x6c
+   100e4: e59f307c     	ldr	r3, [pc, #0x7c]         @ 0x10168 <rust_main+0x98>
+   100e8: e59fc07c     	ldr	r12, [pc, #0x7c]        @ 0x1016c <rust_main+0x9c>
+   100ec: e5933000     	ldr	r3, [r3]
+   100f0: e153000c     	cmp	r3, r12
+   100f4: 1a000018     	bne	0x1015c <rust_main+0x8c> @ imm = #0x60
+   100f8: e58d000c     	str	r0, [sp, #0xc]
+   100fc: e59d000c     	ldr	r0, [sp, #0xc]
+   10100: e58e0008     	str	r0, [lr, #0x8]
+   10104: e58d1008     	str	r1, [sp, #0x8]
+   10108: e59d0008     	ldr	r0, [sp, #0x8]
+   1010c: e58e000c     	str	r0, [lr, #0xc]
+   10110: e58d2004     	str	r2, [sp, #0x4]
+   10114: e59f1054     	ldr	r1, [pc, #0x54]         @ 0x10170 <rust_main+0xa0>
+   10118: e59d0004     	ldr	r0, [sp, #0x4]
+   1011c: e58e0010     	str	r0, [lr, #0x10]
+   10120: e3a00000     	mov	r0, #0
+   10124: e58ec000     	str	r12, [lr]
+   10128: e08e2000     	add	r2, lr, r0
+   1012c: e7d13000     	ldrb	r3, [r1, r0]
+   10130: e2800001     	add	r0, r0, #1
+   10134: e3500028     	cmp	r0, #40
+   10138: e5c23018     	strb	r3, [r2, #0x18]
+   1013c: 1afffff9     	bne	0x10128 <rust_main+0x58> @ imm = #-0x1c
+   10140: e3a00028     	mov	r0, #40
+   10144: e58e0014     	str	r0, [lr, #0x14]
+   10148: e3a00001     	mov	r0, #1
+   1014c: e58e0004     	str	r0, [lr, #0x4]
+   10150: eb00001b     	bl	0x101c4 <_ZN4core9panicking9panic_fmt17h94659d61375b856eE> @ imm = #0x6c
+   10154: e3a0004f     	mov	r0, #79
+   10158: eb00001a     	bl	0x101c8 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x68
+   1015c: e3a00048     	mov	r0, #72
+   10160: eb000018     	bl	0x101c8 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x60
+   10164: 18 02 01 00  	.word	0x00010218
+   10168: 10 02 01 00  	.word	0x00010210
+   1016c: 53 4f 52 43  	.word	0x43524f53
+   10170: cc 01 01 00  	.word	0x000101cc
+
+00010174 <rust_begin_unwind>:
+   10174: e59fc03c     	ldr	r12, [pc, #0x3c]        @ 0x101b8 <rust_begin_unwind+0x44>
+   10178: e59f2040     	ldr	r2, [pc, #0x40]         @ 0x101c0 <rust_begin_unwind+0x4c>
+   1017c: e59f1038     	ldr	r1, [pc, #0x38]         @ 0x101bc <rust_begin_unwind+0x48>
+   10180: e58c1000     	str	r1, [r12]
+   10184: e3a01000     	mov	r1, #0
+   10188: e08c3001     	add	r3, r12, r1
+   1018c: e7d20001     	ldrb	r0, [r2, r1]
+   10190: e2811001     	add	r1, r1, #1
+   10194: e351001c     	cmp	r1, #28
+   10198: e5c30018     	strb	r0, [r3, #0x18]
+   1019c: 1afffff9     	bne	0x10188 <rust_begin_unwind+0x14> @ imm = #-0x1c
+   101a0: e3a0001c     	mov	r0, #28
+   101a4: e58c0014     	str	r0, [r12, #0x14]
+   101a8: e3a00003     	mov	r0, #3
+   101ac: e58c0004     	str	r0, [r12, #0x4]
+   101b0: ebffffa2     	bl	0x10040 <_ZN14crosshair_boot3bsp10diagnostic17ha73b97f5f00885dcE> @ imm = #-0x178
+   101b4: ebffffa0     	bl	0x1003c <_ZN14crosshair_boot4arch4idle17h10f63e0407520eeeE> @ imm = #-0x180
+   101b8: 18 02 01 00  	.word	0x00010218
+   101bc: 53 4f 52 43  	.word	0x43524f53
+   101c0: f4 01 01 00  	.word	0x000101f4
+
+000101c4 <_ZN4core9panicking9panic_fmt17h94659d61375b856eE>:
+   101c4: ebffffea     	bl	0x10174 <rust_begin_unwind> @ imm = #-0x58
+
+000101c8 <_ZN4core9panicking5panic17hac0b3160507ed839E>:
+   101c8: ebfffffd     	bl	0x101c4 <_ZN4core9panicking9panic_fmt17h94659d61375b856eE> @ imm = #-0xc

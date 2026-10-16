@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+    688	      4	  16504	  17196	   432c	<workspace>/target/artifacts/versatilepb/crosshair-boot.elf
