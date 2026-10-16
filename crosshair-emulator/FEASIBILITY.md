@@ -1,12 +1,14 @@
 # Осуществимость собственного эмулятора Blue Angel
 
-Срез: **16.10.2026**. Результат: построить полезную модель по частям технически возможно; готовой machine Blue Angel в проверенном QEMU нет. Большую часть специфической периферии предстоит описать и реализовать. Полная точность устройства, работа WM ROM и аппаратно подтверждённые звонки не установлены.
+Срез: **16.10.2026**. Результат: полезная модель строится по частям; **E2A уже реализован и проверен** как `crosshair-blueangel-e2a` на отдельной QEMU9.2. Готовой полной модели Blue Angel в исходном QEMU нет. Большую часть специфической периферии предстоит описать и реализовать. Полная точность устройства, работа WM ROM и аппаратно подтверждённые звонки не установлены.
 
-**Дополнение после E1:** QEMU9.1 теперь собран отдельно; собственный ARM IRQ guest и независимый QTest реально прошли на Connex/Verdex/Mainstone. Сохранены известные ограничения reset/OIER/UART. [Отчёт E1](../reports/E1_PXA_REFERENCE.md). Сравнение исходников ниже остаётся feasibility; утверждения о том, что старый QEMU ещё не собирался, относятся к первоначальной ревизии E0.
+**Дополнение после E1:** QEMU9.1 теперь собран отдельно; собственный ARM IRQ guest и независимый QTest реально прошли на Connex/Verdex/Mainstone. Сохранены известные ограничения reset/OIER/UART. [Отчёт E1](../reports/E1_PXA_REFERENCE.md). Сравнение исходников ниже сохраняется как feasibility E0; Q91 остаётся неизменяемым comparator.
 
-## Проверено сейчас
+**Дополнение после E2A:** собственная board composition использует `pxa260` как явно ограниченный ISA proxy, синтетическую RAM/low vectors, diagnostic UART, четыре timer и PIC subset. Фактические TCG результаты подтверждают UART, три CPU IRQ, system-reset reboot и четыре настоящих data abort; QTest подтверждает3 686 400 ticks/sec, IRQ/FIQ transitions, W1C, rollover и reset/callback cancellation. [Контракт](../docs/E2A_CONTRACT.md), [отчёт](../reports/E2A_MINIMAL_BOARD.md). Это **реализовано и проверено в эмуляторе**, без GPIO, точного PXA263, экрана или GSM.
 
-Выполнены `local/qemu/bin/qemu-system-arm --version`, `-machine help`, `-cpu help`. [Исходный вывод и его SHA-256](evidence/qemu-9.2.0-inventory.json) сохранены без запуска гостя:
+## Исходный inventory E0 и текущая E2A
+
+Выполнены `local/qemu/bin/qemu-system-arm --version`, `-machine help`, `-cpu help`. [Исходный вывод и его SHA-256](evidence/qemu-9.2.0-inventory.json) сохранены для исходной vanilla9.2 без запуска гостя. Добавленная E2A собирается отдельно:
 
 | Наблюдение | Результат / статус |
 |---|---|
@@ -15,13 +17,13 @@
 | Machines `connex`, `verdex`, `mainstone`, `blueangel` | Отсутствуют в фактическом списке |
 | CPU `pxa255`, `pxa260`, `pxa261`, `pxa262`, варианты `pxa270` | Присутствуют в списке CPU; наличие имени не создаёт SoC или плату |
 | CPU `pxa263` | Отсутствует; точная модель PXA263 не найдена |
-| Собственная machine Blue Angel | Не реализована, не запускалась |
+| Собственная экспериментальная machine E2A | **Реализована и проверена** в отдельной модифицированной9.2; не присутствует в исходном vanilla inventory |
 
 Удаление машин PXA2xx в **9.2** подтверждено `Q92:docs/about/removed-features.rst` и [официальной историей удалений](https://www.qemu.org/docs/master/about/removed-features.html). Локальная 9.2 содержит остаточные CPU-типы, но их список сам по себе не является поддержкой плат PXA. Версию 9.2 нельзя использовать для команд `-M connex` из старых инструкций.
 
 ## Неизменяемые первоисточники
 
-Обозначения ниже всегда включают конкретный commit. Полные URL, размеры и SHA-256 **34 файлов QEMU и 9 файлов PXADroid**: [source manifest](evidence/qemu-source-manifest.json). QEMU и Linux читались как исследовательские источники; код в подпроект не переносился.
+Обозначения ниже всегда включают конкретный commit. Полные URL, размеры и SHA-256 **34 файлов QEMU и 9 файлов PXADroid**: [source manifest](evidence/qemu-source-manifest.json). Для E0 QEMU и Linux читались как исследовательские источники. В E2A host timer/PIC implementation производна от Q91; происхождение и GPL-2.0-only закреплены в [отдельной области](qemu/README.md). Код Linux в Rust guest не переносился.
 
 | Метка | Репозиторий / версия / commit | Прочитанные ключевые пути |
 |---|---|---|
@@ -30,7 +32,7 @@
 | **Q92** | [QEMU v9.2.0](https://github.com/qemu/qemu/tree/ae35f033b874c627d81d51070187fbf55f0bf1a7), `ae35f033b874c627d81d51070187fbf55f0bf1a7` | `docs/about/removed-features.rst`, `target/arm/tcg/cpu32.c`, `hw/arm/Kconfig` |
 | **BA** | [PXADroid pxakernel](https://sourceforge.net/p/pxadroid/pxakernel/ci/3712fd6f197113f19959eba85b3628b202e30d64/tree/), `3712fd6f197113f19959eba85b3628b202e30d64` | `arch/arm/mach-pxa/blueangel.c`, `include/mach/blueangel.h`, `htc_calypso.c`; `drivers/mfd/asic3.c`; TSC2X0X, HTC ASIC keyboard, W100 framebuffer и Blue Angel audio |
 
-Точная ревизия источника не доказывает точность эмуляции. Старые версии QEMU здесь — базовые точки исследования, а не утверждение об актуальной поддержке их веток. Они в этой сессии не собирались и не запускались. Из Linux не переносились GPL-драйверы; при будущем reuse сохранять исходные copyright/license и фиксировать границу собственного кода. Собственный код Crosshair распространяется по MIT; условия сторонних исходников остаются отдельными.
+Точная ревизия источника не доказывает точность эмуляции. Старые версии QEMU здесь — базовые точки исследования, а не утверждение об актуальной поддержке их веток. Q91 затем собран и исполнен в E1; Q82 остался статическим сравнением, Q92 стал отдельной базой E2A. Из Linux не переносились GPL-драйверы; при будущем reuse сохранять исходные copyright/license и фиксировать границу собственного кода. Собственный Rust guest и test harness Crosshair распространяются по MIT; производный host QEMU C — по GPL-2.0-only; условия сторонних исходников сохраняются.
 
 ## Что дают Connex, Verdex и Mainstone II
 
@@ -44,7 +46,7 @@
 
 Q82 содержит те же три machine и эти базовые размеры. В Q91 они уже помечены устаревшими и необслуживаемыми. В `Q91:hw/arm/pxa2xx.c:2237–2270` PXA255 CPU жёстко выбран, GPIO задано **85**; историческая Blue Angel конфигурация использует GPIO89 codec reset (`BA:arch/arm/mach-pxa/include/mach/blueangel.h`). Это конкретный сигнал, что нужна проверка PXA26x, а не переименование Connex. `Q91:target/arm/tcg/cpu32.c:805–863,1029–1041` определяет PXA250/255/260/261/262/270, но не PXA263.
 
-Практическое предложение: сначала изолированная исследовательская сборка Q91 с тестами существующих PXA-моделей, затем отдельная machine `crosshair-blueangel` и минимальный подтверждённый набор SoC. До реализации выбрать и зафиксировать: локальный fork Q91 либо перенос проверенного поднабора в новую базу QEMU. Старые monolithic PXA init и неполные reset paths требуют работы в обоих вариантах; обещать дешёвый перенос в 9.2 нельзя. Основной VersatilePB Boot 0.1 сохраняется как независимый регрессионный тест компилятора/ядра.
+Выбор исполнен: E1 использует изолированную Q91, E2A — собственную минимальную composition на отдельной Q92 с переносом ограниченного timer/PIC подхода и собственным reset. Monolithic PXA255 SoC не переименован в PXA263. Следующий E2B — GPIO и audit CPU/CP14/15/MMU/cache/reset; [различия уже установленные источниками](../docs/E2A_CPU_PROFILE.md) отделены от неизвестных. Основной VersatilePB Boot0.1 и E1 сохраняются как принятые регрессионные точки.
 
 ## Уровни точности
 
@@ -56,19 +58,19 @@ Q82 содержит те же три machine и эти базовые разм�
 
 ## Периферия Blue Angel: reuse / adapt / new / unknown
 
-Классификация — инженерная оценка по источникам, **не реализованный результат**. `reuse` означает кандидата общего механизма, `adapt` — проверку/изменение модели, `new` — отдельную модель/board wiring, `unknown` — отсутствие достаточного контракта.
+Классификация — инженерная оценка по источникам. **Реализованный результат E2A ограничен CPU proxy/RAM/diagnostic UART/timer/PIC**; остальные строки остаются планом. `reuse` означает кандидата общего механизма, `adapt` — проверку/изменение модели, `new` — отдельную модель/board wiring, `unknown` — отсутствие достаточного контракта.
 
 | Узел | Оценка | Доказанный источник / граница reuse | Что ещё необходимо |
 |---|---|---|---|
-| **CPU PXA263 / XScale ARMv5TE** | reuse TCG ARMv5 + **adapt/new**, точность unknown | Q91 `target/arm/tcg/cpu32.c`; Q92 inventory: PXA263 отсутствует | Подтверждённый CPUID, CP14/15, reset state, cache/MMU quirks и отличия PXA26x. PXA255 не маркировать PXA263 |
-| **SDRAM и MMU** | reuse MemoryRegion/ARM MMU + adapt | Q91 `hw/arm/pxa2xx.c:2249–2256`, `include/hw/arm/pxa.h`; [BOOT.md](../BOOT.md) | Банки 128 MB, aliases/holes/reservations и handoff contract Blue Angel; тесты data/prefetch abort, permissions, page walk. Частота RAM и refresh timing отдельно unknown |
+| **CPU PXA263 / XScale ARMv5TE** | reuse TCG ARMv5 + **adapt/new**, точность unknown | Q91 `target/arm/tcg/cpu32.c`; Q92 inventory: PXA263 отсутствует | Подтверждённый CPUID, CP14/15, reset state, cache/MMU quirks и отличия PXA26x. E2A CPU260 proxy проверен; точный PXA263 остаётся unknown |
+| **SDRAM и MMU** | reuse MemoryRegion/ARM MMU + adapt | Q91 `hw/arm/pxa2xx.c:2249–2256`, `include/hw/arm/pxa.h`; [BOOT.md](../BOOT.md) | Банки 128 MB, aliases/holes/reservations и handoff contract Blue Angel; тесты data/prefetch abort, permissions, page walk. E2A synthetic128MiB и MMIO external abort проверены; банки, MMU page walks, частота RAM и refresh timing отдельно unknown |
 | **Flash / внутреннее хранение** | reuse generic CFI + **new/adapt**, topology unknown | Q91 `hw/block/pflash_cfi01.c`; BA `blueangel.c:719–783`, `include/mach/blueangel.h` указывают StrataFlash и Doc G3 | Реальная комплектация/command set/width/ID/geometry. Размер `nk.nbf` не физическая геометрия. Сначала synthetic read-only image; WM ROM не требуется и не распространяется |
 | **ATI Imageon W3200 / LCD 240×320** | **new**, generic display backend reuse | BA `blueangel.c:315–508,1097–1100`; `drivers/video/w100fb.c` | ATI aperture, framebuffer placement/stride/format, panel variant, clocks/reset/IRQ. Q91 `hw/display/pxa2xx_lcd.c` эмулирует **встроенный PXA LCD**, не внешний ATI; скопировать его MMIO нельзя |
 | **TSC2200 touch + front keys** | **new/adapt**, SSI/input infrastructure reuse | BA `blueangel.c:843–902`, `drivers/spi/tsc2X0X-core.c`, `drivers/input/touchscreen/tsc2X0X_ts.c` | SPI register contract, conversion scheduling, ADC calibration/pen IRQ/front-key bitmap. Q91 `hw/input/tsc210x.c` создаёт TSC2102/2301; `tsc2005.c` — иной чип. Их наличие не означает TSC2200 support |
 | **ASIC3 и sliding QWERTY** | **new**, GPIO/IRQ/SSI infrastructure reuse | BA `blueangel.c:202–314,905–1021`; `drivers/mfd/asic3.c`, `drivers/input/keyboard/htc-asic-kbd.c` | ASIC register map/16-bit bus shifts, cascaded IRQ, keyboard SPI FIFO/reset/scancodes/Fn/repeat. Mainstone PXA27x keypad не подходит. Кириллица — отдельный слой раскладки |
 | **SD / SDIO** | SD card backend reuse; **new/adapt controller** | BA `blueangel.c:288–295`: ASIC3 SD region/IRQ; `drivers/mfd/asic3.c:800–809`: `tmio-mmc`. Q91 `hw/sd/sd.c` — generic card | Не заменять ASIC3/TMIO контроллер на PXA MMCI из Connex. Проверить регистры/clock/card detect/IRQ/DMA; SDIO functions отдельно unknown. Использовать только файлы synthetic SD, не physical media |
-| **UART** | reuse generic serial + adapt/wiring | Q91 `hw/arm/pxa2xx.c:2291–2298`, `hw/char/serial.c`; BA `blueangel.c:786–806` | PXA-specific bits/FIFO/flow control/clock/IRQ. FFUART у Blue Angel связан с GSM data; diagnostic UART эмулятора не выдавать за физически доступный порт КПК |
-| **Timers / IRQ / DMA / GPIO** | reuse/adapt | Q91 `hw/timer/pxa2xx_timer.c`, `hw/dma/pxa2xx_dma.c`, `hw/arm/pxa2xx_pic.c`, `pxa2xx_gpio.c`; BA `blueangel.c:1113–1122` | PXA26x match/mask/ack/routing, ASIC cascades, DMA width/descriptor bounds/cache visibility и виртуальное время. Linux virtual IRQ не аппаратный номер |
+| **UART** | reuse generic serial + adapt/wiring | Q91 `hw/arm/pxa2xx.c:2291–2298`, `hw/char/serial.c`; BA `blueangel.c:786–806` | PXA-specific bits/FIFO/flow control/clock/IRQ. E2A generic diagnostic UART проверен отдельно. FFUART у Blue Angel связан с GSM data; physical wiring/PXA-specific control не подтверждены этой диагностикой |
+| **Timers / IRQ / DMA / GPIO** | reuse/adapt | Q91 `hw/timer/pxa2xx_timer.c`, `hw/dma/pxa2xx_dma.c`, `hw/arm/pxa2xx_pic.c`, `pxa2xx_gpio.c`; BA `blueangel.c:1113–1122` | E2A четыре timer/PIC, clock/match/mask/ack/routing и reset проверены. GPIO/DMA/ASIC cascades, descriptor bounds/cache visibility ещё не реализованы; Linux virtual IRQ не аппаратный номер |
 | **Power / RTC / sleep / battery** | adapt SoC + **new functional model**, analog unknown | Q91 `hw/arm/pxa2xx.c` PM/RTC; BA `blueangel.c:608–717,1075–1088`, `drivers/mfd/asic3.c` | Reset/wake/retention/AC events, callbacks и сохранение модели. Закомментированный Linux wake config не спецификация. Заряд/ток/напряжение только синтетические входы с явной меткой |
 | **Audio / UDA1380 / modem route** | generic audio backend reuse; **new/adapt** | BA `blueangel.c:1026–1041`, `sound/soc/pxa/blueangel.c`; Q91 PXA I2S в `hw/arm/pxa2xx.c` | Codec I2C, SSP/I2S paths, DMA, mute/route/power/wake. Тон из host speakers не доказывает телефонный аудиотракт |
 | **Wi-Fi** | **unknown/new** | [HARDWARE.md](../HARDWARE.md), BA board GPIO имена — только кандидаты | Чип/ревизия, bus/IRQ, firmware boundary и протокол. Ethernet SMC91C111 Gumstix не замена Wi-Fi Blue Angel |
@@ -95,6 +97,6 @@ Q82 содержит те же три machine и эти базовые разм�
 
 ## Предел полезности и открытые вопросы
 
-Ранний emulator может проверять ядро, интерфейс, клавиатурный workflow, телефонную логику и ошибки до окончания реверса аппаратуры. Для тестирования настоящего Blue Angel BSP нужны register-level contracts. Загрузка заводской ROM не является критерием первых этапов: исходный образ отсутствует, а совместимость загрузчика, ASIC и undocumented accesses неизвестна.
+E2A уже проверяет базовое исполнение ядра и timer/IRQ/error paths. Интерфейс, клавиатурный workflow и телефонная логика пока остаются будущими направлениями; экранный renderer требует отдельной реализации и не подтверждает ATI MMIO. Для тестирования настоящего Blue Angel BSP нужны register-level contracts. Загрузка заводской ROM не является критерием первых этапов: исходный образ отсутствует, а совместимость загрузчика, ASIC и undocumented accesses неизвестна.
 
 Главные блокеры точности: PXA263 CPU/SoC различия; аппаратная ревизия и карта памяти; ATI/ASIC3/TSC2200 доступные спецификации; восстановление M1 `QwertyKey.dll`; DPRAM modem protocol; power/wake/audio contracts. Поздние golden traces получать только по отдельно разрешённой процедуре на КПК, с сохранением исходной WM и данных; до этого эталоны синтетические и отмечены как таковые. Эмуляция не подтверждает электрическую безопасность или аппаратную готовность драйвера.

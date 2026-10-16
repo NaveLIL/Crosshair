@@ -7,3 +7,5 @@
 Для сенсора нужен воспроизводимый calibration transform с проверкой corners, границ и вырожденных точек. Калибровка в начале первого запуска — проектное направление. Формат ADC, давление, фильтрация и IRQ ещё исследуются.
 
 Целевой экран 240×320 требует компактного UI, ясного focus, прямого управления и читаемой кириллицы. Ни GUI, ни аппаратные input drivers в Boot0.1 не реализованы.
+
+UI0.1 добавляет [отдельный software primitive layer](docs/UI_0.1.md):240×320 RGB565, bitmap кириллица, clipped drawing, bounded dirty regions и host framebuffer export. Это проверяемая основа рендеринга; focus routing, stylus calibration, физическая QWERTY и ATI display transport остаются следующими отдельными контрактами.

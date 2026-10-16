@@ -1,0 +1,55 @@
+{
+  "entry": 2684387328,
+  "flags": 83886592,
+  "segments": [
+    {
+      "pa": 0,
+      "filesz": 64,
+      "memsz": 64,
+      "flags": 5
+    },
+    {
+      "pa": 2684387328,
+      "filesz": 997,
+      "memsz": 997,
+      "flags": 5
+    },
+    {
+      "pa": 2684388328,
+      "filesz": 0,
+      "memsz": 20528,
+      "flags": 6
+    }
+  ],
+  "symbols": {
+    "CROSSHAIR_E2A_FAULT_SELECTOR": 2684354816,
+    "CROSSHAIR_PXA_RECORD": 2684388328,
+    "_ZN23crosshair_pxa_reference11fault_probe17h28cfc8cac9cf1db2E": 2684388076,
+    "_ZN23crosshair_pxa_reference4arch4idle17hec6c2059b25cdde5E": 2684387436,
+    "_ZN23crosshair_pxa_reference8pxa_uart13ReferenceUart4init17h7489be59d2eb5973E": 2684387440,
+    "_ZN23crosshair_pxa_reference8pxa_uart13ReferenceUart4send17h4120d3793d1bf914E": 2684387496,
+    "_ZN4core9panicking5panic17hac0b3160507ed839E": 2684388252,
+    "_ZN4core9panicking9panic_fmt17h94659d61375b856eE": 2684388248,
+    "__bss_end": 2684388376,
+    "__bss_start": 2684388328,
+    "__image_end": 2684408856,
+    "__irq_stack_bottom": 2684404760,
+    "__irq_stack_top": 2684408856,
+    "__stack_bottom": 2684388376,
+    "__stack_top": 2684404760,
+    "_start": 2684387328,
+    "kernel_idle": 2684387432,
+    "reference_fault": 2684387412,
+    "reference_irq": 2684387396,
+    "reference_vectors": 0,
+    "rust_begin_unwind": 2684388196,
+    "rust_fault": 2684387836,
+    "rust_irq": 2684387680,
+    "rust_main": 2684387572
+  },
+  "sha256": {
+    "crosshair-e2a.elf": "8df7f621e6ab43a13a0f97b215b8268200c50e6575e603d753f027d49a4dd57f",
+    "crosshair-e2a.bin": "503840106b7116002d5242ea38406866d535a4790b32f716d8c13a7938e98105",
+    "vectors.bin": "c743923832589ead31c43d6d30536907d49df0607b4e735b9a1e35d3ff35f2c5"
+  }
+}

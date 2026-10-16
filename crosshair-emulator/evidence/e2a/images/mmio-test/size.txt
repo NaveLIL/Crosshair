@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+   1061	      0	  20528	  21589	   5455	<workspace>/target/artifacts/e2a/mmio-test/crosshair-e2a.elf

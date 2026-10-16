@@ -16,7 +16,24 @@ const TIMER: usize = 0x40a0_0000;
 const PIC: usize = 0x40d0_0000;
 const TIMER_IRQ: u32 = 1 << 26;
 const INTERVAL: u32 = 65_536;
+#[cfg(not(feature = "e2a"))]
 const PASS: &str = "CROSSHAIR PXA REFERENCE — UART TIMER IRQ PASS\r\n";
+#[cfg(feature = "e2a")]
+const PASS: &str = "CROSSHAIR E2A — UART TIMER IRQ PASS\r\n";
+
+// The negative-test mailbox is in synthetic RAM outside all ELF load segments
+// and BSS. QEMU's ROM reset restores ELF .data after data-loader reset hooks,
+// so a .data selector would silently revert to its compiled default on reset.
+// This address is an emulator test contract, never a physical BSP reservation.
+#[cfg(feature = "e2a-mmio-test")]
+core::arch::global_asm!(
+    ".global CROSSHAIR_E2A_FAULT_SELECTOR",
+    ".set CROSSHAIR_E2A_FAULT_SELECTOR, 0xa0000100"
+);
+#[cfg(feature = "e2a-mmio-test")]
+unsafe extern "C" {
+    static mut CROSSHAIR_E2A_FAULT_SELECTOR: u32;
+}
 
 #[repr(C)]
 pub struct ReferenceRecord {
@@ -102,6 +119,8 @@ pub extern "C" fn rust_main() -> ! {
         let cpuid: u32;
         asm!("mrc p15, 0, {id}, c0, c0, 0", id=out(reg) cpuid, options(nostack, nomem));
         write_volatile(addr_of_mut!(CROSSHAIR_PXA_RECORD.cpu_id), cpuid);
+        #[cfg(feature = "e2a-mmio-test")]
+        fault_probe();
         write(PIC + 4, 0); // ICMR: mask everything during explicit init.
         write(PIC + 8, 0); // ICLR: route to IRQ, not FIQ.
         write(TIMER + 0x1c, 0); // OIER.
@@ -205,7 +224,65 @@ pub extern "C" fn rust_irq() {
 
 #[unsafe(no_mangle)]
 pub extern "C" fn rust_fault() -> ! {
+    #[cfg(feature = "e2a-mmio-test")]
+    {
+        // SAFETY: the abort vector switched to SVC and reloaded our stack.
+        // Only the synthetic emulator model reaches this test; CP15 fault
+        // registers are read-only diagnostic state. IRQ remains masked.
+        unsafe {
+            let dfsr: u32;
+            let dfar: u32;
+            asm!("mrc p15, 0, {s}, c5, c0, 0", "mrc p15, 0, {a}, c6, c0, 0",
+                 s = out(reg) dfsr, a = out(reg) dfar, options(nostack, nomem));
+            let selector = read_volatile(addr_of_mut!(CROSSHAIR_E2A_FAULT_SELECTOR));
+            let expected = match selector {
+                1 => TIMER + 0x20,
+                2 => PIC,
+                3 => TIMER + 0x10,
+                4 => 0x5000_0000,
+                _ => 0,
+            };
+            let p = addr_of_mut!(CROSSHAIR_PXA_RECORD);
+            write_volatile(addr_of_mut!((*p).pending_seen), dfsr);
+            write_volatile(addr_of_mut!((*p).status_seen), dfar);
+            if read_volatile(addr_of_mut!((*p).error)) == selector
+                && expected != 0
+                && dfar as usize == expected
+                && dfsr & 0xf == 8
+            {
+                write_volatile(addr_of_mut!((*p).stage), 5);
+                let _ = pxa_uart::ReferenceUart::init().send("CROSSHAIR E2A — DATA ABORT PASS\r\n");
+                arch::idle();
+            }
+        }
+    }
     panic!("PXA reference exception");
+}
+
+#[cfg(feature = "e2a-mmio-test")]
+unsafe fn fault_probe() {
+    // SAFETY: isolated emulator negative-test binary only. The addresses are
+    // deliberately invalid under its strict E2A contract. Each transaction
+    // must enter the real ARM data-abort vector; reaching the final panic is
+    // a test failure. No hardware build can enable this code implicitly.
+    unsafe {
+        let selector = read_volatile(addr_of_mut!(CROSSHAIR_E2A_FAULT_SELECTOR));
+        write_volatile(addr_of_mut!(CROSSHAIR_PXA_RECORD.error), selector);
+        match selector {
+            1 => {
+                let _ = read(TIMER + 0x20);
+            }
+            2 => write(PIC, 1),
+            3 => {
+                let _ = read_volatile((TIMER + 0x10) as *const u8);
+            }
+            4 => {
+                let _ = read(0x5000_0000);
+            }
+            _ => panic!("invalid fault selector"),
+        }
+        panic!("MMIO transaction failed to abort");
+    }
 }
 
 #[panic_handler]
