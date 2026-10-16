@@ -1,0 +1,50 @@
+{
+  "result": "PASS",
+  "machine": "mainstone",
+  "image_sha256": {
+    "crosshair-pxa-reference.elf": "65f89a54421f6f847aae2c20eec842f7d9e6b12af415da154b3e36995564891a",
+    "crosshair-pxa-reference.bin": "6fe8287d4c3f4376dd58fefee7241ebdfe41e37b82a69faddb588fda40481920",
+    "vectors.bin": "c743923832589ead31c43d6d30536907d49df0607b4e735b9a1e35d3ff35f2c5"
+  },
+  "qemu_version": "QEMU emulator version 9.1.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "registers": "\r\nCPU#0\r\nR00=00000031 R01=a0008428 R02=fff0bdc0 R03=0000000a\r\nR04=a000c4ac R05=a000c4a4 R06=00000060 R07=fff0bdc0\r\nR08=40d00004 R09=a0008480 R10=40100000 R11=40a00000\r\nR12=00000000 R13=a000c490 R14=a0008070 R15=a0008068\r\nPSR=600001d3 -ZC- A svc32\r\nFPSCR: 00000000\r\n",
+  "memory": "00000000a0008480: 0x50584152 0x00000002 0x00000003 0x00018b68\r\n00000000a0008490: 0x00039cee 0x69054117 0x00000000 0x04000000\r\n00000000a00084a0: 0x00000001 0x00000000 0x00000000 0xa000d488\r\n",
+  "record_words": [
+    1347961170,
+    2,
+    3,
+    101224,
+    236782,
+    1761952023,
+    0,
+    67108864,
+    1,
+    0,
+    0,
+    2684408968
+  ],
+  "uart_utf8": "CROSSHAIR PXA REFERENCE \u2014 UART TIMER IRQ PASS\r\n",
+  "command": [
+    "<workspace>/../qemu-pxa/bin/qemu-system-arm",
+    "-machine",
+    "mainstone",
+    "-accel",
+    "tcg",
+    "-display",
+    "none",
+    "-monitor",
+    "none",
+    "-serial",
+    "stdio",
+    "-nic",
+    "none",
+    "-no-reboot",
+    "-qmp",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-kernel",
+    "<artifacts>/pxa-reference/crosshair-pxa-reference.elf",
+    "-device",
+    "loader,addr=0xa0008484,data=0xa5a5a5a5,data-len=4"
+  ],
+  "scope": "synthetic upstream PXA board, not Blue Angel hardware"
+}

@@ -1,0 +1,45 @@
+   Compiling crosshair-ui v0.2.0 (<workspace>/ui)
+   Compiling crosshair-shell v0.1.2 (<workspace>/shell)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.12s
+     Running unittests src/lib.rs (<workspace>/target/shell-host/x86_64-apple-darwin/debug/deps/crosshair_shell-6739aae481df468b)
+
+running 27 tests
+test icons::tests::stable_catalog_all_sizes_and_mask_bounds ... ok
+test tests::adaptive_modes_keep_content_history_focus_and_have_pointer_recovery ... ok
+test tests::bounded_queue_backpressure_retries_without_losing_actions ... ok
+test tests::desktop_launcher_application_back_restores_selection_and_history ... ok
+test icons::tests::monochrome_tint_clipping_and_invalid_size_do_not_allocate_or_overdraw ... ok
+test tests::existing_text_wire_special_actions_and_unknown_keys_do_not_corrupt_state ... ok
+test tests::input_loss_clears_capture_and_held_state_without_fabricated_actions ... ok
+test tests::launcher_text_prefix_search_is_bounded_cyrillic_and_back_first_clears ... ok
+test tests::menu_cancel_and_screen_switch_preserve_each_screen_state ... ok
+test tests::physical_edges_repeat_only_held_navigation_and_system_commands_once ... ok
+test tests::pointer_half_open_bounds_invalid_wire_and_keyboard_interleave_preserve_state ... ok
+test tests::pointer_overlays_are_modal_and_dialog_cancel_confirm_are_distinct ... ok
+test tests::pointer_press_release_capture_leave_cancel_and_stale_release_are_distinct ... ok
+test tests::pointer_shortcuts_start_launcher_and_application_back_are_functional ... ok
+test tests::settings_changes_real_theme_and_dialog_confirm_cancel_are_distinct ... ok
+test tests::shared_wire_phase_bounds_text_and_key_edges_fail_closed ... ok
+test tests::trusted_hold_threshold_stationarity_and_later_release_suppression ... ok
+test wallpaper::tests::generated_rows_have_exact_extent_and_full_palette_bounds ... ok
+test tests::renderer_clips_small_surface_and_preserves_padding_and_outer_canaries ... ok
+test tests::burst_navigation_has_bounded_valid_focus_history_and_no_implicit_apps ... ok
+test wallpaper::tests::regional_restore_preserves_every_other_pixel_padding_and_canaries ... ok
+test tests::dirty_state_avoids_repaint_and_surface_present_keeps_failed_transfer ... ok
+test tests::runtime_unknown_version_masks_validity_and_updates_only_visible_info ... ok
+test tests::desktop_focus_redraw_matches_full_render_and_limits_dirty_regions ... ok
+test tests::desktop_menu_overlay_reuses_wallpaper_and_dismissal_matches_fresh_composition ... ok
+test tests::pressed_partial_render_matches_fresh_frame_and_bottom_is_wallpaper ... ok
+test tests::canonical_fixture_uses_existing_renderer_without_heap_owned_shell_state ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+   Doc-tests crosshair_shell
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling crosshair-ui v0.2.0 (<workspace>/ui)
+   Compiling crosshair-shell v0.1.2 (<workspace>/shell)
+    Finished `release` profile [optimized] target(s) in 2.08s

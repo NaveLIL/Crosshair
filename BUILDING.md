@@ -1,6 +1,29 @@
 # Сборка Crosshair
 
-## Wave007.1: Desktop, User Shell и интерактивное окно macOS
+## Wave007.2: Adaptive Shell и аппаратная логика ввода
+
+`scripts/run-crosshair-gui.sh` открывает настоящий ARM/QEMU Shell в macOS. Окно показывает только committed guest pixels. Мышь передаёт Press/Move/Release: нажатие захватывает элемент, отпускание над ним вызывает одно действие; выход за границу элемента отменяет tap даже после возврата. Выход за изображение и потеря фокуса отменяют захват. Стационарное удержание не менее 600 мс, измеренное monotonic clock macOS, открывает контекстное меню Launcher либо временную системную панель в других экранах; последующий Release не запускает ярлык. Масштаб/letterboxing учитываются до передачи координат.
+
+Клавиши: стрелки — фокус/прокрутка, Enter — подтверждение, Escape — Back, **F1 — Start/Launcher, F10 — системная панель, F2 — контекстное действие, F3 — переключение открытого экрана, F4 — Home/Desktop**. Отдельная Home также поддерживается. Для F-клавиш MacBook может требоваться Fn; Fn+← не объявляется проверенным Home mapping. Передаются отдельные press/repeat/release: направления повторяются, Select и системные команды не вызываются многократно от удержания. Это семантика Mac adapter, не аппаратные scan codes PDA2k.
+
+Постоянной нижней панели больше нет. Standard даёт 24 пикселя заголовку и 296 содержимому; Compact — 16/304; Immersive — полные 240×320. About и Diagnostics демонстрируют режимы через временную панель. В Immersive остаются аппаратная логическая команда, экранный Menu handle справа сверху и жест от верхнего края. Back закрывает панель, сохраняя фокус/историю. Все действия доступны с клавиатуры.
+
+```sh
+scripts/test-wave007-2.sh                     # полная сохранённая цепочка и новые UX checks
+scripts/run-crosshair-gui.sh --window-test     # четыре команды / восемь key edges
+scripts/run-crosshair-gui.sh --pointer-window-test # 13 pointer/key/text records
+scripts/run-crosshair-gui.sh --adaptive-window-test # drag/cancel, measured hold, repeat, три режима
+```
+
+Новые результаты находятся в `target/artifacts/shell/adaptive/` и `gui/adaptive-window-test-result.json`; сохраняются реальные PNG 240×320, raw565, QEMU PPM, User snapshots и host oracle. Автоматические окна пропускают только зарегистрированные тестовые NSEvent и отключают opening animation, которая может менять координаты synthetic mouse events. Обычное окно принимает ввод без фильтра и остаётся открытым до закрытия/⌘Q. Физические клавиши и TSC2200 не реализованы.
+
+Модель QEMU остаётся Unicode-only: scalar blocks `0x90000` Release, `0xB0000` Move, `0xD0000` Press, `0xF0000` legacy Tap плюс `(y<<8)+x`, block width `0x20000`. Planes 9–14 здесь emulator-reserved, это не PUA и не аппаратный протокол. `U+E006` — pointer Cancel, `U+E007` — отмена всего захваченного ввода. `U+E100..U+F0FF` несёт измеренное удержание 0..4095 мс; Shell проверяет активный стационарный capture и порог 600 мс. Legacy Tap остаётся для регрессий, production mouse path использует фазы.
+
+При росте реального input-overflow counter общий Shell отменяет held keys/capture. Последующий принятый Press может начать новый жест: это не обещание восстановить неизвестный физический драйвер. Тест отдельно проверяет реальное переполнение при активном захвате, отсутствие активации от stale Release и восстановление через Home/свежий Press/Release. Native adapter применяет bounded backpressure; kernel queues, scheduler и MMU сохранены.
+
+`SHELL_UX_METRICS` содержит 20 слов capture/key/chrome/scroll state, `SHELL_RENDER_METRICS` — 8 counters software composition; host replay сверяет их с ARM. Это не CPU cycles, peak stack или задержка аппаратного дисплея. Kernel по-прежнему публикует 153600 байт полного framebuffer на render. Горные обои, 15533 read-only байта palette/RLE и один рабочий framebuffer сохранены.
+
+## Сохранённые команды и артефакты Wave007.1
 
 ```sh
 scripts/run-crosshair-gui.sh
@@ -8,9 +31,9 @@ scripts/run-crosshair-gui.sh
 
 Команда собирает отдельный User ELF, встраивает его в ARM guest, компилирует небольшой AppKit frontend и открывает окно **Crosshair Shell0.1 — ARM QEMU**. Внутри работает `crosshair-blueangel-display-test` с настоящим ARM TCG: Shell, приложения, RGB565 rendering, системные вызовы и планировщик исполняются гостем. Окно получает свежие committed pixels через QMP `screendump`, показывает гостевые 240×320 в масштабе 2× по умолчанию и передаёт клавиши и координаты одиночных нажатий в существующий synthetic input FIFO. Это host adapter к проверенной модели; аппаратные ATI, клавиатура и сенсор PDA2k здесь не проверяются.
 
-Мышь работает как экспериментальный стилус: нажатие на ярлык Today/Настройки/Диагностика открывает экран; «Пуск» открывает отдельный Launcher. Можно нажимать строки программ, заголовок Back, нижние softkeys, пункты меню и кнопки диалога. Координаты вычисляются относительно фактического изображения гостя 240×320, с началом слева сверху; масштаб окна и поля вокруг изображения учитываются, нажатия вне изображения не отправляются. Frontend передаёт координаты настоящему ARM User Shell, где выполняется hit-testing. Он показывает только QEMU pixels и не рисует собственные элементы Shell.
+Текущий экспериментальный стилус передаёт Press/Move/Release. Ярлык Today/Настройки/Диагностика открывается на корректном Release; Start открывает отдельный Launcher. Доступны строки программ, Back, временная системная панель, пункты меню и кнопки диалога. Постоянных нижних softkeys нет. Координаты вычисляются относительно фактического изображения гостя 240×320, с началом слева сверху; масштаб и поля вокруг изображения учитываются. Frontend передаёт события настоящему ARM User Shell, где выполняется hit-testing, и показывает только QEMU pixels.
 
-Стрелки меняют выделение, Enter запускает выбранное действие, Escape возвращает назад. F10 открывает Menu, Home возвращает Desktop, F1/F2 — левая/правая softkey, F3 переключает открытый экран. На MacBook для F-клавиш может требоваться Fn; Home обычно доступен через Fn+← ([стандартные сочетания Apple](https://support.apple.com/en-ie/102650)). В Launcher обычные символы вводят настоящий ограниченный поисковый запрос, Backspace удаляет символ; проверен и кириллический ввод. Изменённая тема действует до reset. Закрытие окна или ⌘Q завершает frontend и его QEMU; окно остаётся открытым до этого действия. `scripts/run-shell.sh` — короткий alias той же команды.
+Исторические Wave007.1 captures использовали нижние softkeys и атомарный tap. Текущий ввод и клавиши описаны выше для Wave007.2. В Launcher обычные символы вводят ограниченный запрос, Backspace удаляет символ; кириллица проверяется через настоящий ARM guest. Тема действует до reset. Закрытие окна или ⌘Q завершает frontend и его QEMU; `scripts/run-shell.sh` — alias той же команды.
 
 Нужны прежние pinned Rust и QEMU display-test cache, а для окна — macOS AppKit и Swift compiler из Xcode Command Line Tools (`xcrun swiftc`). Новые Shell-команды через `scripts/shell-env.sh` находят стандартные `local/` caches и соседние caches публичного checkout; подготовленные `RUSTUP_HOME`/`QEMU_DISPLAY_TEST` сохраняют приоритет. Для чистой машины сначала выполнить существующие Rust/QEMU bootstrap-команды. Cocoa доступна в проверенном QEMU cache; выбранный frontend подключает keyboard events к synthetic FIFO и показывает фактический QEMU console framebuffer.
 
@@ -27,7 +50,7 @@ scripts/run-crosshair-gui.sh --pointer-window-test # mouseDown, клавиши �
 
 Образы находятся в `target/artifacts/shell/{user-image,image}/`, гостевые PNG 240×320, raw RGB565, QEMU PPM, actual state journals и host pixel references — в `target/artifacts/shell/execution/`. `gui/pipeline-result.json` содержит native keymap/PPM decoder checks, проверку нескольких событий в одном pipe write и ARM delivery; `gui/session-result.json` записывается при закрытии интерактивного окна. Тесты очередей используют отдельный автоматический session; interactive adapter применяет bounded backpressure перед hardware FIFO и kernel queue. UI state и нарисованные экраны в frontend не дублируются. Размер flat image включает адресные промежутки и отдельно учитывается от выделенной RAM.
 
-Новые pointer captures и replay находятся в `target/artifacts/shell/pointer/`, native mouse-route — в `gui/pointer-window-test-result.json` и отдельном `gui/pointer-window-test/`. Координатный транспорт резервирует supplementary private-use Unicode scalars `0xF0000 + (y << 8) + x` внутри прежнего tag8 FIFO; это только соглашение эмуляторного адаптера. Модель QEMU, kernel event service и очереди не изменены. События за пределами 240×320 игнорируются до изменения UI counters; malformed wire values проверяются отдельно. Это не формат контроллера сенсора Blue Angel.
+Сохранённые atomic-tap captures/replay находятся в `target/artifacts/shell/pointer/`; native phase-route — в `gui/pointer-window-test-result.json` и отдельном `gui/pointer-window-test/`. Legacy test fixture использует supplementary private-use scalars `0xF0000 + (y << 8) + x` внутри прежнего tag8 FIFO. Текущий production Press/Move/Release transport описан выше. Модель QEMU, kernel event service и очереди не изменены. Invalid legacy coordinates не меняют UI counters; malformed wire values проверяются отдельно. Это не формат контроллера сенсора Blue Angel.
 
 ### Обои и измерение перерисовки
 

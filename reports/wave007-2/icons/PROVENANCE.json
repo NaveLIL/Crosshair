@@ -1,0 +1,658 @@
+{
+  "schema": "crosshair-tabler-assets-v1",
+  "upstream": "https://github.com/tabler/tabler-icons",
+  "commit": "a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d",
+  "license": {
+    "spdx": "MIT",
+    "copyright": "Copyright (c) 2020-2026 Paweł Kuna",
+    "path": "LICENSE",
+    "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/LICENSE",
+    "sha256": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db"
+  },
+  "icons": [
+    {
+      "id": 0,
+      "symbol": "Applications",
+      "name": "layout-grid",
+      "upstream_path": "icons/outline/layout-grid.svg",
+      "local_path": "selected/layout-grid.svg",
+      "bytes": 707,
+      "sha256": "91f923bcca6e9201ccedd2a10bb5d5a7eb3dbb5fa5a26af394d362f35c935237",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/layout-grid.svg"
+    },
+    {
+      "id": 1,
+      "symbol": "Today",
+      "name": "calendar",
+      "upstream_path": "icons/outline/calendar.svg",
+      "local_path": "selected/calendar.svg",
+      "bytes": 568,
+      "sha256": "4861f170e9b1fa72eaa7cdefc3c7ca64ca6a10b9c2e3a13e1aceb4725f266d8d",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/calendar.svg"
+    },
+    {
+      "id": 2,
+      "symbol": "Settings",
+      "name": "settings",
+      "upstream_path": "icons/outline/settings.svg",
+      "local_path": "selected/settings.svg",
+      "bytes": 942,
+      "sha256": "ef9cf42d822c00b4fad5bc5eeceddd4e1ec3774bb7ddd09891d0fba274bc3e95",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/settings.svg"
+    },
+    {
+      "id": 3,
+      "symbol": "Diagnostics",
+      "name": "activity",
+      "upstream_path": "icons/outline/activity.svg",
+      "local_path": "selected/activity.svg",
+      "bytes": 401,
+      "sha256": "2279e7a64688d1e730e42a7b277792350fbfade1fd3b992ad3971737e88ccde8",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/activity.svg"
+    },
+    {
+      "id": 4,
+      "symbol": "Information",
+      "name": "info-circle",
+      "upstream_path": "icons/outline/info-circle.svg",
+      "local_path": "selected/info-circle.svg",
+      "bytes": 442,
+      "sha256": "48b7dddf34a6b87e93843a42b14781ce01794cf69274c458249ed8bfc01b6e4d",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/info-circle.svg"
+    },
+    {
+      "id": 5,
+      "symbol": "SwitchView",
+      "name": "switch-horizontal",
+      "upstream_path": "icons/outline/switch-horizontal.svg",
+      "local_path": "selected/switch-horizontal.svg",
+      "bytes": 463,
+      "sha256": "8c32eec89ad359e0132608022962c9e800c1b95330679aa6ea74a4ab98ba3d5f",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/switch-horizontal.svg"
+    },
+    {
+      "id": 6,
+      "symbol": "Home",
+      "name": "home",
+      "upstream_path": "icons/outline/home.svg",
+      "local_path": "selected/home.svg",
+      "bytes": 511,
+      "sha256": "069600f461f3e967685765723a851af7b35f24b715e03d41a2928152cf75644c",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/home.svg"
+    },
+    {
+      "id": 7,
+      "symbol": "Back",
+      "name": "arrow-left",
+      "upstream_path": "icons/outline/arrow-left.svg",
+      "local_path": "selected/arrow-left.svg",
+      "bytes": 433,
+      "sha256": "12af90f1bb49b7ae62792ecf38d2fa8b39daa4753e39ebc3520d07482a90704f",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/arrow-left.svg"
+    },
+    {
+      "id": 8,
+      "symbol": "Up",
+      "name": "chevron-up",
+      "upstream_path": "icons/outline/chevron-up.svg",
+      "local_path": "selected/chevron-up.svg",
+      "bytes": 412,
+      "sha256": "b9a66bccd34ae897a255a38af9e66a1149adf6549f60108907ea3066e5d0e740",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/chevron-up.svg"
+    },
+    {
+      "id": 9,
+      "symbol": "Down",
+      "name": "chevron-down",
+      "upstream_path": "icons/outline/chevron-down.svg",
+      "local_path": "selected/chevron-down.svg",
+      "bytes": 424,
+      "sha256": "5a2e5c2a155ce06264a3f7299073ed636142dfd0b324b747387d9cfbf9fb5e3e",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/chevron-down.svg"
+    },
+    {
+      "id": 10,
+      "symbol": "Left",
+      "name": "chevron-left",
+      "upstream_path": "icons/outline/chevron-left.svg",
+      "local_path": "selected/chevron-left.svg",
+      "bytes": 408,
+      "sha256": "889174801ca4213379fe4e6a574546793a72ab22be35bc2f177e3d8d24576dbd",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/chevron-left.svg"
+    },
+    {
+      "id": 11,
+      "symbol": "Right",
+      "name": "chevron-right",
+      "upstream_path": "icons/outline/chevron-right.svg",
+      "local_path": "selected/chevron-right.svg",
+      "bytes": 401,
+      "sha256": "83733bb6e03e1d20fd2674d06a493642c8ea6eef76c44ebb2239b9ef17dedff7",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/chevron-right.svg"
+    },
+    {
+      "id": 12,
+      "symbol": "Menu",
+      "name": "menu-2",
+      "upstream_path": "icons/outline/menu-2.svg",
+      "local_path": "selected/menu-2.svg",
+      "bytes": 438,
+      "sha256": "bcef199c5e53082a56c7bf33d4c48181b71373eb5d923cce8884aca09d106842",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/menu-2.svg"
+    },
+    {
+      "id": 13,
+      "symbol": "Folder",
+      "name": "folder",
+      "upstream_path": "icons/outline/folder.svg",
+      "local_path": "selected/folder.svg",
+      "bytes": 450,
+      "sha256": "acdf398775addb8104673e5a8ef29d01d40184c6a5b3c62a93f10309cf9ef253",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/folder.svg"
+    },
+    {
+      "id": 14,
+      "symbol": "Phone",
+      "name": "phone",
+      "upstream_path": "icons/outline/phone.svg",
+      "local_path": "selected/phone.svg",
+      "bytes": 469,
+      "sha256": "4659f9041061912c6382c6fde8d2455105ce2f29145df862d81d22f3a73f83e6",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/phone.svg"
+    },
+    {
+      "id": 15,
+      "symbol": "Messages",
+      "name": "messages",
+      "upstream_path": "icons/outline/messages.svg",
+      "local_path": "selected/messages.svg",
+      "bytes": 551,
+      "sha256": "eb7841d7719e9b16fdad1810dbe15ddc9f247f69becbb5ee13299e46bd997c84",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/messages.svg"
+    },
+    {
+      "id": 16,
+      "symbol": "Clipboard",
+      "name": "clipboard",
+      "upstream_path": "icons/outline/clipboard.svg",
+      "local_path": "selected/clipboard.svg",
+      "bytes": 520,
+      "sha256": "46bcd71c2d4a42d8ad6c59ef07a9cfce09af42843aac908a0829c3bdfb44d8ae",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/clipboard.svg"
+    },
+    {
+      "id": 17,
+      "symbol": "Calculator",
+      "name": "calculator",
+      "upstream_path": "icons/outline/calculator.svg",
+      "local_path": "selected/calculator.svg",
+      "bytes": 711,
+      "sha256": "44ec05c7a5e8ad6b9cb6d0e5f58049746c51d163a0eface1cbb7d780976800ed",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d/icons/outline/calculator.svg"
+    }
+  ],
+  "sizes": [
+    12,
+    16,
+    24
+  ],
+  "packing": "row-major continuous bits, MSB first, zero padding bits",
+  "supersampling": 8,
+  "alpha_threshold": 96,
+  "toolchain": {
+    "cairosvg": "2.8.2",
+    "cairocffi": "1.7.1",
+    "cssselect2": "0.10.1",
+    "defusedxml": "0.7.1",
+    "tinycss2": "1.5.1",
+    "webencodings": "0.6.1",
+    "cffi": "2.1.1",
+    "pycparser": "3.0",
+    "pillow": "12.3.0",
+    "native_cairo": "1.18.4"
+  },
+  "generated_path": "shell/src/icon_assets.rs",
+  "mask_bytes": 2196,
+  "mutable_bytes": 0,
+  "generator_sha256": "51ad1f907b98ef46b61d1bf27d96b7f460767b7e2f1dc0e75f7070b911bc151b",
+  "generated_sha256": "3fd40cee85b4eb49b02164fd26f4f6fe5f8493c26db6dbe5c6bf2a2d95da0122",
+  "mask_sha256": "ef24e5a16f47dd57e784ba1424daed593f346a807c49ace968725c0b8b2ffc2a",
+  "masks": [
+    {
+      "id": 0,
+      "size": 12,
+      "offset": 0,
+      "bytes": 18,
+      "sha256": "7e0b86820b843972bdf97e7b5746bf0ea160b3402fa965ecb5009c6cdd58c43c",
+      "set_pixels": 80
+    },
+    {
+      "id": 0,
+      "size": 16,
+      "offset": 18,
+      "bytes": 32,
+      "sha256": "425a40d5b37e481d6ec311884790d915d90905ac449f71e1f3077bc932f80aa5",
+      "set_pixels": 68
+    },
+    {
+      "id": 0,
+      "size": 24,
+      "offset": 50,
+      "bytes": 72,
+      "sha256": "1eda1f752d9e6b49bf03c84d1b4c7ee9a26d3359c9f115b14f44d72d3be608d9",
+      "set_pixels": 176
+    },
+    {
+      "id": 1,
+      "size": 12,
+      "offset": 122,
+      "bytes": 18,
+      "sha256": "73b6477c7d2a4843a2f7b3ce44a73cf52031a8381197477cbaeda88d7e0e6b60",
+      "set_pixels": 62
+    },
+    {
+      "id": 1,
+      "size": 16,
+      "offset": 140,
+      "bytes": 32,
+      "sha256": "48ef35ce8a99026229da450a341b41e432b368f19429bf12809a5e8014fe14e5",
+      "set_pixels": 79
+    },
+    {
+      "id": 1,
+      "size": 24,
+      "offset": 172,
+      "bytes": 72,
+      "sha256": "64246e678ca695eb13a41cc388a8363a66c54f3e6366e7d424076b9875855620",
+      "set_pixels": 180
+    },
+    {
+      "id": 2,
+      "size": 12,
+      "offset": 244,
+      "bytes": 18,
+      "sha256": "924dc634fccada61703eb75cee5c68b100c8bc334897a3a8d0f803f9646064b5",
+      "set_pixels": 44
+    },
+    {
+      "id": 2,
+      "size": 16,
+      "offset": 262,
+      "bytes": 32,
+      "sha256": "188572c286d1c29f33fd06a065bd2f614394ff95dd9c8d9ecc0c5cc55e35be14",
+      "set_pixels": 80
+    },
+    {
+      "id": 2,
+      "size": 24,
+      "offset": 294,
+      "bytes": 72,
+      "sha256": "9daa436ccbdbdeece2786a5b2a7bde00c2fa4b629d93d23b63415919a77d9f46",
+      "set_pixels": 188
+    },
+    {
+      "id": 3,
+      "size": 12,
+      "offset": 366,
+      "bytes": 18,
+      "sha256": "f724511bb078ceb56ecaf7bead39fb7fceadcfad396c720c8a14bd7585f7d3a4",
+      "set_pixels": 30
+    },
+    {
+      "id": 3,
+      "size": 16,
+      "offset": 384,
+      "bytes": 32,
+      "sha256": "14dffd1005d7d3da982360f538c79aedc290bb8d9458e780f9261b6b918f282b",
+      "set_pixels": 42
+    },
+    {
+      "id": 3,
+      "size": 24,
+      "offset": 416,
+      "bytes": 72,
+      "sha256": "d3621c01d18bcb816f8e6737e435f1c4a2cc820aa4a9ecdc87aa4f225bc3d308",
+      "set_pixels": 94
+    },
+    {
+      "id": 4,
+      "size": 12,
+      "offset": 488,
+      "bytes": 18,
+      "sha256": "280e198b4f75bb0ed01940267f477cacc3c5d5238d74892a247698b81360f5a9",
+      "set_pixels": 36
+    },
+    {
+      "id": 4,
+      "size": 16,
+      "offset": 506,
+      "bytes": 32,
+      "sha256": "fa0b5d61f08165e8a9a8827f11b66f64fb34a5d5a2906123d654ad59b89ce3ac",
+      "set_pixels": 67
+    },
+    {
+      "id": 4,
+      "size": 24,
+      "offset": 538,
+      "bytes": 72,
+      "sha256": "988c5cad5beff17335e723c17b1b38b4386a96cbfbd0e00a7c4d60e97a087e5d",
+      "set_pixels": 144
+    },
+    {
+      "id": 5,
+      "size": 12,
+      "offset": 610,
+      "bytes": 18,
+      "sha256": "d701fd16da19ced380ebfea37cbf20d0ecba22e00b50ee22e9ba6687ecc9d809",
+      "set_pixels": 29
+    },
+    {
+      "id": 5,
+      "size": 16,
+      "offset": 628,
+      "bytes": 32,
+      "sha256": "0984a7556917f8d84a549dc73ec7127182ab5644c016fd004abdffd5a2332fd4",
+      "set_pixels": 41
+    },
+    {
+      "id": 5,
+      "size": 24,
+      "offset": 660,
+      "bytes": 72,
+      "sha256": "1fe8c97b2fef26c0ae3723f07238b8dde3b8451a42c3859b60fcc30cfb821248",
+      "set_pixels": 90
+    },
+    {
+      "id": 6,
+      "size": 12,
+      "offset": 732,
+      "bytes": 18,
+      "sha256": "62872a4f39c247dfa23022fdd00c7347fd751f4da09384b36f0419d09f023b38",
+      "set_pixels": 46
+    },
+    {
+      "id": 6,
+      "size": 16,
+      "offset": 750,
+      "bytes": 32,
+      "sha256": "01c3dac4ca72a6b76fc443f274619e4b6afcfb86cec4d6d09f8343e265f7cf23",
+      "set_pixels": 86
+    },
+    {
+      "id": 6,
+      "size": 24,
+      "offset": 782,
+      "bytes": 72,
+      "sha256": "5bf97f66aaacef1c719823ec7245e61f4fe98c07e7f30d0641eb747ffb8357bd",
+      "set_pixels": 160
+    },
+    {
+      "id": 7,
+      "size": 12,
+      "offset": 854,
+      "bytes": 18,
+      "sha256": "2961e2e794c5fb557842ae7fc3f83c4e4b228beb531ee815571550777ed08d8a",
+      "set_pixels": 26
+    },
+    {
+      "id": 7,
+      "size": 16,
+      "offset": 872,
+      "bytes": 32,
+      "sha256": "9e4c7a286915f0282be28a1ccfa6d34ef59f76ed51c7b80b2cc724e7c750fc2b",
+      "set_pixels": 34
+    },
+    {
+      "id": 7,
+      "size": 24,
+      "offset": 904,
+      "bytes": 72,
+      "sha256": "d5a4f7b9ad933b214c1df3c7d12ab7d4a967b083ef6c24387b0412ca8724fa84",
+      "set_pixels": 66
+    },
+    {
+      "id": 8,
+      "size": 12,
+      "offset": 976,
+      "bytes": 18,
+      "sha256": "fdf46a98615975bf07f28d0ccd6d12fdb28ce2d253b9cfbf94483e3a64fcfbc7",
+      "set_pixels": 14
+    },
+    {
+      "id": 8,
+      "size": 16,
+      "offset": 994,
+      "bytes": 32,
+      "sha256": "f188e39df0be3b8f217f26db2c017224cb8d4ead71506f57a54e7941125e4468",
+      "set_pixels": 26
+    },
+    {
+      "id": 8,
+      "size": 24,
+      "offset": 1026,
+      "bytes": 72,
+      "sha256": "b37525c56bfa1c7d55a8e2a62ad1563f0beb6b2f7e2d78e09dcb4a24da046cde",
+      "set_pixels": 40
+    },
+    {
+      "id": 9,
+      "size": 12,
+      "offset": 1098,
+      "bytes": 18,
+      "sha256": "c949fcc8d53af32faca2707ba131b17846e7570fcf08b7495ce8b44c5fe19efe",
+      "set_pixels": 14
+    },
+    {
+      "id": 9,
+      "size": 16,
+      "offset": 1116,
+      "bytes": 32,
+      "sha256": "f093c787dc86b04866c445ecae563ec639334821e9815c9fa3308c261296f460",
+      "set_pixels": 26
+    },
+    {
+      "id": 9,
+      "size": 24,
+      "offset": 1148,
+      "bytes": 72,
+      "sha256": "4f16e77c4de35f837f7ace8a3cd99d9fb2c3b90428f9b911413aa7241d04ab98",
+      "set_pixels": 40
+    },
+    {
+      "id": 10,
+      "size": 12,
+      "offset": 1220,
+      "bytes": 18,
+      "sha256": "7dd0d3eae44f37e0dbe5f321b7ee3d6bf2a43ca82457111a7efa9f67c0afe176",
+      "set_pixels": 14
+    },
+    {
+      "id": 10,
+      "size": 16,
+      "offset": 1238,
+      "bytes": 32,
+      "sha256": "84cf05a777da2cda3e827a4d870f6196d009a5c0a197f52723e192fe3a22b848",
+      "set_pixels": 26
+    },
+    {
+      "id": 10,
+      "size": 24,
+      "offset": 1270,
+      "bytes": 72,
+      "sha256": "be8a58d47295e0a55744042a03735185cf4a18b2cbb1255377876249af33979b",
+      "set_pixels": 40
+    },
+    {
+      "id": 11,
+      "size": 12,
+      "offset": 1342,
+      "bytes": 18,
+      "sha256": "c38c721948dcc6a28563514cf91a740ea9fb6223155db9241428578074a9aa2d",
+      "set_pixels": 14
+    },
+    {
+      "id": 11,
+      "size": 16,
+      "offset": 1360,
+      "bytes": 32,
+      "sha256": "52710abf4500275eeb4afb8bc4e32bf661a30770446f25f51d816832cc5d8650",
+      "set_pixels": 26
+    },
+    {
+      "id": 11,
+      "size": 24,
+      "offset": 1392,
+      "bytes": 72,
+      "sha256": "242c559093b0385379e50ced8cce8b8b142e2867c2e6c22824350e2fa7d1c834",
+      "set_pixels": 40
+    },
+    {
+      "id": 12,
+      "size": 12,
+      "offset": 1464,
+      "bytes": 18,
+      "sha256": "6a4538121813122aa4152c2caf970b8c35aa48310eaa54cda0af64bcfd28bed4",
+      "set_pixels": 48
+    },
+    {
+      "id": 12,
+      "size": 16,
+      "offset": 1482,
+      "bytes": 32,
+      "sha256": "b2c6d57cfc81aab9af4a3d347093a6ae7c2cb45fc00d9d405c74232d97e24a27",
+      "set_pixels": 72
+    },
+    {
+      "id": 12,
+      "size": 24,
+      "offset": 1514,
+      "bytes": 72,
+      "sha256": "7758af6d7842d9818b8a483ccfb6585b449c835175e6c358a54e355d46b02108",
+      "set_pixels": 108
+    },
+    {
+      "id": 13,
+      "size": 12,
+      "offset": 1586,
+      "bytes": 18,
+      "sha256": "679cf1c0a956155aa3497dd6c3ca81df944436c8b143a46f42510e5bea647e9c",
+      "set_pixels": 35
+    },
+    {
+      "id": 13,
+      "size": 16,
+      "offset": 1604,
+      "bytes": 32,
+      "sha256": "fedf9d48b28efa89b25e33e1f320f24e321b4edf18eeaca7d16fd1a1f334ddd8",
+      "set_pixels": 58
+    },
+    {
+      "id": 13,
+      "size": 24,
+      "offset": 1636,
+      "bytes": 72,
+      "sha256": "e921159bbc944f560f5c75d9230ffc39b1608a8b2d4fa931b1c38eb6ae47db35",
+      "set_pixels": 125
+    },
+    {
+      "id": 14,
+      "size": 12,
+      "offset": 1708,
+      "bytes": 18,
+      "sha256": "f43e1dfb1ec39db185818ec49af9b57181ddbc83b9026a6f5cabb2aab8d64ac5",
+      "set_pixels": 42
+    },
+    {
+      "id": 14,
+      "size": 16,
+      "offset": 1726,
+      "bytes": 32,
+      "sha256": "30a48aae520e842ece0471f6e8a3a9feeb59d43932cc73e850c63dfd82e9f312",
+      "set_pixels": 64
+    },
+    {
+      "id": 14,
+      "size": 24,
+      "offset": 1758,
+      "bytes": 72,
+      "sha256": "a719cc4203bbf30e49ac89d653bd177201c6b5a95250d9872cee2e362fde07ff",
+      "set_pixels": 138
+    },
+    {
+      "id": 15,
+      "size": 12,
+      "offset": 1830,
+      "bytes": 18,
+      "sha256": "5af69e64638020dfba9d376af297abfdcde25973442316727673cf136440dda7",
+      "set_pixels": 44
+    },
+    {
+      "id": 15,
+      "size": 16,
+      "offset": 1848,
+      "bytes": 32,
+      "sha256": "27d9a0b895b9dbb3aa7f95a4601dca662dac83c76cd997fad6ba8cdc501ddced",
+      "set_pixels": 77
+    },
+    {
+      "id": 15,
+      "size": 24,
+      "offset": 1880,
+      "bytes": 72,
+      "sha256": "449cac940e9773ae08083b9646cf1540c4035cb3bbaa59cc357b946140ddc52c",
+      "set_pixels": 141
+    },
+    {
+      "id": 16,
+      "size": 12,
+      "offset": 1952,
+      "bytes": 18,
+      "sha256": "080eba2199796f41b033aadfec079cefa020cf5b7e873867194702db8073cc0c",
+      "set_pixels": 36
+    },
+    {
+      "id": 16,
+      "size": 16,
+      "offset": 1970,
+      "bytes": 32,
+      "sha256": "49f1d40a71ec663f426a033e0781929047351c067844b916d7314f26d364669c",
+      "set_pixels": 58
+    },
+    {
+      "id": 16,
+      "size": 24,
+      "offset": 2002,
+      "bytes": 72,
+      "sha256": "76811db8c9c4f48170e0cde522fc13b2ec01cc5f74c07bcb1b83e5f0352c6dd3",
+      "set_pixels": 136
+    },
+    {
+      "id": 17,
+      "size": 12,
+      "offset": 2074,
+      "bytes": 18,
+      "sha256": "0e99bf639fe620559578f9e32690b6e66af19c4ffd6e57a47dd51a378c23d5d4",
+      "set_pixels": 68
+    },
+    {
+      "id": 17,
+      "size": 16,
+      "offset": 2092,
+      "bytes": 32,
+      "sha256": "916ee7c3b966f35e9842795ed6fa71abf92f3a4dc8c00c4b49bdcdf65ce7593e",
+      "set_pixels": 86
+    },
+    {
+      "id": 17,
+      "size": 24,
+      "offset": 2124,
+      "bytes": 72,
+      "sha256": "62f80cf0ad8122a3d77941f62f822bd3fe70dee390f2c9edda4d67540ed75341",
+      "set_pixels": 196
+    }
+  ],
+  "renderer_lock": {
+    "requirements.lock.json": "cc5f3764cc51c25e016d2943fbef02e1052c3c64820c40ac0c084dda964fbf1f",
+    "requirements.txt": "b77c332f1f44bf92ca6a4ae330c1ce02e9c60f5b5148678297950c253f4bb69a"
+  }
+}

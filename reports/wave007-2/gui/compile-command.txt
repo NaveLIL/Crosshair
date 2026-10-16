@@ -1,0 +1,1 @@
+xcrun swiftc tools/crosshair_gui.swift -O -framework AppKit -o target/artifacts/shell/gui/crosshair-gui

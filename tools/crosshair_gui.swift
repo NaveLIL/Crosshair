@@ -9,7 +9,6 @@ private let screenHeight = 320
 private let rgbBytes = screenWidth * screenHeight * 3
 private let maximumPPMBytes = rgbBytes + 4096
 private let pointerScalarBase: UInt32 = 0xf0000
-private let automatedEventMarker: Int64 = 0x435248525450
 private struct AutomatedEventSignature: Hashable {
     let type: UInt
     let timestamp: TimeInterval
@@ -17,7 +16,7 @@ private struct AutomatedEventSignature: Hashable {
     init(_ event: NSEvent) {
         type = event.type.rawValue
         timestamp = event.timestamp
-        keyCode = event.type == .keyDown ? event.keyCode : 0
+        keyCode = event.type == .keyDown || event.type == .keyUp ? event.keyCode : 0
     }
 }
 @MainActor private var queuedAutomatedEvents: Set<AutomatedEventSignature> = []
@@ -26,11 +25,10 @@ private struct AutomatedEventSignature: Hashable {
     // Explicit test windows may be focused while the owner types elsewhere.
     // Mark only our posted events, so unrelated physical input cannot alter an
     // automated trace. Normal live windows apply no such filter.
-    event.cgEvent?.setIntegerValueField(.eventSourceUserData, value: automatedEventMarker)
     // Keep the original NSEvent: recreating a mouse event from CGEvent loses
     // its NSWindow-relative routing. AppKit may copy posted events, so match
     // their preserved type/timestamp/keycode fields in this bounded registry.
-    if event.type == .keyDown || event.type == .leftMouseDown {
+    if [.keyDown, .keyUp, .leftMouseDown, .leftMouseDragged, .leftMouseUp].contains(event.type) {
         queuedAutomatedEvents.insert(AutomatedEventSignature(event))
     }
     NSApplication.shared.postEvent(event, atStart: false)
@@ -163,8 +161,26 @@ private func eventWires(keyCode: UInt16, characters: String) -> [UInt32] {
         let value = scalar.value
         // AppKit function-key scalars are not printable text. The four PUA
         // controls above are emitted only by the explicit keycode mapping.
-        guard value >= 0x20 && value != 0x7f && !(0xe000...0xf8ff).contains(value) && !(pointerScalarBase...0x10ffff).contains(value) else { return nil }
+        guard value >= 0x20 && value != 0x7f && !(0xe000...0xf8ff).contains(value) && !(0x90000...0x10ffff).contains(value) else { return nil }
         return UInt32(8 << 24) | value
+    }
+}
+
+// Semantic IDs belong to the emulator adapter; these are not PDA scan codes.
+private func hardwareKey(_ keyCode: UInt16) -> Int? {
+    switch keyCode {
+    case 126: return 0
+    case 125: return 1
+    case 123: return 2
+    case 124: return 3
+    case 36, 76: return 4
+    case 53: return 5
+    case 109: return 12 // F10: Shell-owned system panel
+    case 115, 118: return 7
+    case 122: return 11 // F1: Shell-owned Start
+    case 120: return 9 // F2: current context action
+    case 99: return 10
+    default: return nil
     }
 }
 
@@ -180,6 +196,13 @@ private final class GuestView: NSView {
     private var previousRGB: Data?
     private var timer: Timer?
     private(set) var ignoredTestInputs = 0
+    private var pressClock: TimeInterval?
+    private var pressPoint: (Int, Int)?
+    private var lastPoint: (Int, Int)?
+    private var movedSincePress = false
+    private var sentHold = false
+    private var holdTimer: Timer?
+    private var heldKeys: Set<Int> = []
     override var acceptsFirstResponder: Bool { true }
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 
@@ -218,14 +241,64 @@ private final class GuestView: NSView {
         image.draw(in: destination, from: .zero, operation: .copy, fraction: 1)
     }
 
+    private func emitPointer(_ phase: Int, _ x: Int = 0, _ y: Int = 0, held: Int = 0) {
+        emit("pointer \(phase) \(x) \(y) \(held)")
+    }
+    private func clearPointer() {
+        holdTimer?.invalidate(); holdTimer = nil
+        pressClock = nil; pressPoint = nil; lastPoint = nil
+        movedSincePress = false; sentHold = false
+    }
+    func cancelSource() {
+        if pressClock != nil || !heldKeys.isEmpty { emit("event \(UInt32(0x0800e007))") }
+        clearPointer(); heldKeys.removeAll()
+    }
+    private func cancelPointer() {
+        if pressClock != nil { emitPointer(4) }
+        clearPointer()
+    }
     override func mouseDown(with event: NSEvent) {
         guard acceptsInput(event) else { return }
-        // NSEvent locations are window points (already independent of backing
-        // scale). Only taps inside the actual guest image enter the FIFO.
         let point = convert(event.locationInWindow, from: nil)
-        guard let (x, y) = logicalPoint(point, in: bounds), let wire = pointerWire(x: x, y: y) else { return }
+        guard let (x, y) = logicalPoint(point, in: bounds) else { cancelPointer(); return }
+        cancelPointer()
         window?.makeFirstResponder(self)
-        emit("event \(wire)")
+        // Use actual monotonic receipt time, never NSEvent's timestamp. Test
+        // routing timestamps are deliberately synthetic future integers.
+        pressClock = ProcessInfo.processInfo.systemUptime
+        pressPoint = (x,y); lastPoint = (x,y)
+        emitPointer(1,x,y)
+        holdTimer = Timer.scheduledTimer(withTimeInterval: 0.025, repeats: true) { [weak self] timer in
+            MainActor.assumeIsolated {
+                guard let self, let started = self.pressClock, let point = self.lastPoint,
+                      !self.movedSincePress, !self.sentHold else { timer.invalidate(); return }
+                let elapsed = ProcessInfo.processInfo.systemUptime - started
+                if elapsed >= 0.6 {
+                    let millis = Int(min(elapsed * 1000, Double(UInt32.max)))
+                    self.emitPointer(5,point.0,point.1,held:millis)
+                    self.sentHold = true
+                    timer.invalidate()
+                }
+            }
+        }
+    }
+    override func mouseDragged(with event: NSEvent) {
+        guard acceptsInput(event), pressClock != nil else { return }
+        let point = convert(event.locationInWindow, from: nil)
+        guard let (x,y) = logicalPoint(point, in: bounds) else { cancelPointer(); return }
+        if lastPoint?.0 != x || lastPoint?.1 != y {
+            movedSincePress = true
+            holdTimer?.invalidate(); holdTimer = nil
+            lastPoint = (x,y)
+            emitPointer(2,x,y)
+        }
+    }
+    override func mouseUp(with event: NSEvent) {
+        guard acceptsInput(event), pressClock != nil else { return }
+        let point = convert(event.locationInWindow, from: nil)
+        guard let (x,y) = logicalPoint(point, in: bounds) else { cancelPointer(); return }
+        emitPointer(3,x,y)
+        clearPointer()
     }
 
     private func acceptsInput(_ event: NSEvent) -> Bool {
@@ -238,15 +311,28 @@ private final class GuestView: NSView {
     override func keyDown(with event: NSEvent) {
         guard acceptsInput(event) else { return }
         guard !event.modifierFlags.contains(.command) else { super.keyDown(with: event); return }
-        for wire in eventWires(keyCode: event.keyCode, characters: event.characters ?? "") {
-            emit("event \(wire)")
+        if let key = hardwareKey(event.keyCode) {
+            heldKeys.insert(key)
+            emit("key \(event.isARepeat ? 1 : 0) \(key)")
+        } else {
+            for wire in eventWires(keyCode: event.keyCode, characters: event.characters ?? "") {
+                emit("event \(wire)")
+            }
         }
+    }
+    override func keyUp(with event: NSEvent) {
+        guard acceptsInput(event), let key = hardwareKey(event.keyCode) else { return }
+        heldKeys.remove(key)
+        emit("key 2 \(key)")
     }
 }
 
 private enum NativeTestEvent {
     case key(UInt16, String)
     case pointer(Int, Int)
+    case mouse(NSEvent.EventType, Int, Int)
+    case keyEdge(UInt16, NSEvent.EventType, Bool)
+    case pause
 }
 
 @MainActor
@@ -256,17 +342,20 @@ private final class ApplicationDelegate: NSObject, NSApplicationDelegate, NSWind
     private var sentQuit = false
     private let windowTest: Bool
     private let pointerWindowTest: Bool
+    private let adaptiveWindowTest: Bool
     private var testTimer: Timer?
-    init(path: String, windowTest: Bool = false, pointerWindowTest: Bool = false) {
+    init(path: String, windowTest: Bool = false, pointerWindowTest: Bool = false, adaptiveWindowTest: Bool = false) {
         framePath = path; self.windowTest = windowTest; self.pointerWindowTest = pointerWindowTest
+        self.adaptiveWindowTest = adaptiveWindowTest
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let view = GuestView(path: framePath, automated: windowTest || pointerWindowTest)
+        let view = GuestView(path: framePath, automated: windowTest || pointerWindowTest || adaptiveWindowTest)
         let next = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 480, height: 640),
                             styleMask: [.titled, .closable, .miniaturizable, .resizable],
                             backing: .buffered, defer: false)
         next.title = "Crosshair Shell0.1 — ARM QEMU"
+        if windowTest || pointerWindowTest || adaptiveWindowTest { next.animationBehavior = .none }
         next.contentView = view
         next.contentMinSize = NSSize(width: CGFloat(screenWidth), height: CGFloat(screenHeight))
         next.contentAspectRatio = NSSize(width: CGFloat(screenWidth), height: CGFloat(screenHeight))
@@ -276,18 +365,26 @@ private final class ApplicationDelegate: NSObject, NSApplicationDelegate, NSWind
         next.makeKeyAndOrderFront(nil)
         next.makeFirstResponder(view)
         window = next
-        if !windowTest && !pointerWindowTest {
+        if !windowTest && !pointerWindowTest && !adaptiveWindowTest {
             NSApplication.shared.activate(ignoringOtherApps: true)
         }
-        if windowTest || pointerWindowTest {
+        if windowTest || pointerWindowTest || adaptiveWindowTest {
             emit("window-ready \(next.isVisible ? 1 : 0)")
             // Only the explicit test flag schedules input and closes the window.
             // Events traverse NSApplication's normal key-window/first-responder
             // routing, then the same FIFO bridge as physical MacBook keys.
-            let events: [NativeTestEvent] = pointerWindowTest
-                ? [.pointer(40, 68), .key(53, ""), .pointer(25, 12), .key(31, "О"),
-                   .key(36, ""), .pointer(227, 12), .key(115, "")]
-                : [.key(122, ""), .key(36, ""), .key(53, ""), .key(115, "")]
+            let adaptiveEvents: [NativeTestEvent] = [
+                .mouse(.leftMouseDown,40,68), .mouse(.leftMouseDragged,130,150),
+                .mouse(.leftMouseDragged,40,68), .mouse(.leftMouseUp,40,68),
+                .mouse(.leftMouseDown,40,68), .pause,.pause,.pause,.pause,.pause,.pause,.pause,.pause,
+                .mouse(.leftMouseUp,40,68), .key(53,""),
+                .keyEdge(125,.keyDown,false), .keyEdge(125,.keyDown,true), .keyEdge(125,.keyDown,true), .keyEdge(125,.keyUp,false),
+                .key(36,""), .key(109,""), .pointer(30,214), .key(109,""), .pointer(30,240),
+                .pointer(230,8), .pointer(30,188), .key(118,"")]
+            let events: [NativeTestEvent] = adaptiveWindowTest ? adaptiveEvents : pointerWindowTest
+                ? [.pointer(40, 68), .key(53, ""), .pointer(12, 8), .key(31, "О"),
+                   .key(36, ""), .pointer(227, 12), .key(118, "")]
+                : [.key(122, ""), .key(36, ""), .key(53, ""), .key(118, "")]
             // Regression fixture: unrelated text follows the normal AppKit
             // route but is absent from the explicit test-event registry.
             Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak next] _ in
@@ -300,7 +397,7 @@ private final class ApplicationDelegate: NSObject, NSApplicationDelegate, NSWind
                 }
             }
             var step = 0
-            testTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: true) { [weak self, weak next] timer in
+            testTimer = Timer.scheduledTimer(withTimeInterval: adaptiveWindowTest ? 0.12 : 0.7, repeats: true) { [weak self, weak next] timer in
                 MainActor.assumeIsolated {
                     guard let self, let next else { timer.invalidate(); return }
                     if step == events.count {
@@ -313,10 +410,29 @@ private final class ApplicationDelegate: NSObject, NSApplicationDelegate, NSWind
                     let testTimestamp = floor(ProcessInfo.processInfo.systemUptime) + 1000 + Double(step)
                     switch events[step] {
                     case .key(let code, let characters):
-                        if let event = NSEvent.keyEvent(with: .keyDown, location: .zero,
-                            modifierFlags: [], timestamp: testTimestamp,
-                            windowNumber: next.windowNumber, context: nil, characters: characters,
-                            charactersIgnoringModifiers: characters, isARepeat: false, keyCode: code) {
+                        for type in [NSEvent.EventType.keyDown, .keyUp] {
+                            if let event = NSEvent.keyEvent(with: type, location: .zero,
+                                modifierFlags: [], timestamp: testTimestamp,
+                                windowNumber: next.windowNumber, context: nil, characters: characters,
+                                charactersIgnoringModifiers: characters, isARepeat: false, keyCode: code) {
+                                postAutomatedEvent(event)
+                            }
+                        }
+                    case .pause:
+                        break
+                    case .keyEdge(let code, let type, let repeated):
+                        if let event = NSEvent.keyEvent(with: type, location: .zero,
+                            modifierFlags: [], timestamp: testTimestamp, windowNumber: next.windowNumber,
+                            context: nil, characters: "", charactersIgnoringModifiers: "", isARepeat: repeated, keyCode: code) {
+                            postAutomatedEvent(event)
+                        }
+                    case .mouse(let type, let x, let y):
+                        guard let rectangle = contentRectangle(in: view.bounds) else { return }
+                        let point = NSPoint(x: rectangle.minX + (CGFloat(x)+0.5)*rectangle.width/CGFloat(screenWidth),
+                                            y: rectangle.maxY - (CGFloat(y)+0.5)*rectangle.height/CGFloat(screenHeight))
+                        if let event = NSEvent.mouseEvent(with: type, location: view.convert(point,to:nil),
+                            modifierFlags: [], timestamp: testTimestamp, windowNumber: next.windowNumber,
+                            context: nil, eventNumber: step, clickCount: 1, pressure: type == .leftMouseUp ? 0 : 1) {
                             postAutomatedEvent(event)
                         }
                     case .pointer(let x, let y):
@@ -339,7 +455,11 @@ private final class ApplicationDelegate: NSObject, NSApplicationDelegate, NSWind
             }
         }
     }
+    func windowDidResignKey(_ notification: Notification) {
+        (window?.contentView as? GuestView)?.cancelSource()
+    }
     func windowWillClose(_ notification: Notification) {
+        (window?.contentView as? GuestView)?.cancelSource()
         requestQuit()
         NSApplication.shared.terminate(nil)
     }
@@ -399,8 +519,13 @@ private func selfTest() throws {
           logicalPoint(.zero, in: .zero) == nil,
           pointerWire(x: -1, y: 0) == nil, pointerWire(x: 240, y: 0) == nil,
           pointerWire(x: 0, y: 320) == nil,
-          eventWires(keyCode: 0, characters: "\u{f0000}\u{103fef}\u{10ffff}") == [] else {
+          eventWires(keyCode: 0, characters: "\u{90000}\u{d0000}\u{f0000}\u{103fef}\u{10ffff}") == [] else {
         throw ViewerError.invalid("Invalid pointer or reserved text accepted")
+    }
+    let hardwareFixtures: [(UInt16,Int)] = [(126,0),(125,1),(123,2),(124,3),(36,4),(53,5),
+                                           (115,7),(118,7),(122,11),(120,9),(99,10),(109,12)]
+    for (code,key) in hardwareFixtures {
+        guard hardwareKey(code) == key else { throw ViewerError.invalid("Hardware semantic key mapping failed") }
     }
     var header = Data("P6\n# QMP fixture\n240 320\n255\n".utf8)
     var pixels = Data(repeating: 0x5a, count: rgbBytes)
@@ -430,7 +555,7 @@ if arguments.count == 2 && arguments[1] == "--self-test" {
         print("{\"width\":240,\"height\":320,\"rgb_bytes\":\(frame.rgb.count),\"rgb_fnv1a64\":\"\(String(format: "%016llx", frame.checksum))\"}")
     } catch { fputs("\(error)\n", stderr); exit(1) }
 } else if (arguments.count == 2 && !arguments[1].hasPrefix("--")) ||
-          (arguments.count == 3 && ["--window-test", "--pointer-window-test"].contains(arguments[1])) {
+          (arguments.count == 3 && ["--window-test", "--pointer-window-test", "--adaptive-window-test"].contains(arguments[1])) {
     // The executable's synchronous top-level entry runs on the main thread.
     // No AppKit object is constructed on a worker or the headless test paths.
     MainActor.assumeIsolated {
@@ -438,7 +563,8 @@ if arguments.count == 2 && arguments[1] == "--self-test" {
         let testing = arguments.count == 3
         let delegate = ApplicationDelegate(path: arguments[testing ? 2 : 1],
             windowTest: testing && arguments[1] == "--window-test",
-            pointerWindowTest: testing && arguments[1] == "--pointer-window-test")
+            pointerWindowTest: testing && arguments[1] == "--pointer-window-test",
+            adaptiveWindowTest: testing && arguments[1] == "--adaptive-window-test")
         app.setActivationPolicy(.regular)
         app.delegate = delegate
         let menu = NSMenu()
@@ -452,6 +578,6 @@ if arguments.count == 2 && arguments[1] == "--self-test" {
         withExtendedLifetime(delegate) {}
     }
 } else {
-    fputs("Usage: crosshair-gui FRAME.ppm | --self-test | --inspect-ppm FRAME.ppm | --window-test FRAME.ppm | --pointer-window-test FRAME.ppm\n", stderr)
+    fputs("Usage: crosshair-gui FRAME.ppm | --self-test | --inspect-ppm FRAME.ppm | --window-test FRAME.ppm | --pointer-window-test FRAME.ppm | --adaptive-window-test FRAME.ppm\n", stderr)
     exit(2)
 }

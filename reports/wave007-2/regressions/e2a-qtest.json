@@ -1,0 +1,125 @@
+{
+  "result": "PASS",
+  "machine": "crosshair-blueangel-e2a",
+  "scope": "register-level synthetic subset; no guest instructions in QTest, no physical HTC traces",
+  "qemu_version": "QEMU emulator version 9.2.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "qemu_sha256": "ea9dbd311573eda256ec3c4057305af0f8b73f8002e3ab922115c960acda1458",
+  "command": [
+    "<workspace>/../qemu-blueangel/bin/qemu-system-arm",
+    "-machine",
+    "crosshair-blueangel-e2a",
+    "-accel",
+    "qtest",
+    "-S",
+    "-display",
+    "none",
+    "-monitor",
+    "none",
+    "-serial",
+    "file:<artifacts>/e2a-qtest/qemu-uart.log",
+    "-nic",
+    "none",
+    "-d",
+    "guest_errors",
+    "-qmp",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest-log",
+    "<artifacts>/e2a-qtest/qemu-qtest.log"
+  ],
+  "cpu_before": "\r\nCPU#0\r\nR00=00000000 R01=00000000 R02=00000000 R03=00000000\r\nR04=00000000 R05=00000000 R06=00000000 R07=00000000\r\nR08=00000000 R09=00000000 R10=00000000 R11=00000000\r\nR12=00000000 R13=00000000 R14=00000000 R15=00000000\r\nPSR=400001d3 -Z-- A svc32\r\nFPSCR: 00000000\r\n",
+  "uart": {
+    "result": "PASS",
+    "base": 1074790400,
+    "register_shift": 2,
+    "transmitted_hex": "51"
+  },
+  "frequency": {
+    "result": "PASS",
+    "virtual_interval_ns": 1000000000,
+    "expected_hz": 3686400,
+    "observed_ticks": 3686400
+  },
+  "irq_transitions": {
+    "result": "PASS",
+    "outputs": {
+      "0": "CPU IRQ",
+      "1": "CPU FIQ"
+    },
+    "events": [
+      [
+        "raise",
+        0
+      ],
+      [
+        "lower",
+        0
+      ],
+      [
+        "raise",
+        1
+      ],
+      [
+        "lower",
+        1
+      ],
+      [
+        "raise",
+        1
+      ],
+      [
+        "lower",
+        1
+      ]
+    ]
+  },
+  "w1c_isolation": {
+    "result": "PASS",
+    "timer_channels": [
+      0,
+      1
+    ],
+    "pic_bits": [
+      26,
+      27
+    ]
+  },
+  "counter_rollover": {
+    "result": "PASS",
+    "initial_counter": 4294967280,
+    "match": 16,
+    "virtual_interval_ns": 1000000000,
+    "expected_counter": 3686384,
+    "observed_counter": 3686384
+  },
+  "reset": {
+    "result": "PASS",
+    "before": {
+      "OSMR0": 4096,
+      "OSCR": 4097,
+      "OIER": 3,
+      "OSSR": 1,
+      "ICMR": 67108864,
+      "ICLR": 67108864,
+      "ICPR": 67108864
+    },
+    "after": {
+      "OSMR0": 0,
+      "OSCR": 0,
+      "OIER": 0,
+      "OSSR": 0,
+      "ICMR": 0,
+      "ICLR": 0,
+      "ICPR": 0
+    },
+    "old_deadline_cancelled": true,
+    "post_reset_irq_tested": true
+  },
+  "invalid_mmio": {
+    "result": "PASS",
+    "state_unchanged": true,
+    "transaction_error_observation": "TCG data-abort tests in smoke_e2a.py; QTest alone does not expose MemTxResult"
+  },
+  "cpu_after": "\r\nCPU#0\r\nR00=00000000 R01=00000000 R02=00000000 R03=00000000\r\nR04=00000000 R05=00000000 R06=00000000 R07=00000000\r\nR08=00000000 R09=00000000 R10=00000000 R11=00000000\r\nR12=00000000 R13=00000000 R14=00000000 R15=00000000\r\nPSR=400001d3 -Z-- A svc32\r\nFPSCR: 00000000\r\n"
+}

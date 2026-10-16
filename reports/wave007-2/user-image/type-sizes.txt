@@ -1,0 +1,361 @@
+   Compiling crosshair-boot v0.1.0 (<workspace>)
+print-type-size type: `Framebuffer`: 153728 bytes, alignment: 8 bytes
+print-type-size     field `.before`: 64 bytes
+print-type-size     field `.pixels`: 153600 bytes
+print-type-size     field `.after`: 64 bytes
+print-type-size type: `crosshair_shell::Shell`: 296 bytes, alignment: 4 bytes
+print-type-size     field `.screen`: 4 bytes
+print-type-size     field `.history`: 32 bytes
+print-type-size     field `.query`: 64 bytes
+print-type-size     field `.pointer`: 12 bytes
+print-type-size     field `.build`: 24 bytes
+print-type-size     field `.runtime`: 48 bytes
+print-type-size     field `.render_stats`: 32 bytes
+print-type-size     field `.events_processed`: 4 bytes
+print-type-size     field `.revision`: 4 bytes
+print-type-size     field `.renders`: 4 bytes
+print-type-size     field `.scroll`: 12 bytes
+print-type-size     field `.gesture_serial`: 4 bytes
+print-type-size     field `.actions_invoked`: 4 bytes
+print-type-size     field `.input_cancels`: 4 bytes
+print-type-size     field `.last_phase`: 4 bytes
+print-type-size     field `.panel_invocations`: 4 bytes
+print-type-size     field `.mode_changes`: 4 bytes
+print-type-size     field `.last_key_phase`: 4 bytes
+print-type-size     field `.last_key`: 4 bytes
+print-type-size     field `.key_actions`: 4 bytes
+print-type-size     field `.modes`: 6 bytes
+print-type-size     field `.held_keys`: 2 bytes
+print-type-size     field `.dirty`: 1 bytes
+print-type-size     field `.history_len`: 1 bytes
+print-type-size     field `.desktop_selected`: 1 bytes
+print-type-size     field `.launcher_selected`: 1 bytes
+print-type-size     field `.query_len`: 1 bytes
+print-type-size     field `.settings_selected`: 1 bytes
+print-type-size     field `.today_selected`: 1 bytes
+print-type-size     field `.overlay`: 1 bytes
+print-type-size     field `.overlay_selected`: 1 bytes
+print-type-size     field `.theme`: 1 bytes
+print-type-size     field `.opened_mask`: 1 bytes
+print-type-size     field `.desktop_dirty`: 1 bytes
+print-type-size type: `core::result::Result<crosshair_ui::Surface<'_>, crosshair_ui::SurfaceError>`: 88 bytes, alignment: 4 bytes
+print-type-size     variant `Ok`: 88 bytes
+print-type-size         field `.0`: 88 bytes
+print-type-size     variant `Err`: 5 bytes
+print-type-size         padding: 4 bytes
+print-type-size         field `.0`: 1 bytes, alignment: 1 bytes
+print-type-size type: `crosshair_ui::Surface<'_>`: 88 bytes, alignment: 4 bytes
+print-type-size     field `.pixels`: 8 bytes
+print-type-size     field `.width`: 4 bytes
+print-type-size     field `.height`: 4 bytes
+print-type-size     field `.stride`: 4 bytes
+print-type-size     field `.dirty`: 68 bytes
+print-type-size type: `crosshair_shell::UxSnapshot`: 80 bytes, alignment: 4 bytes
+print-type-size     field `.version`: 4 bytes
+print-type-size     field `.chrome_mode`: 4 bytes
+print-type-size     field `.content_y`: 4 bytes
+print-type-size     field `.content_height`: 4 bytes
+print-type-size     field `.panel`: 4 bytes
+print-type-size     field `.pointer_active`: 4 bytes
+print-type-size     field `.pointer_target`: 4 bytes
+print-type-size     field `.pointer_cancelled`: 4 bytes
+print-type-size     field `.scroll_offset`: 4 bytes
+print-type-size     field `.scroll_max`: 4 bytes
+print-type-size     field `.gesture_serial`: 4 bytes
+print-type-size     field `.actions_invoked`: 4 bytes
+print-type-size     field `.input_cancels`: 4 bytes
+print-type-size     field `.last_phase`: 4 bytes
+print-type-size     field `.panel_invocations`: 4 bytes
+print-type-size     field `.mode_changes`: 4 bytes
+print-type-size     field `.held_keys`: 4 bytes
+print-type-size     field `.last_key_phase`: 4 bytes
+print-type-size     field `.last_key`: 4 bytes
+print-type-size     field `.key_actions`: 4 bytes
+print-type-size type: `crosshair_ui::DirtyRects`: 68 bytes, alignment: 4 bytes
+print-type-size     field `.rects`: 64 bytes
+print-type-size     field `.len`: 4 bytes
+print-type-size type: `crosshair_shell::Snapshot`: 64 bytes, alignment: 4 bytes
+print-type-size     field `.screen`: 4 bytes
+print-type-size     field `.desktop_selected`: 4 bytes
+print-type-size     field `.launcher_selected`: 4 bytes
+print-type-size     field `.settings_selected`: 4 bytes
+print-type-size     field `.today_selected`: 4 bytes
+print-type-size     field `.overlay`: 4 bytes
+print-type-size     field `.overlay_selected`: 4 bytes
+print-type-size     field `.theme`: 4 bytes
+print-type-size     field `.opened_mask`: 4 bytes
+print-type-size     field `.history_depth`: 4 bytes
+print-type-size     field `.events_processed`: 4 bytes
+print-type-size     field `.revision`: 4 bytes
+print-type-size     field `.renders`: 4 bytes
+print-type-size     field `.runtime_valid`: 4 bytes
+print-type-size     field `.runtime_ticks`: 4 bytes
+print-type-size     field `.runtime_switches`: 4 bytes
+print-type-size type: `crosshair_shell::RuntimeInfo`: 48 bytes, alignment: 4 bytes
+print-type-size     field `.version`: 4 bytes
+print-type-size     field `.valid`: 4 bytes
+print-type-size     field `.ticks`: 4 bytes
+print-type-size     field `.switches`: 4 bytes
+print-type-size     field `.task_count`: 4 bytes
+print-type-size     field `.ready_tasks`: 4 bytes
+print-type-size     field `.running_tasks`: 4 bytes
+print-type-size     field `.faulted_tasks`: 4 bytes
+print-type-size     field `.working_ram_bytes`: 4 bytes
+print-type-size     field `.events_delivered`: 4 bytes
+print-type-size     field `.input_overflows`: 4 bytes
+print-type-size     field `.reserved`: 4 bytes
+print-type-size type: `core::fmt::Formatter<'_>`: 36 bytes, alignment: 4 bytes
+print-type-size     field `.options`: 28 bytes
+print-type-size     field `.buf`: 8 bytes
+print-type-size type: `core::fmt::rt::Placeholder`: 32 bytes, alignment: 4 bytes
+print-type-size     field `.precision`: 8 bytes
+print-type-size     field `.width`: 8 bytes
+print-type-size     field `.fill`: 4 bytes
+print-type-size     field `.position`: 4 bytes
+print-type-size     field `.flags`: 4 bytes
+print-type-size     field `.align`: 1 bytes
+print-type-size     end padding: 3 bytes
+print-type-size type: `crosshair_shell::RenderStats`: 32 bytes, alignment: 4 bytes
+print-type-size     field `.wallpaper`: 16 bytes
+print-type-size     field `.dirty_rects`: 4 bytes
+print-type-size     field `.dirty_pixels`: 4 bytes
+print-type-size     field `.full`: 4 bytes
+print-type-size     field `.rendered`: 4 bytes
+print-type-size type: `core::fmt::FormattingOptions`: 28 bytes, alignment: 4 bytes
+print-type-size     field `.width`: 8 bytes
+print-type-size     field `.precision`: 8 bytes
+print-type-size     field `.fill`: 4 bytes
+print-type-size     field `.flags`: 4 bytes
+print-type-size     field `.align`: 1 bytes
+print-type-size     end padding: 3 bytes
+print-type-size type: `core::fmt::Arguments<'_>`: 24 bytes, alignment: 4 bytes
+print-type-size     field `.pieces`: 8 bytes
+print-type-size     field `.args`: 8 bytes
+print-type-size     field `.fmt`: 8 bytes
+print-type-size type: `crosshair_shell::BuildInfo`: 24 bytes, alignment: 4 bytes
+print-type-size     field `.version`: 8 bytes
+print-type-size     field `.architecture`: 8 bytes
+print-type-size     field `.environment`: 8 bytes
+print-type-size type: `core::panic::Location<'_>`: 16 bytes, alignment: 4 bytes
+print-type-size     field `.file`: 8 bytes
+print-type-size     field `.line`: 4 bytes
+print-type-size     field `.col`: 4 bytes
+print-type-size type: `crosshair_shell::wallpaper::DrawStats`: 16 bytes, alignment: 4 bytes
+print-type-size     field `.packets_decoded`: 4 bytes
+print-type-size     field `.pixels_decoded`: 4 bytes
+print-type-size     field `.pixels_written`: 4 bytes
+print-type-size     field `.runs_written`: 4 bytes
+print-type-size type: `core::iter::Enumerate<core::slice::Iter<'_, u32>>`: 12 bytes, alignment: 4 bytes
+print-type-size     field `.iter`: 8 bytes
+print-type-size     field `.count`: 4 bytes
+print-type-size type: `core::panic::PanicInfo<'_>`: 12 bytes, alignment: 4 bytes
+print-type-size     field `.message`: 4 bytes
+print-type-size     field `.location`: 4 bytes
+print-type-size     field `.can_unwind`: 1 bytes
+print-type-size     field `.force_no_backtrace`: 1 bytes
+print-type-size     end padding: 2 bytes
+print-type-size type: `crosshair_shell::Action`: 12 bytes, alignment: 4 bytes
+print-type-size     discriminant: 1 bytes
+print-type-size     variant `PointerEvent`: 11 bytes
+print-type-size         padding: 1 bytes
+print-type-size         field `.x`: 2 bytes, alignment: 2 bytes
+print-type-size         field `.y`: 2 bytes
+print-type-size         padding: 2 bytes
+print-type-size         field `.phase`: 4 bytes, alignment: 4 bytes
+print-type-size     variant `Key`: 7 bytes
+print-type-size         padding: 3 bytes
+print-type-size         field `.0`: 4 bytes, alignment: 4 bytes
+print-type-size     variant `HardwareKey`: 7 bytes
+print-type-size         field `.key`: 1 bytes
+print-type-size         padding: 2 bytes
+print-type-size         field `.phase`: 4 bytes, alignment: 4 bytes
+print-type-size     variant `Pointer`: 5 bytes
+print-type-size         padding: 1 bytes
+print-type-size         field `.x`: 2 bytes, alignment: 2 bytes
+print-type-size         field `.y`: 2 bytes
+print-type-size     variant `PointerHold`: 3 bytes
+print-type-size         padding: 1 bytes
+print-type-size         field `.millis`: 2 bytes, alignment: 2 bytes
+print-type-size     variant `Home`: 0 bytes
+print-type-size     variant `SoftLeft`: 0 bytes
+print-type-size     variant `SoftRight`: 0 bytes
+print-type-size     variant `SwitchTask`: 0 bytes
+print-type-size     variant `Start`: 0 bytes
+print-type-size     variant `SystemPanel`: 0 bytes
+print-type-size     variant `CancelInput`: 0 bytes
+print-type-size type: `crosshair_shell::adaptive::PointerState`: 12 bytes, alignment: 2 bytes
+print-type-size     field `.target`: 2 bytes
+print-type-size     field `.start_y`: 2 bytes
+print-type-size     field `.x`: 2 bytes
+print-type-size     field `.y`: 2 bytes
+print-type-size     field `.active`: 1 bytes
+print-type-size     field `.cancelled`: 1 bytes
+print-type-size     field `.stationary`: 1 bytes
+print-type-size     end padding: 1 bytes
+print-type-size type: `core::fmt::rt::Argument<'_>`: 8 bytes, alignment: 4 bytes
+print-type-size     field `.ty`: 8 bytes
+print-type-size type: `core::fmt::rt::ArgumentType<'_>`: 8 bytes, alignment: 4 bytes
+print-type-size     variant `Placeholder`: 8 bytes
+print-type-size         field `.value`: 4 bytes
+print-type-size         field `.formatter`: 4 bytes
+print-type-size         field `._lifetime`: 0 bytes
+print-type-size     variant `Count`: 8 bytes
+print-type-size         padding: 4 bytes
+print-type-size         field `.0`: 4 bytes, alignment: 4 bytes
+print-type-size type: `core::fmt::rt::Count`: 8 bytes, alignment: 4 bytes
+print-type-size     discriminant: 4 bytes
+print-type-size     variant `Is`: 4 bytes
+print-type-size         field `.0`: 4 bytes
+print-type-size     variant `Param`: 4 bytes
+print-type-size         field `.0`: 4 bytes
+print-type-size     variant `Implied`: 0 bytes
+print-type-size type: `core::ops::Range<usize>`: 8 bytes, alignment: 4 bytes
+print-type-size     field `.start`: 4 bytes
+print-type-size     field `.end`: 4 bytes
+print-type-size type: `core::option::Option<&[core::fmt::rt::Placeholder]>`: 8 bytes, alignment: 4 bytes
+print-type-size     variant `Some`: 8 bytes
+print-type-size         field `.0`: 8 bytes
+print-type-size     variant `None`: 0 bytes
+print-type-size type: `core::option::Option<(usize, &u32)>`: 8 bytes, alignment: 4 bytes
+print-type-size     variant `Some`: 8 bytes
+print-type-size         field `.0`: 8 bytes
+print-type-size     variant `None`: 0 bytes
+print-type-size type: `core::option::Option<usize>`: 8 bytes, alignment: 4 bytes
+print-type-size     discriminant: 4 bytes
+print-type-size     variant `Some`: 4 bytes
+print-type-size         field `.0`: 4 bytes
+print-type-size     variant `None`: 0 bytes
+print-type-size type: `core::ptr::NonNull<[u32]>`: 8 bytes, alignment: 4 bytes
+print-type-size     field `.pointer`: 8 bytes
+print-type-size type: `core::result::Result<usize, ()>`: 8 bytes, alignment: 4 bytes
+print-type-size     discriminant: 4 bytes
+print-type-size     variant `Ok`: 4 bytes
+print-type-size         field `.0`: 4 bytes
+print-type-size     variant `Err`: 0 bytes
+print-type-size         field `.0`: 0 bytes
+print-type-size type: `core::slice::Iter<'_, crosshair_ui::Rect>`: 8 bytes, alignment: 4 bytes
+print-type-size     field `.ptr`: 4 bytes
+print-type-size     field `.end_or_len`: 4 bytes
+print-type-size     field `._marker`: 0 bytes
+print-type-size type: `core::slice::Iter<'_, u32>`: 8 bytes, alignment: 4 bytes
+print-type-size     field `.ptr`: 4 bytes
+print-type-size     field `.end_or_len`: 4 bytes
+print-type-size     field `._marker`: 0 bytes
+print-type-size type: `crosshair_ui::Rect`: 8 bytes, alignment: 2 bytes
+print-type-size     field `.x`: 2 bytes
+print-type-size     field `.y`: 2 bytes
+print-type-size     field `.width`: 2 bytes
+print-type-size     field `.height`: 2 bytes
+print-type-size type: `core::ops::ControlFlow<core::option::Option<core::convert::Infallible>, &u32>`: 4 bytes, alignment: 4 bytes
+print-type-size     variant `Continue`: 4 bytes
+print-type-size         field `.0`: 4 bytes
+print-type-size     variant `Break`: 0 bytes
+print-type-size         field `.0`: 0 bytes
+print-type-size type: `core::ops::RangeTo<usize>`: 4 bytes, alignment: 4 bytes
+print-type-size     field `.end`: 4 bytes
+print-type-size type: `core::option::Option<&crosshair_ui::Rect>`: 4 bytes, alignment: 4 bytes
+print-type-size     variant `Some`: 4 bytes
+print-type-size         field `.0`: 4 bytes
+print-type-size     variant `None`: 0 bytes
+print-type-size type: `core::option::Option<&u32>`: 4 bytes, alignment: 4 bytes
+print-type-size     variant `Some`: 4 bytes
+print-type-size         field `.0`: 4 bytes
+print-type-size     variant `None`: 0 bytes
+print-type-size type: `core::ptr::DynMetadata<dyn core::fmt::Debug>`: 4 bytes, alignment: 4 bytes
+print-type-size     field `._vtable_ptr`: 4 bytes
+print-type-size     field `._phantom`: 0 bytes
+print-type-size type: `core::ptr::DynMetadata<dyn core::fmt::Write>`: 4 bytes, alignment: 4 bytes
+print-type-size     field `._vtable_ptr`: 4 bytes
+print-type-size     field `._phantom`: 0 bytes
+print-type-size type: `core::ptr::NonNull<()>`: 4 bytes, alignment: 4 bytes
+print-type-size     field `.pointer`: 4 bytes
+print-type-size type: `core::ptr::NonNull<core::ptr::metadata::VTable>`: 4 bytes, alignment: 4 bytes
+print-type-size     field `.pointer`: 4 bytes
+print-type-size type: `core::ptr::NonNull<crosshair_ui::Rect>`: 4 bytes, alignment: 4 bytes
+print-type-size     field `.pointer`: 4 bytes
+print-type-size type: `core::ptr::NonNull<u32>`: 4 bytes, alignment: 4 bytes
+print-type-size     field `.pointer`: 4 bytes
+print-type-size type: `crosshair_shell::KeyPhase`: 4 bytes, alignment: 4 bytes
+print-type-size     discriminant: 4 bytes
+print-type-size     variant `Press`: 0 bytes
+print-type-size     variant `Repeat`: 0 bytes
+print-type-size     variant `Release`: 0 bytes
+print-type-size type: `crosshair_shell::PointerPhase`: 4 bytes, alignment: 4 bytes
+print-type-size     discriminant: 4 bytes
+print-type-size     variant `Press`: 0 bytes
+print-type-size     variant `Move`: 0 bytes
+print-type-size     variant `Release`: 0 bytes
+print-type-size     variant `Cancel`: 0 bytes
+print-type-size type: `crosshair_shell::Screen`: 4 bytes, alignment: 4 bytes
+print-type-size     discriminant: 4 bytes
+print-type-size     variant `Desktop`: 0 bytes
+print-type-size     variant `Today`: 0 bytes
+print-type-size     variant `Launcher`: 0 bytes
+print-type-size     variant `About`: 0 bytes
+print-type-size     variant `Diagnostics`: 0 bytes
+print-type-size     variant `Settings`: 0 bytes
+print-type-size type: `crosshair_ui::components::Event`: 4 bytes, alignment: 4 bytes
+print-type-size     variant `TextInput`: 4 bytes
+print-type-size         field `.0`: 4 bytes
+print-type-size     variant `Up`: 0 bytes
+print-type-size     variant `Down`: 0 bytes
+print-type-size     variant `Left`: 0 bytes
+print-type-size     variant `Right`: 0 bytes
+print-type-size     variant `Select`: 0 bytes
+print-type-size     variant `Back`: 0 bytes
+print-type-size     variant `Menu`: 0 bytes
+print-type-size type: `{closure@src/shell_user.rs:157:30: 157:39}`: 4 bytes, alignment: 4 bytes
+print-type-size     end padding: 4 bytes
+print-type-size type: `core::fmt::Alignment`: 1 bytes, alignment: 1 bytes
+print-type-size     discriminant: 1 bytes
+print-type-size     variant `Left`: 0 bytes
+print-type-size     variant `Right`: 0 bytes
+print-type-size     variant `Center`: 0 bytes
+print-type-size type: `core::fmt::rt::Alignment`: 1 bytes, alignment: 1 bytes
+print-type-size     discriminant: 1 bytes
+print-type-size     variant `Left`: 0 bytes
+print-type-size     variant `Right`: 0 bytes
+print-type-size     variant `Center`: 0 bytes
+print-type-size     variant `Unknown`: 0 bytes
+print-type-size type: `core::ops::ControlFlow<core::result::Result<core::convert::Infallible, ()>>`: 1 bytes, alignment: 1 bytes
+print-type-size     discriminant: 1 bytes
+print-type-size     variant `Continue`: 0 bytes
+print-type-size         field `.0`: 0 bytes
+print-type-size     variant `Break`: 0 bytes
+print-type-size         field `.0`: 0 bytes
+print-type-size type: `core::option::Option<core::fmt::Alignment>`: 1 bytes, alignment: 1 bytes
+print-type-size     variant `Some`: 1 bytes
+print-type-size         field `.0`: 1 bytes
+print-type-size     variant `None`: 0 bytes
+print-type-size type: `core::result::Result<(), ()>`: 1 bytes, alignment: 1 bytes
+print-type-size     discriminant: 1 bytes
+print-type-size     variant `Ok`: 0 bytes
+print-type-size         field `.0`: 0 bytes
+print-type-size     variant `Err`: 0 bytes
+print-type-size         field `.0`: 0 bytes
+print-type-size type: `core::result::Result<(), core::fmt::Error>`: 1 bytes, alignment: 1 bytes
+print-type-size     discriminant: 1 bytes
+print-type-size     variant `Ok`: 0 bytes
+print-type-size         field `.0`: 0 bytes
+print-type-size     variant `Err`: 0 bytes
+print-type-size         field `.0`: 0 bytes
+print-type-size type: `crosshair_ui::SurfaceError`: 1 bytes, alignment: 1 bytes
+print-type-size     discriminant: 1 bytes
+print-type-size     variant `Dimensions`: 0 bytes
+print-type-size     variant `Stride`: 0 bytes
+print-type-size     variant `Overflow`: 0 bytes
+print-type-size     variant `MemoryBudget`: 0 bytes
+print-type-size     variant `BufferTooShort`: 0 bytes
+print-type-size type: `core::convert::Infallible`: 0 bytes, alignment: 1 bytes
+print-type-size type: `core::fmt::Error`: 0 bytes, alignment: 1 bytes
+print-type-size type: `core::marker::PhantomData<&()>`: 0 bytes, alignment: 1 bytes
+print-type-size type: `core::marker::PhantomData<&crosshair_ui::Rect>`: 0 bytes, alignment: 1 bytes
+print-type-size type: `core::marker::PhantomData<&u32>`: 0 bytes, alignment: 1 bytes
+print-type-size type: `core::marker::PhantomData<dyn core::fmt::Debug>`: 0 bytes, alignment: 1 bytes
+print-type-size type: `core::marker::PhantomData<dyn core::fmt::Write>`: 0 bytes, alignment: 1 bytes
+print-type-size type: `core::option::Option<core::convert::Infallible>`: 0 bytes, alignment: 1 bytes
+print-type-size     variant `None`: 0 bytes
+print-type-size type: `core::result::Result<core::convert::Infallible, ()>`: 0 bytes, alignment: 1 bytes
+print-type-size     variant `Err`: 0 bytes
+print-type-size         field `.0`: 0 bytes
+    Finished `release` profile [optimized + debuginfo] target(s) in 2.40s

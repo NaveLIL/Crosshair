@@ -1,0 +1,41 @@
+{
+  "schema": "crosshair-wallpaper-v1",
+  "width": 240,
+  "height": 320,
+  "colors": 16,
+  "origin": "Created for Project Crosshair with the built-in imagegen tool on 2026-10-16; a new wallpaper, no drawn UI",
+  "licensing": "Project-provided generated resource, distributed under project MIT terms where applicable. The separate owner-provided visual reference retains its own provenance and is not relicensed.",
+  "reference": {
+    "path": "docs/design/crosshair-ui-reference-2026-10-16.png",
+    "role": "artistic direction only",
+    "sha256": "cf7aecb9a0ea4b288a8008a2b26c4b33ddca48a060c2d39fc7c60088c8ff8a07"
+  },
+  "source": {
+    "path": "crosshair-mist-source.png",
+    "bytes": 1863008,
+    "sha256": "ec39c947f8405a560d18abcd0224c976c9b37a1ff7b6852232ffa77afaf9ca77"
+  },
+  "prompt": {
+    "path": "PROMPT.txt",
+    "bytes": 1219,
+    "sha256": "3c77c396a568555396d9690af8a17b859c7e44840b254304810a5028835d3e16"
+  },
+  "transform": "Exact 3:4 source resized to 240x320 LANCZOS; Pillow MEDIANCUT16, no dithering; truncate RGB888 to RGB565; dark palette RGB565 channels *3//4",
+  "packing": "Each row independent: high4bits length minus1 (1..16), low4bits palette index; 321 little-endian u16 row offsets; 32 RGB565 u16 colors (classic16/night16)",
+  "toolchain": {
+    "python": "3.12.14",
+    "pillow": "12.3.0"
+  },
+  "dependency_lock": "shell/assets/tabler/requirements.txt (same pinned Pillow12.3.0 artifacts)",
+  "generated_path": "shell/src/wallpaper_assets.rs",
+  "mutable_decode_scratch_bytes": 0,
+  "generator_sha256": "13fb4dc3613d6c673a6424f146af5878ce05dc60a8b864827d2a2e0ff917eed4",
+  "generated_sha256": "fb9ef4d7ad0651626ac8ea5094779d94535e4eaa9d4612967d5a7c935e1b4232",
+  "rle_bytes": 14827,
+  "palette_bytes": 64,
+  "row_table_bytes": 642,
+  "payload_bytes": 15533,
+  "payload_sha256": "94e0f9da7b310b0841323923b8cebdf3a5b446161c6e9fbae49b3921825c34bc",
+  "raw565_sha256": "75c3c06b45f61b82e21c8e3abaa152d3679757204f309b30fd87d3a47fe3d349",
+  "scratch_scope": "No persistent, row or pixel decode buffer; scalar automatic call state and Shell RenderStats are accounted separately"
+}

@@ -1305,6 +1305,1686 @@
       "pixel_format": "RGB565_LE"
     },
     {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-00.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-00.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-02.png",
+      "media_type": "image/png",
+      "bytes": 4104,
+      "sha256": "a008ec866d0d16b6b30915ed14c967c9a18c213d5577184cb828c313e70941d5"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-02.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "c7153a45a7d9f6f050beba03b6454783bea56e1d8aa43d90c96ba80808b2415f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-03.png",
+      "media_type": "image/png",
+      "bytes": 2618,
+      "sha256": "070cf092c9de7babcb482d1ec970f3456f90eeeb9d339b96b7311944cb21eefc"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-03.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "10dfd78dd802b796a2bda78d1fcfb3b0972afe88887b3cf33ee7793c9590bbff",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-04.png",
+      "media_type": "image/png",
+      "bytes": 4028,
+      "sha256": "2d889731e60107905e6aafacc0ff422f5f1da3286e4ee7a2b4ad7346ca3ee6a6"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-04.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "69f002b972de57856f93ddb515ff972da62dbcc9576a70ec62820aaac925f1b1",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-05.png",
+      "media_type": "image/png",
+      "bytes": 4131,
+      "sha256": "a9472de2a860f06db88f07088a076814f5e713e0d52372f06749cdd752aedb53"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-05.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "baac4a51b779fcef4487446cc6cec45660f1df6969a1e7db5416fa9cc0ab72f0",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-07.png",
+      "media_type": "image/png",
+      "bytes": 4157,
+      "sha256": "0c9103e88ee1cefce887cddb829bf57f32379da95dba12fef12b875a1ce5be2e"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-07.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "3089e42d05e2a557537a71a14e4de0ed438888c4c487768ac022af0839747d70",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-09.png",
+      "media_type": "image/png",
+      "bytes": 2739,
+      "sha256": "abefe954e4c8443f06084269cb10ec3c5698be989c2669c7679fca9ebca04e09"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-09.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "afb7c6b5fcf05418aed1f21ea00714a9d1e3846f6321fd40ecd5f5ce651c11ba",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-11.png",
+      "media_type": "image/png",
+      "bytes": 4208,
+      "sha256": "de925e8080eb7e55a3216aa7790f316cdf37fbc5cb5d0b86522cf92f703bf550"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-11.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "fd85d43e3ff1fc0dc6bb90577ace9ab86d77162658d884162bba3ee471359a3c",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-23.png",
+      "media_type": "image/png",
+      "bytes": 13558,
+      "sha256": "8a694a92dc2610265321b42486205bf3c8adcdb78b07ba63eda53ab61393c10f"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-23.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "8c98e5cc4b5ba592ea042dd44047d4066f96f2a5aee1c5844e45379d2e55d182",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-27.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-27.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-32.png",
+      "media_type": "image/png",
+      "bytes": 2792,
+      "sha256": "021f88a93ea8ee38eafb450437ae25d2b60e7643cc27a380274650f5a0b7d812"
+    },
+    {
+      "path": "reports/wave007-2/frames/adaptive-reset/step-32.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "3420e830c065b7ef386ab628758b3d5bdc0d0c76eaa05ca7d678f32a13c58069",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/burst-reset/step-00.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/burst-reset/step-00.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/burst-reset/step-08.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/burst-reset/step-08.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/burst-reset/step-20.png",
+      "media_type": "image/png",
+      "bytes": 2681,
+      "sha256": "d8843badfe974edfcc9fde0f2983877206ad9588df6ad2b3b43bd0cc9dca9e09"
+    },
+    {
+      "path": "reports/wave007-2/frames/burst-reset/step-20.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "ce13af50fa15f5acf9e0b2ccfec811b49195cad225e72589ff08d6774b1253f0",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/burst-reset/step-28.png",
+      "media_type": "image/png",
+      "bytes": 2171,
+      "sha256": "c6005c3aa68a5da75005c8a770c5332e784977c866af712a97d3595ed15a3d91"
+    },
+    {
+      "path": "reports/wave007-2/frames/burst-reset/step-28.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "29390c28d6a90e172fc69031e65e3f03a2a46b8c288ff37c511f9c0f82c707ab",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/burst-reset/step-48.png",
+      "media_type": "image/png",
+      "bytes": 13554,
+      "sha256": "19e6b3a40b2f6956301a47be9ee95553098e5ab3b545976f178e3e16557b1957"
+    },
+    {
+      "path": "reports/wave007-2/frames/burst-reset/step-48.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "5f21e93043064475cdf1e92f060b94158e12b305aeb42b3a72728821c7cf0682",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-00.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-00.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-01.png",
+      "media_type": "image/png",
+      "bytes": 2241,
+      "sha256": "250a5d4e8ff4df632809a2ffd33b6514c41cf0c07f7aca7e232db6b6dfffdcbf"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-01.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "e87e99186c7640701966d2862de67f25e3f2f44195887a8f03e5c0fb26c3bb9f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-02.png",
+      "media_type": "image/png",
+      "bytes": 4104,
+      "sha256": "a008ec866d0d16b6b30915ed14c967c9a18c213d5577184cb828c313e70941d5"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-02.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "c7153a45a7d9f6f050beba03b6454783bea56e1d8aa43d90c96ba80808b2415f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-04.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-04.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-06.png",
+      "media_type": "image/png",
+      "bytes": 2134,
+      "sha256": "ef073e08990570c6893b9519df603a714817d20fab58e2062150887df6eda0cc"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-06.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "0c9d60aa8fb8b3f680aa8f8abe5b0ccb27118239a38f91163132b0b09e79f904",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-07.png",
+      "media_type": "image/png",
+      "bytes": 2052,
+      "sha256": "7359a7e96644d16d5217948fcca376d6283cd6e422ae8e028b52cc4f4a2053ee"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-07.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "2a26a1d31ced35dc4381588ab42ee4e7fa108fb0b39a61dfab601f144f3b2131",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-09.png",
+      "media_type": "image/png",
+      "bytes": 2128,
+      "sha256": "c4c4759906b095abeaeea374b76909549a21928f8d4292808e02795b4fc8f868"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-09.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "7ba8f9da4b692d34dda58e5a3d291e6a5cd741bfa3f9f7bd9e31e2d61a90ed56",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-10.png",
+      "media_type": "image/png",
+      "bytes": 2042,
+      "sha256": "43fe5a52092c0460ea300e9d48035210a9bf031609162bc2ce8d05fad5e59879"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-10.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "69977bbc0102c2b99b2d6a286ce2aa15e7f9fb945d70607350367a4ef31cfc71",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-13.png",
+      "media_type": "image/png",
+      "bytes": 3556,
+      "sha256": "94e1d0191f1edfc422751c0bd1bfa18a0cfdf11a165916eca0fe1c31e3e9074e"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-13.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "2c46e9e95afb4d38ab369df57b05461c546df65a77db50b22a801a2ab78f4498",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-15.png",
+      "media_type": "image/png",
+      "bytes": 7921,
+      "sha256": "5019ace97cb6b4fe409e5ce07f0b95d02fe3d80cdc39a83d3b7dd473b8d9538e"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-15.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "7cf26306ddb892f4a25f7a222bbe753b685539f758745aedc19929c6b8579c74",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-16.png",
+      "media_type": "image/png",
+      "bytes": 2680,
+      "sha256": "99ee186cca6ac158fbd0a7398aa109b00043789d992343a5311614b11b653b33"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-16.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "a737a978530303206cb1982026168795732201fbd7575682fd8c1268e5ec3c83",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-18.png",
+      "media_type": "image/png",
+      "bytes": 3539,
+      "sha256": "393323f58b6f8ab911b07650047aed48216787e18b67bb7aa169bfd4c543b76d"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-18.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "815e8fd4ca3923d8cc06ed196d71a4407a31274a23ef1773f1104b6779cbddd8",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-19.png",
+      "media_type": "image/png",
+      "bytes": 2042,
+      "sha256": "43fe5a52092c0460ea300e9d48035210a9bf031609162bc2ce8d05fad5e59879"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-19.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "69977bbc0102c2b99b2d6a286ce2aa15e7f9fb945d70607350367a4ef31cfc71",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-24.png",
+      "media_type": "image/png",
+      "bytes": 2171,
+      "sha256": "c6005c3aa68a5da75005c8a770c5332e784977c866af712a97d3595ed15a3d91"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-24.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "29390c28d6a90e172fc69031e65e3f03a2a46b8c288ff37c511f9c0f82c707ab",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-29.png",
+      "media_type": "image/png",
+      "bytes": 2042,
+      "sha256": "43fe5a52092c0460ea300e9d48035210a9bf031609162bc2ce8d05fad5e59879"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-29.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "69977bbc0102c2b99b2d6a286ce2aa15e7f9fb945d70607350367a4ef31cfc71",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-33.png",
+      "media_type": "image/png",
+      "bytes": 13557,
+      "sha256": "3f8663371f030908c3ce8cf290fc93de6f89cf80df3f4e115dcf130cb9d7bef7"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-33.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "4023cf86ea0fe958b9c0109a98d8e68f8e6eb59cde79b4dbf96adee8cd8b435a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-37.png",
+      "media_type": "image/png",
+      "bytes": 1773,
+      "sha256": "d26f26c38ee367e44e9b4098db7e05d5b7d7bfe0005a643742ba6dd03413300f"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-37.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "0bc64afe0a056779d4ec72bfc879e4dc420a2c9dd75b24126a7872b7b365ae19",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-38.png",
+      "media_type": "image/png",
+      "bytes": 3972,
+      "sha256": "f94c9d428ecd35bff7232e2114301305e27579e248c4c149874352854ce41ba9"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-38.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "38a05611fda36871dc92edbc4840ea6e0b00fc29434c1a402e32a8b6b7dad28d",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-44.png",
+      "media_type": "image/png",
+      "bytes": 13554,
+      "sha256": "19e6b3a40b2f6956301a47be9ee95553098e5ab3b545976f178e3e16557b1957"
+    },
+    {
+      "path": "reports/wave007-2/frames/canonical/step-44.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "5f21e93043064475cdf1e92f060b94158e12b305aeb42b3a72728821c7cf0682",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-00.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-00.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-01.png",
+      "media_type": "image/png",
+      "bytes": 2241,
+      "sha256": "250a5d4e8ff4df632809a2ffd33b6514c41cf0c07f7aca7e232db6b6dfffdcbf"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-01.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "e87e99186c7640701966d2862de67f25e3f2f44195887a8f03e5c0fb26c3bb9f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-02.png",
+      "media_type": "image/png",
+      "bytes": 4104,
+      "sha256": "a008ec866d0d16b6b30915ed14c967c9a18c213d5577184cb828c313e70941d5"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-02.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "c7153a45a7d9f6f050beba03b6454783bea56e1d8aa43d90c96ba80808b2415f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-04.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-04.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-06.png",
+      "media_type": "image/png",
+      "bytes": 2134,
+      "sha256": "ef073e08990570c6893b9519df603a714817d20fab58e2062150887df6eda0cc"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-06.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "0c9d60aa8fb8b3f680aa8f8abe5b0ccb27118239a38f91163132b0b09e79f904",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-07.png",
+      "media_type": "image/png",
+      "bytes": 2052,
+      "sha256": "7359a7e96644d16d5217948fcca376d6283cd6e422ae8e028b52cc4f4a2053ee"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-07.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "2a26a1d31ced35dc4381588ab42ee4e7fa108fb0b39a61dfab601f144f3b2131",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-09.png",
+      "media_type": "image/png",
+      "bytes": 2128,
+      "sha256": "c4c4759906b095abeaeea374b76909549a21928f8d4292808e02795b4fc8f868"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-09.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "7ba8f9da4b692d34dda58e5a3d291e6a5cd741bfa3f9f7bd9e31e2d61a90ed56",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-10.png",
+      "media_type": "image/png",
+      "bytes": 2042,
+      "sha256": "43fe5a52092c0460ea300e9d48035210a9bf031609162bc2ce8d05fad5e59879"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-10.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "69977bbc0102c2b99b2d6a286ce2aa15e7f9fb945d70607350367a4ef31cfc71",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-13.png",
+      "media_type": "image/png",
+      "bytes": 3559,
+      "sha256": "861b0d707e0c779ab1fe20ddb7784120b6d2f7f57d8dc5e9a3d473c5abd351b5"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-13.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "ff1d82f898b390f27e27bdf8549635d034a916955c280a59f6e0afa7509361ac",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-15.png",
+      "media_type": "image/png",
+      "bytes": 7921,
+      "sha256": "5019ace97cb6b4fe409e5ce07f0b95d02fe3d80cdc39a83d3b7dd473b8d9538e"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-15.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "7cf26306ddb892f4a25f7a222bbe753b685539f758745aedc19929c6b8579c74",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-16.png",
+      "media_type": "image/png",
+      "bytes": 2690,
+      "sha256": "ae6e3379d8995ac9032bc8dc15bbd652c0b196c4e0b64849a9dd1609fbc67d02"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-16.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "61b12d759d74b682c3496872ccea6147f573ace87850b4ce4e49c806cf0209c9",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-18.png",
+      "media_type": "image/png",
+      "bytes": 3528,
+      "sha256": "8a29f74ff50041e5744f82fd60f9a30fe78b4b84d5270d6c45f9cc0c96757af7"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-18.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "058daa89241c7e7905c703f37760449cf0493630b6196258cdfffa684acc0eec",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-19.png",
+      "media_type": "image/png",
+      "bytes": 2042,
+      "sha256": "43fe5a52092c0460ea300e9d48035210a9bf031609162bc2ce8d05fad5e59879"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-19.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "69977bbc0102c2b99b2d6a286ce2aa15e7f9fb945d70607350367a4ef31cfc71",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-24.png",
+      "media_type": "image/png",
+      "bytes": 2171,
+      "sha256": "c6005c3aa68a5da75005c8a770c5332e784977c866af712a97d3595ed15a3d91"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-24.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "29390c28d6a90e172fc69031e65e3f03a2a46b8c288ff37c511f9c0f82c707ab",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-29.png",
+      "media_type": "image/png",
+      "bytes": 2042,
+      "sha256": "43fe5a52092c0460ea300e9d48035210a9bf031609162bc2ce8d05fad5e59879"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-29.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "69977bbc0102c2b99b2d6a286ce2aa15e7f9fb945d70607350367a4ef31cfc71",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-33.png",
+      "media_type": "image/png",
+      "bytes": 13557,
+      "sha256": "3f8663371f030908c3ce8cf290fc93de6f89cf80df3f4e115dcf130cb9d7bef7"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-33.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "4023cf86ea0fe958b9c0109a98d8e68f8e6eb59cde79b4dbf96adee8cd8b435a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-37.png",
+      "media_type": "image/png",
+      "bytes": 1773,
+      "sha256": "d26f26c38ee367e44e9b4098db7e05d5b7d7bfe0005a643742ba6dd03413300f"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-37.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "0bc64afe0a056779d4ec72bfc879e4dc420a2c9dd75b24126a7872b7b365ae19",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-38.png",
+      "media_type": "image/png",
+      "bytes": 3972,
+      "sha256": "f94c9d428ecd35bff7232e2114301305e27579e248c4c149874352854ce41ba9"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-38.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "38a05611fda36871dc92edbc4840ea6e0b00fc29434c1a402e32a8b6b7dad28d",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-44.png",
+      "media_type": "image/png",
+      "bytes": 13554,
+      "sha256": "19e6b3a40b2f6956301a47be9ee95553098e5ab3b545976f178e3e16557b1957"
+    },
+    {
+      "path": "reports/wave007-2/frames/fault-reset/step-44.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "5f21e93043064475cdf1e92f060b94158e12b305aeb42b3a72728821c7cf0682",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-00.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-00.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-01.png",
+      "media_type": "image/png",
+      "bytes": 13565,
+      "sha256": "80c23031438f5e3a3a92fdf3abf8e224aa9e4e353c778f71b2163b9eb2c25d27"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-01.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "0b519b894165d45ba5759199b28302910cda3a8fecf7d6a7c8f191734a6ed205",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-02.png",
+      "media_type": "image/png",
+      "bytes": 2134,
+      "sha256": "ef073e08990570c6893b9519df603a714817d20fab58e2062150887df6eda0cc"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-02.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "0c9d60aa8fb8b3f680aa8f8abe5b0ccb27118239a38f91163132b0b09e79f904",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-03.png",
+      "media_type": "image/png",
+      "bytes": 2052,
+      "sha256": "7359a7e96644d16d5217948fcca376d6283cd6e422ae8e028b52cc4f4a2053ee"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-03.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "2a26a1d31ced35dc4381588ab42ee4e7fa108fb0b39a61dfab601f144f3b2131",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-04.png",
+      "media_type": "image/png",
+      "bytes": 2042,
+      "sha256": "43fe5a52092c0460ea300e9d48035210a9bf031609162bc2ce8d05fad5e59879"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-04.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "69977bbc0102c2b99b2d6a286ce2aa15e7f9fb945d70607350367a4ef31cfc71",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-05.png",
+      "media_type": "image/png",
+      "bytes": 2128,
+      "sha256": "c4c4759906b095abeaeea374b76909549a21928f8d4292808e02795b4fc8f868"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-05.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "7ba8f9da4b692d34dda58e5a3d291e6a5cd741bfa3f9f7bd9e31e2d61a90ed56",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-06.png",
+      "media_type": "image/png",
+      "bytes": 2128,
+      "sha256": "6d487306f9d2f6b8ee4c32c9b2a779b52e97e485de56b9885bd4f489898944e7"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-06.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "f94e40a424320f58d754b09ecfa828b5d798e31795ae096f1e0e5fe901ebf7cc",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-07.png",
+      "media_type": "image/png",
+      "bytes": 2042,
+      "sha256": "43fe5a52092c0460ea300e9d48035210a9bf031609162bc2ce8d05fad5e59879"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-07.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "69977bbc0102c2b99b2d6a286ce2aa15e7f9fb945d70607350367a4ef31cfc71",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-08.png",
+      "media_type": "image/png",
+      "bytes": 2052,
+      "sha256": "7359a7e96644d16d5217948fcca376d6283cd6e422ae8e028b52cc4f4a2053ee"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-08.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "2a26a1d31ced35dc4381588ab42ee4e7fa108fb0b39a61dfab601f144f3b2131",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-09.png",
+      "media_type": "image/png",
+      "bytes": 2134,
+      "sha256": "ef073e08990570c6893b9519df603a714817d20fab58e2062150887df6eda0cc"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-09.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "0c9d60aa8fb8b3f680aa8f8abe5b0ccb27118239a38f91163132b0b09e79f904",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-10.png",
+      "media_type": "image/png",
+      "bytes": 13565,
+      "sha256": "80c23031438f5e3a3a92fdf3abf8e224aa9e4e353c778f71b2163b9eb2c25d27"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-10.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "0b519b894165d45ba5759199b28302910cda3a8fecf7d6a7c8f191734a6ed205",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-11.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-11.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-12.png",
+      "media_type": "image/png",
+      "bytes": 2779,
+      "sha256": "d072a15224192a897c22c1030ae64fde22f00a92a4275574372da4c48d3cb50a"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-12.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "6edbe16830792ea061284747c3eaeb5f6bbe627805b4e31932dd412f624fb218",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-13.png",
+      "media_type": "image/png",
+      "bytes": 2780,
+      "sha256": "327fd5440fc70246a827ed6f29fe612e4707e8586da38d054dc098a7d92e1584"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-13.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "af60578a40e9b5ac8f935301afeff21b327207546302cc0ad2f6627392d69986",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-14.png",
+      "media_type": "image/png",
+      "bytes": 3642,
+      "sha256": "ccc55fed91744ea5801e4ab27d917db75a35164ec22dccece909a70ce4ce7568"
+    },
+    {
+      "path": "reports/wave007-2/frames/keyboard-reset/step-14.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "6a3d09aad97e769c426826c7732e39956393aa5c8107c9b3da9dcc38f23d7dbf",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-00.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-00.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-01.png",
+      "media_type": "image/png",
+      "bytes": 13558,
+      "sha256": "8a694a92dc2610265321b42486205bf3c8adcdb78b07ba63eda53ab61393c10f"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-01.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "8c98e5cc4b5ba592ea042dd44047d4066f96f2a5aee1c5844e45379d2e55d182",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-04.png",
+      "media_type": "image/png",
+      "bytes": 2768,
+      "sha256": "19a5d0863387e3ebd25d6d2deb9cfa30ab45612e531991cf19bf8ad3902268d9"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-04.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "b0ddf146bc6ae5b7efe732ae49e76ba27f4199b667facd1d2649af2fa172a91d",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-07.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-07.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-09.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-09.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-14.png",
+      "media_type": "image/png",
+      "bytes": 9209,
+      "sha256": "168d829d856e95df5bada21e44b5ecc5912f215b3d91af9202bf83d40ec4e0cf"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-14.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "74e2434f1c86d8eb9f5a012249c1ece6e6d73c8730fdf288c0bdb803530cd3ee",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-21.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-21.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-26.png",
+      "media_type": "image/png",
+      "bytes": 2780,
+      "sha256": "9d26729eb284b6fbc00475035d003c5a80a152a767f026f5b8a3fbd574775210"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-26.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "9b1522cf9b3af145d7d64797e96f6a276a33dc9f68d07477dc604a5032cb2a87",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-30.png",
+      "media_type": "image/png",
+      "bytes": 2241,
+      "sha256": "250a5d4e8ff4df632809a2ffd33b6514c41cf0c07f7aca7e232db6b6dfffdcbf"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-30.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "e87e99186c7640701966d2862de67f25e3f2f44195887a8f03e5c0fb26c3bb9f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-32.png",
+      "media_type": "image/png",
+      "bytes": 2385,
+      "sha256": "5758c7eddd520164e7905ebec8e2b509f0b5149429d86a7891a299ec2ab6b38d"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-32.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "fff53744700944142469a51a9767eb5b4f99cbaf2260436e996144862c98dd74",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-37.png",
+      "media_type": "image/png",
+      "bytes": 2241,
+      "sha256": "250a5d4e8ff4df632809a2ffd33b6514c41cf0c07f7aca7e232db6b6dfffdcbf"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-37.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "e87e99186c7640701966d2862de67f25e3f2f44195887a8f03e5c0fb26c3bb9f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-39.png",
+      "media_type": "image/png",
+      "bytes": 2186,
+      "sha256": "335cedd33fcf5a9ec91ef0b3b42b24227a6a4a6a705732aedefa456725d231f9"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-39.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "a586dc2b71357b7bed2f6bfa69c00dd4afca6103c23c15c20d8fa2a66f5eef2a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-41.png",
+      "media_type": "image/png",
+      "bytes": 2186,
+      "sha256": "335cedd33fcf5a9ec91ef0b3b42b24227a6a4a6a705732aedefa456725d231f9"
+    },
+    {
+      "path": "reports/wave007-2/frames/phases/step-41.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "a586dc2b71357b7bed2f6bfa69c00dd4afca6103c23c15c20d8fa2a66f5eef2a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer-burst-reset/step-00.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer-burst-reset/step-00.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer-burst-reset/step-04.png",
+      "media_type": "image/png",
+      "bytes": 2241,
+      "sha256": "250a5d4e8ff4df632809a2ffd33b6514c41cf0c07f7aca7e232db6b6dfffdcbf"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer-burst-reset/step-04.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "e87e99186c7640701966d2862de67f25e3f2f44195887a8f03e5c0fb26c3bb9f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-00.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-00.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-02.png",
+      "media_type": "image/png",
+      "bytes": 2134,
+      "sha256": "ef073e08990570c6893b9519df603a714817d20fab58e2062150887df6eda0cc"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-02.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "0c9d60aa8fb8b3f680aa8f8abe5b0ccb27118239a38f91163132b0b09e79f904",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-03.png",
+      "media_type": "image/png",
+      "bytes": 2052,
+      "sha256": "7359a7e96644d16d5217948fcca376d6283cd6e422ae8e028b52cc4f4a2053ee"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-03.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "2a26a1d31ced35dc4381588ab42ee4e7fa108fb0b39a61dfab601f144f3b2131",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-04.png",
+      "media_type": "image/png",
+      "bytes": 2128,
+      "sha256": "c4c4759906b095abeaeea374b76909549a21928f8d4292808e02795b4fc8f868"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-04.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "7ba8f9da4b692d34dda58e5a3d291e6a5cd741bfa3f9f7bd9e31e2d61a90ed56",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-06.png",
+      "media_type": "image/png",
+      "bytes": 2042,
+      "sha256": "43fe5a52092c0460ea300e9d48035210a9bf031609162bc2ce8d05fad5e59879"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-06.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "69977bbc0102c2b99b2d6a286ce2aa15e7f9fb945d70607350367a4ef31cfc71",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-08.png",
+      "media_type": "image/png",
+      "bytes": 2120,
+      "sha256": "4956f5d86a425ac9e169cadefb0912a24f979a8312cd99e436ae5cfd11c91ce2"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-08.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "fc854e5dda0f7a3a9b8bb600bbd96c6e3d6476889e743b3807fb33743cfe415d",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-09.png",
+      "media_type": "image/png",
+      "bytes": 13565,
+      "sha256": "80c23031438f5e3a3a92fdf3abf8e224aa9e4e353c778f71b2163b9eb2c25d27"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-09.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "0b519b894165d45ba5759199b28302910cda3a8fecf7d6a7c8f191734a6ed205",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-10.png",
+      "media_type": "image/png",
+      "bytes": 13567,
+      "sha256": "885f920435ab191b270e283a9ecf118333b355fa5efef08acdecf86b48ca8a6b"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-10.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "f94f43602be8c231132a94a114a8dc7cdc312b9b733e68b9f5b1523f321d75b0",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-12.png",
+      "media_type": "image/png",
+      "bytes": 2241,
+      "sha256": "250a5d4e8ff4df632809a2ffd33b6514c41cf0c07f7aca7e232db6b6dfffdcbf"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-12.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "e87e99186c7640701966d2862de67f25e3f2f44195887a8f03e5c0fb26c3bb9f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-13.png",
+      "media_type": "image/png",
+      "bytes": 4104,
+      "sha256": "a008ec866d0d16b6b30915ed14c967c9a18c213d5577184cb828c313e70941d5"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-13.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "c7153a45a7d9f6f050beba03b6454783bea56e1d8aa43d90c96ba80808b2415f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-19.png",
+      "media_type": "image/png",
+      "bytes": 2786,
+      "sha256": "d4e7a6b05fce28861823e0f1adbe9165d2084f7c04bcca26ecdf9a1bc8c80466"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-19.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "21911776591df65af4cb40bedff3f56a010b8fc95e15d1bba376e01a6a1f45e8",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-20.png",
+      "media_type": "image/png",
+      "bytes": 3632,
+      "sha256": "fd738a94df17b41123c6c75a8f9d8ee9b60bbe2eb1bb37020d46316b10dd74e3"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-20.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "3dcfe7e749a8ae1833cb670d93ed5db2b67ca442d3b219a51fb762aff87fdf97",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-24.png",
+      "media_type": "image/png",
+      "bytes": 7960,
+      "sha256": "36aa4544f9cd978b4dd6a2d8bae5fe217420f54381f9c9c1a4174231a5dbce45"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-24.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "b9c16ad4113e60038a0343a7db1d597fb85742ec1c2e716db2c2387296895565",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-25.png",
+      "media_type": "image/png",
+      "bytes": 2777,
+      "sha256": "7022ab88732204c96ec6f0263de95227f0d79a76e5edf270589e5e7900c8892d"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-25.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "8e1815618763f54a7384b3ad6bbe38348ee3dbcd1b85e554510b62319b9f0c9b",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-28.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-28.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-29.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-29.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-34.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/pointer/step-34.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/role-reset/step-00.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/role-reset/step-00.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/role-reset/step-01.png",
+      "media_type": "image/png",
+      "bytes": 2241,
+      "sha256": "250a5d4e8ff4df632809a2ffd33b6514c41cf0c07f7aca7e232db6b6dfffdcbf"
+    },
+    {
+      "path": "reports/wave007-2/frames/role-reset/step-01.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "e87e99186c7640701966d2862de67f25e3f2f44195887a8f03e5c0fb26c3bb9f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/role-reset/step-02.png",
+      "media_type": "image/png",
+      "bytes": 4104,
+      "sha256": "a008ec866d0d16b6b30915ed14c967c9a18c213d5577184cb828c313e70941d5"
+    },
+    {
+      "path": "reports/wave007-2/frames/role-reset/step-02.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "c7153a45a7d9f6f050beba03b6454783bea56e1d8aa43d90c96ba80808b2415f",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
+      "path": "reports/wave007-2/frames/role-reset/step-04.png",
+      "media_type": "image/png",
+      "bytes": 13569,
+      "sha256": "de0bcf83b066be917c8338afadab760622fae043e3c34ff4b8e07b667fa4853a"
+    },
+    {
+      "path": "reports/wave007-2/frames/role-reset/step-04.raw565",
+      "media_type": "image/x-rgb565-le",
+      "bytes": 153600,
+      "sha256": "dba6b0c70fff928b864ad70632206d74f747ffa5ce06e005b56d895ee37f963a",
+      "width": 240,
+      "height": 320,
+      "stride_pixels": 240,
+      "pixel_format": "RGB565_LE"
+    },
+    {
       "path": "reports/wave007/frames/burst-reset/step-00.png",
       "media_type": "image/png",
       "bytes": 2573,

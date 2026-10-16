@@ -47,7 +47,7 @@ POINTER = [
     ("app-back", tap(228,12), 0,0,0),
     ("keyboard-focus-down", wire(1), 0,0,0),
     ("keyboard-focus-up", wire(0), 0,0,0),
-    ("start", tap(24,12), 2,0,0),
+    ("start", tap(12,8), 2,0,0),
     ("about-row", tap(30,70), 3,0,0),
     ("about-blank", tap(130,270), 3,0,0),
     ("about-back", tap(228,12), 2,0,0),
@@ -55,19 +55,19 @@ POINTER = [
     ("query-keyboard-select", wire(4), 3,0,0),
     ("keyboard-home", wire(7), 0,0,0),
     ("today-shortcut", tap(40,68), 1,0,0),
-    ("today-diagnostics", tap(30,260), 4,0,0),
-    ("diagnostics-soft-back", tap(30,308), 1,0,0),
-    ("today-launcher", tap(30,230), 2,0,0),
+    ("today-diagnostics", tap(30,280), 4,0,0),
+    ("diagnostics-soft-back", wire(5), 1,0,0),
+    ("today-launcher", tap(30,255), 2,0,0),
     ("home-again", wire(7), 0,0,0),
-    ("system-menu", tap(180,308), 0,1,0),
+    ("system-menu", wire(6), 0,1,0),
     ("menu-today", tap(30,96), 1,0,0),
     ("home-menu", wire(7), 0,0,0),
-    ("menu-open", tap(180,308), 0,1,0),
+    ("menu-open", wire(6), 0,1,0),
     ("outside-menu-no-fallthrough", tap(230,150), 0,0,0),
-    ("last-pixel", tap(239,319), 0,1,0),
+    ("last-pixel", tap(239,319), 0,0,0),
     ("menu-keyboard-back", wire(5), 0,0,0),
     ("top-right-boundary", tap(239,0), 0,0,0),
-    ("bottom-left-boundary", tap(0,319), 2,0,0),
+    ("start-top-left-boundary", tap(0,0), 2,0,0),
     ("launcher-keyboard-back", wire(5), 2,0,0),  # Clears the retained query first.
     ("launcher-back-home", wire(5), 0,0,0),
 ]
@@ -165,7 +165,7 @@ def run(qemu, image, user, exporter):
                     captures = {0:capture(qmp,initial["record"],directory/"step-00")}
                     delivered = handled = 0
                     if name == "pointer-burst-reset":
-                        sequence = [tap(40,68),tap(30,230),tap(30,70),tap(228,12)]
+                        sequence = [tap(40,68),tap(30,255),tap(30,70),tap(228,12)]
                         for value in sequence: memory.writel(INPUT+8,value)
                         equal(memory.readl(INPUT),4,"four coordinate taps admitted as a bounded burst")
                         qmp.request("cont")
@@ -235,7 +235,7 @@ def run(qemu, image, user, exporter):
                     if boot < 2: qmp.request("system_reset")
                 # Settings before interaction has identical pixels regardless
                 # of pointer shortcut or keyboard focus+Select activation.
-                equal((OUT/"pointer/step-02.raw565").read_bytes(),(OUT/"keyboard-reset/step-02.raw565").read_bytes(),"stylus and keyboard open pixel-identical Settings")
+                equal((OUT/"pointer/step-02.raw565").read_bytes() == (OUT/"keyboard-reset/step-02.raw565").read_bytes(),True,"stylus and keyboard open pixel-identical Settings")
                 current_bindings = {str(path.relative_to(ROOT)):sha(path.read_bytes()) for path in sorted(set(sources))}
                 equal([name for name in bindings if bindings[name] != current_bindings[name]], [],
                       "tested pointer source bytes unchanged during execution")

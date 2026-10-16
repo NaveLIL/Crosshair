@@ -1,74 +1,79 @@
-# Shell navigation and input
+# Shell navigation and hardware-first input
 
-Crosshair Shell0.1.1 (Wave007.1) starts on **Desktop**, with a separate Today view and a four-entry Launcher. Source-confirmed state and actions live in [crosshair-shell](../shell/src/lib.rs); actual ARM captures/transitions belong to [Wave007](../reports/WAVE_007.md). The approved reference supplies the cold gray-blue Pocket PC composition, dark compact bars, small shortcuts over a wallpaper workspace, clear focus and bottom softkeys; it does not supply working clock, modem or battery services.
+Crosshair Shell0.1.2 (Wave007.2) starts on Desktop, with separate Today/Launcher and the existing four built-ins. [Adaptive Shell](ADAPTIVE_SHELL.md) defines viewport, pointer, held-key and recovery policy; [state](../shell/src/lib.rs), [capture](../shell/src/adaptive.rs) and [shared rectangles](../shell/src/geometry.rs) are authoritative. Earlier [Wave007](../reports/WAVE_007.md) and [Wave007.1](../reports/WAVE_007_1.md) captures remain historical evidence. Physical PDA keys/stylus remain unverified.
 
-## Reachable views
+## Views and state
 
-| Screen | Real content / action | Preserved state |
+| View | Real content / commands | Retained state |
 |---|---|---|
-|Desktop|Wallpaper workspace with three compact shortcuts: Today, Settings, Diagnostics; Start opens the complete Launcher|Selected shortcut survives visits to other screens and Home; blank workspace has no hidden action|
-|Today|Known runtime summaries and explicit unavailable time/phone/battery state; links to Launcher and Diagnostics|One of two action rows|
-|Launcher|About, Diagnostics, Settings and Today; bounded16-character, case-insensitive prefix filter; Select opens only a matching built-in screen|Selection and query survive ordinary screen visits|
-|About|Actual build/version strings, ARMv5TE and identified synthetic environment/capability limits|Back returns to caller|
-|Diagnostics|Kernel-supplied ticks, switches, task counts, mapped working RAM and input counters, with unavailable states for invalid data groups|Back returns to caller|
-|Settings|Two actual color themes; reset-to-default confirmation with cancel|Current theme and settings row; theme lasts until reboot|
+|Desktop|Mountain wallpaper through the bottom of the screen; Today/Settings/Diagnostics shortcuts; one top Start; visible panel icon|Selected shortcut survives visits/Home|
+|Today|Dense grouped task/input/reserved-RAM observations, small section icons, concise unavailable sources and Launcher/Diagnostics inline actions|Selected action|
+|Launcher|About, Diagnostics, Settings, Today;16-scalar Latin/Cyrillic prefix query; only matching entries open|Query/selection survive visits; Backspace erases, Back first clears query|
+|About|Actual version/build/architecture/environment/licences and capability limits in shared key-value rows|Bounded scroll; per-view Standard/Compact/Immersive mode|
+|Diagnostics|Actual kernel/UI observations and explicit measurement limits|Bounded scroll; per-view mode|
+|Settings|Two volatile themes and reset confirmation|Selected row/theme; no storage/power write|
 
-Launcher labels identify implemented built-in screens within the Shell task. They do not claim separate application processes, a package registry or a general loader. The independent Busy User workload remains scheduled while Shell visits these views.
+These built-ins remain one Shell process; selecting a screen does not load a new task or grant scheduler authority. No Files/Phone/SMS/network placeholder is offered as a working app. Separate Busy User work continues to exercise preemption.
 
-## Logical actions
+## Semantic commands
 
-| Action | Behavior |
+| Command | Behavior |
 |---|---|
-|Up/Down/Left/Right|Desktop moves through three shortcuts (Up/Left previous, Down/Right next), clamped at edges; Launcher traverses matching entries; Today/Settings traverse their two rows. An open menu/dialog wraps among its own bounded entries|
-|Select|Invokes selected shortcut/entry/setting/menu item; empty Launcher and informational screens perform no unavailable action|
-|Back|Closes overlay first; otherwise clears a nonempty Launcher query before navigating back; otherwise restores previous screen or Desktop|
-|Home|Closes overlays, clears screen history and returns to Desktop, preserving per-screen selections and current theme|
-|Menu|Opens system menu; in Launcher opens its context menu; closes an already open overlay|
-|Softkey Left|Invokes the displayed left action atomically. Desktop opens Launcher (Start); About/Diagnostics return Back; other screens open/change their selection. In reset confirmation it chooses the displayed Reset action|
-|Softkey Right|Opens Menu in a normal view; cancels/closes an overlay|
-|SwitchTask|Closes overlay and cycles through previously opened Shell views in fixed screen order|
-|Pointer {x,y}|One tap in guest coordinates; activates the hit control through the same state machine, with no host-side transitions. Coordinates outside240×320 are ignored before UI counters|
-|TextInput|In Launcher only: appends up to16 Unicode scalars; `U+0008` erases one scalar. Other views ignore text|
+|Directions|Desktop previous/next shortcut, clamped; Launcher matching entries; Today/Settings rows; About/Diagnostics bounded scroll. Open overlays wrap their own entries|
+|Select|Invoke selected real target; an empty Launcher/informational row cannot launch a hidden entry|
+|Back|Close overlay; otherwise clear nonempty Launcher query; otherwise restore history or Desktop|
+|Home|Return Desktop and clear navigation history; preserve per-view selections/modes/theme|
+|Start|Open Launcher from any view through Shell-owned routing|
+|SystemPanel|Toggle temporary system panel; preserve underlying state|
+|Menu / context right|Close existing overlay, otherwise system/context menu; About/Diagnostics open the adaptive panel|
+|Legacy context left|Desktop Start; About/Diagnostics Back; other views invoke current selection; reset dialog chooses Reset|
+|Task Switch|Close overlay and cycle previously opened Shell views in fixed ID order|
+|TextInput|Launcher query only;16 scalars, `U+0008` erases. Synthetic reserved input carriers are excluded|
 
-Screen history holds8 entries; entering a ninth drops the oldest while retaining the most recent return path. Home clears history. Each screen retains its own selection. A menu stores overlay selection separately, so closing it restores underlying screen focus. Empty search results have a visible search-area focus and cannot activate a hidden entry; Back/erase/menu remain usable. There are no inaccessible Launcher placeholders for Files, Phone, Messages or networking.
+There is **no permanent bottom action bar or bottom action hit target**. Context commands remain logical actions; they do not require duplicate on-screen softkeys. Screen history holds8 entries and drops the oldest on a ninth; Home clears it. Per-view focus/query/scroll/mode persist. Menus/dialogs have their own selection, and closing them restores underlying focus.
 
-The system menu offers Today, Applications, Settings, Diagnostics, About and Switch. Launcher context actions open the selected matching entry (or clear an empty-result filter), return Home, or open About. Settings' second row opens a two-option reset confirmation; Reset sets theme0, Cancel preserves it. No storage write or device/power operation is hidden behind these actions.
+## Adaptive panels and keyboard paths
 
-## Existing wire protocol
+Standard reserves top24px, Compact top16px, Immersive no full-width bar; content extends to y320. About/Diagnostics demonstrate mode changes without adding apps. Their panel entries are Home, Start, Back, next view, Standard, Compact, Immersive, Close; other screens show the same actual system commands without unavailable mode entries. From About, SystemPanel→five Down→Select chooses Compact; six Down chooses Immersive; four Down chooses Standard. Modes do not add history entries.
 
-The synthetic model remains unchanged: `wire=(tag<<24)|payload`, tags1..7 are Up, Down, Left, Right, Select, Back, Menu; tag8 carries a Unicode scalar. Shell's adapter reserves `TextInput(U+E000)` for Home, `U+E001` for direct SoftLeft, `U+E002` for direct SoftRight and `U+E003` for SwitchTask. These are integration commands, not PDA scan codes or new model register encodings. The Shell converts each into one action; a direct softkey is never expanded into a potentially interrupted pair of queued navigation events.
+Standard/Compact have visible Start, panel and Back targets. Immersive has a visible16×16 top-right recovery affordance with12px menu icon, plus top-edge pull and trusted hold. Keyboard Home/Start/Back/Panel/Task Switch remain available in every mode. A panel is modal: it never passes a release/tap through to underlying content. Settings Reset/Cancel remain distinct.
 
-Wave007.1 reserves supplemental private-use scalars `U+F0000..U+10FFFF` for pointer transport: `scalar=0xF0000+(y<<8)+x`, wire `0x08000000|scalar`. Coordinates use the top-left guest origin, with `x<240`, `y<320`; invalid decoded coordinates do not mutate Shell state or its UI event counter. The kernel transport can still count a delivered invalid wire. Ordinary text cannot use that reserved range. This extends the adapter interpretation of existing tag8; the QEMU model/register protocol is unchanged.
+## Pointer contract
 
-The model FIFO8 and kernel FIFO4 have explicit counted overflow; see [architecture](SHELL_ARCHITECTURE.md). Rapid input can drop new tail events when full, while accepted events retain FIFO order. Focus/state validation and subsequent Home/Back remain bounded. This is an honest finite queue rather than a promise that every arbitrarily fast host keypress is delivered.
+Press captures/focuses an enabled target without activation. Release invokes once only on the original enabled target after an uncancelled capture. An eligible outside-menu release dismisses the menu without activating content beneath it; outside-dialog release remains inert. Move outside the captured target cancels pending activation permanently for the gesture. Cancel, source loss, new Press or keyboard navigation clear capture; stale Release cannot invoke a newly appearing control. A trusted stationary hold of at least 600 ms opens Launcher's actual context menu, or the Shell panel in other views, and suppresses later tap. Any changed guest coordinate suppresses hold for that capture. These are synthetic interaction rules, not physical TSC2200 timing/calibration.
 
-## Native host controls
+Legacy atomic tap remains for earlier functional regression callers. The new native adapter emits actual Press/Move/Release/Cancel and monotonic hold observations. Mouse/window coordinates are transformed to guest pixels before transport; Shell itself performs hit testing. Letterbox/outside coordinates do not activate content. No drag-scroll, handwriting, double-tap or physical stylus driver is claimed. Scrollable info views expose separate small up/down content controls as well as keyboard directions.
 
-The [Mac viewer](../tools/crosshair_gui.swift) displays the running ARM guest's actual QMP frame. It forwards input to the [backend](../tools/run_shell.py), which injects the existing logical FIFO; the host never draws Shell widgets or performs screen transitions itself.
+Desktop shortcuts remain x`[8,80)` at y`[42,100)`, `[108,166)`, `[174,232)`. Standard top Start is x`[0,58)`, panel x`[192,216)`, Back x`[216,240)`; Compact Start shrinks to x`[0,24)`. Immersive recovery is x`[224,240)`, y`[0,16)`; its scroll-up control starts at y20 to avoid overlap. Launcher query is x`[8,232)`, y`[34,56)`; visible matching row i is y`[66+32i,94+32i)`. Today inline links are y`[244,266)` and `[272,294)`. All rectangles are half-open and shared with rendering.
 
-| Host key | Logical action |
+## Native macOS controls
+
+The [viewer](../tools/crosshair_gui.swift) blits actual QMP pixels and forwards input to the [adapter](../tools/run_shell.py); it does not draw controls or perform Shell transitions.
+
+| Host control | Semantic input |
 |---|---|
-|Arrow keys|Up/Down/Left/Right|
-|Enter / keypad Enter|Select|
-|Escape|Back|
-|F10|Menu|
-|Home|Home|
-|F1 / F2|Direct left/right softkey|
-|F3|Switch opened Shell view|
-|Backspace / Delete|Erase Launcher scalar|
-|Printable text|TextInput Unicode|
-|Window close / Command-Q|Quit the viewer/backend's own emulation session|
+|Arrows|Direction Press/OS repeat/Release|
+|Enter / keypad Enter|Select Press/Release; repeats ignored|
+|Escape|Back Press/Release|
+|F1|Start|
+|F10|SystemPanel|
+|F2|Context right/menu|
+|F3|Task Switch|
+|F4 or external Home key|Home|
+|Backspace / Delete|Erase query scalar|
+|Printable text|Translated Unicode key-down/repeat input|
+|Mouse down / move / up|Pointer Press/Move/Release; trusted hold measured monotonically|
+|Window resign/capture loss|CancelInput clears held keys/capture|
+|Close / Command-Q|End only that viewer/backend emulation session|
 
-On a Mac configured to use media/brightness keys, the Fn modifier may be needed to send F1/F2/F3/F10. These host shortcuts are a test adapter, not a claim about the physical PDA2k keyboard. The experimental mouse adapter sends a single logical tap on mouse-down; host scaling/letterboxing is handled before transport. Guest Shell performs the hit test. It provides no drag, press/release capture, double-tap or handwriting semantics. TSC2200 calibration and actual hardware input remain separate work.
+Fn may be needed for function keys on media-key keyboards. Fn+Left is not established as a Home shortcut. These are host test mappings, not PDA scan codes. [Hardware-first UX](HARDWARE_FIRST_UX.md) records the separate historical device-control evidence and proposed semantic mapping boundary.
 
-The original Wave007 six-tile presentation and its recorded captures remain historical evidence. Wave007.1 intentionally changes Desktop geometry and updates the keyboard trace while retaining navigation, menus, text search, isolation and task-runtime test intent.
+## Shared wire, failure and observations
 
-The reproducible acceptance path uses the shared [logical trace](../shell/src/fixtures.rs): Desktop→Launcher→About→Back→Home→Settings→theme change→reset/cancel→Home→Diagnostics→Menu→Today, then opened-view switching and return. Additional queue/invalid-state checks and guest/host pixel comparisons belong to the executed report; a static screenshot alone does not prove these transitions.
+[Action::from_wire](../shell/src/lib.rs) is shared by User and host replay. Existing tag1..7 legacy keys remain; tag8 encodes ordinary text or explicit emulator-reserved system/phase carriers. Release/Move/Press/legacy tap use scalar bases `90000/B0000/D0000/F0000` plus `(y<<8)+x`, with x<240/y<320. They are not all Unicode private-use ranges. `E004/E005` are Start/Panel, `E006` pointer Cancel, `E007` input-source cancellation, `E010+(edge<<4)+id` key edges and `E100+millis` trusted hold0..4095ms. [Full encoding and limits](ADAPTIVE_SHELL.md#shared-wire-interpretation-and-failure-policy).
 
-## Shared tap geometry
+Press acts once per held semantic key; only held directions repeat; Release clears held state without activation. Invalid reserved wires cancel pending input rather than becoming text. `Shell::update_runtime` cancels held/capture state on a valid input-group loss or valid overflow-counter change. Transport delivery, UI event count, dispatched key commands and explicit target-command attempts are separate observations; they do not assert a visible effect. Valid phases count as UI events even when repeat/release performs no action; CancelInput is recovery and does not increase UI events.
 
-[Shared half-open rectangles](../shell/src/geometry.rs) are consumed by both composition and hit testing. Top/system bar is y`[0,24)`, workspace y`[24,296)`, bottom actions y`[296,320)`. Start occupies x`[0,58)` in the top bar; application Back occupies x`[216,240)`. Desktop's left softkey is also Start, preserving full keyboard reachability.
+Model FIFO8/kernel FIFO4 remain bounded and unchanged. New tail input may be dropped when full. The implementation detects known source/queue loss and preserves recovery paths; it does not promise every event is delivered or fabricate a physical interrupt driver. Capture cannot monopolize the CPU: no guest hold-timing loop or mandatory animation is added.
 
-Desktop shortcuts occupy x`[8,80)` with y`[42,100)`, `[108,166)`, `[174,232)`. Their24px icons and opaque bounded captions leave most of the wallpaper workspace free. Launcher rows are x`[8,232)`, y`[66+32i,94+32i)` for matching visible row i; query y`[34,56)`. Today links and Settings rows use their corresponding geometry arrays. Tap selects and invokes one target atomically; filtered rows map to the matching app, not the unfiltered numeric row.
-
-Menus and dialogs are modal: input cannot pass through them. A menu tap outside its rectangle dismisses it without activating the underlying screen. A dialog tap outside its buttons is ignored; its visible Reset/Cancel buttons and left/right softkeys retain distinct actions. An app's top Back and the existing keyboard Back use the same return/query-clearing policy. Launcher query is the existing keyboard text destination; tapping its search strip does not invent an on-screen keyboard.
+The64B Snapshot keeps its16 words/screen IDs. A separate80B UX observation records mode/viewport/panel/capture/scroll/held-key state and counters;32B RenderStats still distinguishes software composition from full-frame publication. [Host exporter](../shell/examples/export.rs) replays raw wires with actual supplied metrics and writes UX20, Snapshot16, RenderStats8 and native PNG/raw565. Canonical keyboard traces preserve functional intent after deliberate presentation changes; old reports/captures remain unchanged. Actual ARM/reset/burst/fault/preemption/parity results belong to the final execution report.

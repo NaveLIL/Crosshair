@@ -1,6 +1,6 @@
 # UI navigation and input contract
 
-This document describes the implemented logical state machine and the boundary for future physical input. [AppsScreen](../ui/src/components.rs) is shared by the host fixture and ARM caller. It owns no device handle, timer, framebuffer or allocator. There are still exactly eight `Event` variants: `Up`, `Down`, `Left`, `Right`, `Select`, `Back`, `Menu`, `TextInput(char)`. No new event or wire encoding is introduced by the design system.
+This document preserves the Wave004 diagnostic AppsScreen contract and its future physical-input boundary. The current Shell has separate [adaptive navigation](SHELL_NAVIGATION.md) and [implemented capture/key-edge policy](ADAPTIVE_SHELL.md); its phase actions do not change this diagnostic Event enum or historical behavior. [AppsScreen](../ui/src/components.rs) is shared by the host fixture and ARM caller. It owns no device handle, timer, framebuffer or allocator. There are still exactly eight `Event` variants: `Up`, `Down`, `Left`, `Right`, `Select`, `Back`, `Menu`, `TextInput(char)`. No new event or wire encoding is introduced by the design system.
 
 ## Implemented keyboard behavior
 

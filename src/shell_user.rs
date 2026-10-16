@@ -6,8 +6,8 @@ use core::{
     panic::PanicInfo,
     ptr::{addr_of, addr_of_mut, read_volatile, write_volatile},
 };
-use crosshair_shell::{Action, BuildInfo, RuntimeInfo, Shell, Snapshot};
-use crosshair_ui::{MAX_PIXELS, Surface, components::Event};
+use crosshair_shell::{Action, BuildInfo, RuntimeInfo, Shell, Snapshot, UxSnapshot};
+use crosshair_ui::{MAX_PIXELS, Surface};
 global_asm!(
     r#"
 .syntax unified
@@ -66,37 +66,17 @@ static mut SHELL_TRACE: [u32; 32 * 64] = [0; 32 * 64];
 /// Last render's bounded work counters, not a second frame or a kernel ABI.
 #[unsafe(no_mangle)]
 static mut SHELL_RENDER_METRICS: [u32; 8] = [0; 8];
+/// User-owned bounded observations; neither changes the kernel's ABI.
+#[unsafe(no_mangle)]
+static mut SHELL_UX_METRICS: [u32; 20] = [0; 20];
+#[unsafe(no_mangle)]
+static mut SHELL_UX_TRACE: [u32; 20 * 64] = [0; 20 * 64];
+#[unsafe(no_mangle)]
+static mut SHELL_RENDER_TRACE: [u32; 8 * 64] = [0; 8 * 64];
 unsafe fn call(n: u32, a: u32, b: u32, c: u32, d: u32) -> u32 {
     // SAFETY: assembly follows AAPCS, saves r4/r7/LR, SVC is the only privilege
     // boundary. Kernel validates all raw arguments; no references span copyout.
     unsafe { shell_svc(n, a, b, c, d) }
-}
-fn decode(w: u32) -> Action {
-    // The unchanged synthetic FIFO accepts logical keys and Unicode only.
-    // Supplementary private-use scalars transport a synthetic tap. The host
-    // reserves this range from text; Shell rejects coordinates beyond 240x320.
-    // This is an emulator adapter convention, not a Blue Angel sensor protocol.
-    if w >> 24 == 8 {
-        let scalar = w & 0xffffff;
-        if (0x0f0000..=0x10ffff).contains(&scalar) {
-            let packed = scalar - 0x0f0000;
-            return Action::Pointer {
-                x: (packed & 0xff) as u16,
-                y: (packed >> 8) as u16,
-            };
-        }
-    }
-    Action::Key(match w >> 24 {
-        1 => Event::Up,
-        2 => Event::Down,
-        3 => Event::Left,
-        4 => Event::Right,
-        5 => Event::Select,
-        6 => Event::Back,
-        7 => Event::Menu,
-        8 => Event::TextInput(char::from_u32(w & 0xffffff).unwrap_or('\u{fffd}')),
-        _ => Event::TextInput('\0'),
-    })
 }
 unsafe fn metrics() -> RuntimeInfo {
     // SAFETY: fixed exclusive own User data allocation, exact48B ABI.
@@ -146,16 +126,18 @@ pub extern "C" fn shell_user_main() -> ! {
         );
         let mut surface = Surface::new(pixels, 240, 320, 240).unwrap();
         let mut shell = Shell::new(BuildInfo {
-            version: "0.1.1 / Wave007.1",
+            version: "0.1.2 / Wave007.2",
             architecture: "ARMv5TE",
             environment: "QEMU synthetic",
         });
         let mut wire = 0;
         loop {
             let runtime = metrics();
+            // Shared Shell policy cancels capture/held keys if this real
+            // broker snapshot reports input loss; host replay does the same.
             shell.update_runtime(runtime);
             if wire != 0 {
-                shell.handle(decode(wire));
+                shell.handle(Action::from_wire(wire));
             }
             let rendered = shell.render(&mut surface);
             let render_metrics = shell.render_stats().words();
@@ -189,8 +171,10 @@ pub extern "C" fn shell_user_main() -> ! {
                     .unwrap();
             }
             let snapshot = shell.snapshot();
+            let ux = shell.ux_snapshot().words();
             const _: () = assert!(core::mem::size_of::<Snapshot>() == 64);
             const _: () = assert!(core::mem::size_of::<RuntimeInfo>() == 48);
+            const _: () = assert!(core::mem::size_of::<UxSnapshot>() == 80);
             let record = addr_of_mut!(SHELL_USER_RECORD).cast::<u32>();
             write_volatile(record, 0x5553484c);
             write_volatile(record.add(1), 1);
@@ -200,6 +184,21 @@ pub extern "C" fn shell_user_main() -> ! {
             core::ptr::copy_nonoverlapping(addr_of!(runtime).cast::<u32>(), record.add(20), 12);
             write_volatile(record.add(2), 2);
             let slot = snapshot.events_processed as usize % 64;
+            core::ptr::copy_nonoverlapping(
+                ux.as_ptr(),
+                addr_of_mut!(SHELL_UX_METRICS).cast::<u32>(),
+                20,
+            );
+            core::ptr::copy_nonoverlapping(
+                ux.as_ptr(),
+                addr_of_mut!(SHELL_UX_TRACE).cast::<u32>().add(slot * 20),
+                20,
+            );
+            core::ptr::copy_nonoverlapping(
+                render_metrics.as_ptr(),
+                addr_of_mut!(SHELL_RENDER_TRACE).cast::<u32>().add(slot * 8),
+                8,
+            );
             core::ptr::copy_nonoverlapping(
                 record,
                 addr_of_mut!(SHELL_TRACE).cast::<u32>().add(slot * 32),

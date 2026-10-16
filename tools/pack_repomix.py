@@ -65,7 +65,7 @@ def public_inventory():
             asset = {"path": name, "media_type": IMAGE_TYPES[relative.suffix.lower()], **original[name]}
             if relative.suffix.lower() == ".raw565":
                 require(any(name.startswith(prefix) for prefix in
-                            ("reports/wave007/frames/", "reports/wave007-1/frames/"))
+                            ("reports/wave007/frames/", "reports/wave007-1/frames/", "reports/wave007-2/frames/"))
                         and len(data) == 240 * 320 * 2,
                         "Only bounded verified Shell framebuffer captures may use raw565: " + name)
                 asset.update(width=240, height=320, stride_pixels=240, pixel_format="RGB565_LE")

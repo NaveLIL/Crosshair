@@ -3,13 +3,17 @@
 //! Original MIT shell state and composition on crosshair-ui. No hardware access,
 //! allocator, framebuffer ownership, clock or invented device-status service.
 use crosshair_ui::{Surface, components::Event};
+mod adaptive;
 pub mod fixtures;
+use adaptive::PointerState;
+pub use adaptive::{ChromeMode, KeyPhase, PointerPhase, UxSnapshot};
 pub mod geometry;
 pub mod icons;
 mod render;
 pub mod wallpaper;
 
-pub const VERSION: &str = "0.1.1";
+pub const VERSION: &str = "0.1.2";
+pub const UX_WORDS: usize = 20;
 pub const RUNTIME_VERSION: u32 = 1;
 pub const VALID_TIMER: u32 = 1;
 pub const VALID_TASKS: u32 = 2;
@@ -35,6 +39,11 @@ impl BuildInfo {
     };
     pub const WAVE007_1: Self = Self {
         version: "0.1.1 / Wave007.1",
+        architecture: "ARMv5TE",
+        environment: "QEMU synthetic",
+    };
+    pub const WAVE007_2: Self = Self {
+        version: "0.1.2 / Wave007.2",
         architecture: "ARMv5TE",
         environment: "QEMU synthetic",
     };
@@ -199,6 +208,21 @@ pub enum Action {
     SoftLeft,
     SoftRight,
     SwitchTask,
+    Start,
+    SystemPanel,
+    CancelInput,
+    HardwareKey {
+        phase: KeyPhase,
+        key: u8,
+    },
+    PointerEvent {
+        phase: PointerPhase,
+        x: u16,
+        y: u16,
+    },
+    PointerHold {
+        millis: u16,
+    },
     /// One logical tap in the fixed guest pixel coordinate space. No press,
     /// release, calibration, drag or host-window coordinates are implied.
     Pointer {
@@ -221,6 +245,8 @@ impl Action {
             8 => Self::SoftLeft,
             9 => Self::SoftRight,
             10 => Self::SwitchTask,
+            11 => Self::Start,
+            12 => Self::SystemPanel,
             _ => return None,
         })
     }
@@ -230,14 +256,97 @@ impl Action {
             Self::Key(Event::TextInput('\u{e001}')) => Self::SoftLeft,
             Self::Key(Event::TextInput('\u{e002}')) => Self::SoftRight,
             Self::Key(Event::TextInput('\u{e003}')) => Self::SwitchTask,
-            Self::Key(Event::TextInput(ch)) if ch as u32 >= POINTER_SCALAR_BASE => {
-                let point = ch as u32 - POINTER_SCALAR_BASE;
-                Self::Pointer {
-                    x: (point & 255) as u16,
-                    y: (point >> 8) as u16,
-                }
+            Self::Key(Event::TextInput(ch))
+                if ch as u32 >= 0x90000 || (0xe004..=0xf0ff).contains(&(ch as u32)) =>
+            {
+                Self::from_wire(0x08000000 | ch as u32)
             }
             _ => self,
+        }
+    }
+    /// Synthetic logical transport, not physical PDA key IDs. Invalid reserved
+    /// words cancel pending input instead of becoming application text/actions.
+    pub fn from_wire(wire: u32) -> Self {
+        let scalar = wire & 0xffffff;
+        if wire >> 24 == 8 {
+            if (0x90000..=0x10ffff).contains(&scalar) {
+                let block = (scalar - 0x90000) / 0x20000;
+                let point = (scalar - 0x90000) % 0x20000;
+                let x = (point & 255) as u16;
+                let y = (point >> 8) as u16;
+                if x >= 240 || y >= 320 {
+                    return Self::CancelInput;
+                }
+                return match block {
+                    0 => Self::PointerEvent {
+                        phase: PointerPhase::Release,
+                        x,
+                        y,
+                    },
+                    1 => Self::PointerEvent {
+                        phase: PointerPhase::Move,
+                        x,
+                        y,
+                    },
+                    2 => Self::PointerEvent {
+                        phase: PointerPhase::Press,
+                        x,
+                        y,
+                    },
+                    _ => Self::Pointer { x, y },
+                };
+            }
+            if (0xe100..=0xf0ff).contains(&scalar) {
+                return Self::PointerHold {
+                    millis: (scalar - 0xe100) as u16,
+                };
+            }
+            if (0xe010..=0xe03c).contains(&scalar) {
+                let code = scalar - 0xe010;
+                let key = (code & 15) as u8;
+                return if key <= 12 {
+                    Self::HardwareKey {
+                        phase: match code >> 4 {
+                            0 => KeyPhase::Press,
+                            1 => KeyPhase::Repeat,
+                            _ => KeyPhase::Release,
+                        },
+                        key,
+                    }
+                } else {
+                    Self::CancelInput
+                };
+            }
+            return match scalar {
+                0xe000 => Self::Home,
+                0xe001 => Self::SoftLeft,
+                0xe002 => Self::SoftRight,
+                0xe003 => Self::SwitchTask,
+                0xe004 => Self::Start,
+                0xe005 => Self::SystemPanel,
+                0xe006 => Self::PointerEvent {
+                    phase: PointerPhase::Cancel,
+                    x: 0,
+                    y: 0,
+                },
+                0xe007 => Self::CancelInput,
+                0xe004..=0xf0ff => Self::CancelInput,
+                _ => char::from_u32(scalar)
+                    .map_or(Self::CancelInput, |ch| Self::Key(Event::TextInput(ch))),
+            };
+        }
+        if scalar != 0 {
+            return Self::CancelInput;
+        }
+        match wire >> 24 {
+            1 => Self::Key(Event::Up),
+            2 => Self::Key(Event::Down),
+            3 => Self::Key(Event::Left),
+            4 => Self::Key(Event::Right),
+            5 => Self::Key(Event::Select),
+            6 => Self::Key(Event::Back),
+            7 => Self::Key(Event::Menu),
+            _ => Self::CancelInput,
         }
     }
 }
@@ -315,6 +424,19 @@ pub struct Shell {
     events_processed: u32,
     revision: u32,
     renders: u32,
+    modes: [u8; 6],
+    scroll: [u16; 6],
+    pointer: PointerState,
+    gesture_serial: u32,
+    actions_invoked: u32,
+    input_cancels: u32,
+    last_phase: u32,
+    panel_invocations: u32,
+    mode_changes: u32,
+    held_keys: u16,
+    last_key_phase: u32,
+    last_key: u32,
+    key_actions: u32,
 }
 impl Shell {
     pub const fn new(build: BuildInfo) -> Self {
@@ -340,6 +462,19 @@ impl Shell {
             events_processed: 0,
             revision: 0,
             renders: 0,
+            modes: [0; 6],
+            scroll: [0; 6],
+            pointer: PointerState::EMPTY,
+            gesture_serial: 0,
+            actions_invoked: 0,
+            input_cancels: 0,
+            last_phase: 0,
+            panel_invocations: 0,
+            mode_changes: 0,
+            held_keys: 0,
+            last_key_phase: 0,
+            last_key: 0,
+            key_actions: 0,
         }
     }
     pub const fn snapshot(&self) -> Snapshot {
@@ -401,6 +536,12 @@ impl Shell {
     }
     pub fn update_runtime(&mut self, runtime: RuntimeInfo) {
         if self.runtime != runtime {
+            if (self.runtime.has(VALID_INPUT) && !runtime.has(VALID_INPUT))
+                || (runtime.has(VALID_INPUT)
+                    && runtime.input_overflows != self.runtime.input_overflows)
+            {
+                self.handle(Action::CancelInput);
+            }
             self.runtime = runtime;
             if matches!(self.screen, Screen::Today | Screen::Diagnostics) && self.overlay == 0 {
                 self.invalidate();
@@ -485,6 +626,10 @@ impl Shell {
             self.overlay = 0;
             return;
         }
+        if self.mode_available() {
+            self.system_panel();
+            return;
+        }
         self.overlay = if self.screen == Screen::Launcher {
             2
         } else {
@@ -521,6 +666,14 @@ impl Shell {
                     self.theme = 0;
                 }
             }
+            4 => match selected {
+                0 => self.home(),
+                1 => self.open(Screen::Launcher),
+                2 => self.back(),
+                3 => self.switch(),
+                4..=6 if self.mode_available() => self.set_mode(ChromeMode::from_u8(selected - 4)),
+                _ => {}
+            },
             _ => {}
         }
     }
@@ -538,106 +691,73 @@ impl Shell {
             self.activate();
         }
     }
-    fn pointer(&mut self, x: u16, y: u16) {
-        use geometry as g;
-        // Modal controls own the whole input surface. A tap can never pass
-        // through a dismissed overlay into a shortcut behind it.
-        if self.overlay != 0 {
-            if g::SOFT_LEFT.contains(x, y) {
-                self.soft_left();
-            } else if g::SOFT_RIGHT.contains(x, y) {
-                self.overlay = 0;
-            } else if self.overlay == 3 {
-                for (index, rect) in g::DIALOG_BUTTONS.into_iter().enumerate() {
-                    if rect.contains(x, y) {
-                        self.overlay_selected = index as u8;
-                        self.activate_overlay();
-                        break;
-                    }
-                }
-            } else {
-                let count = if self.overlay == 1 { 6 } else { 3 };
-                if let Some(index) = (0..count).find(|&i| g::menu_row(i).contains(x, y)) {
-                    self.overlay_selected = index as u8;
-                    self.activate_overlay();
-                } else {
-                    let height = 30 + count as u16 * 26;
-                    if !g::Rect::new(g::MENU.x, g::MENU.y, g::MENU.width, height).contains(x, y) {
-                        self.overlay = 0;
-                    }
-                }
-            }
-            return;
-        }
-        if g::START.contains(x, y) {
-            self.open(Screen::Launcher);
-        } else if self.screen != Screen::Desktop && g::APP_BACK.contains(x, y) {
-            self.back();
-        } else if g::SOFT_LEFT.contains(x, y) {
-            self.soft_left();
-        } else if g::SOFT_RIGHT.contains(x, y) {
-            self.menu();
-        } else {
-            match self.screen {
-                Screen::Desktop => {
-                    if let Some(index) = g::DESKTOP.iter().position(|r| r.contains(x, y)) {
-                        self.desktop_selected = index as u8;
-                        self.activate();
-                    }
-                }
-                Screen::Launcher => {
-                    let mut visible = 0;
-                    for (index, app) in APPS.into_iter().enumerate() {
-                        if self.matches(app) {
-                            if g::launcher_row(visible).contains(x, y) {
-                                self.launcher_selected = index as u8;
-                                self.activate();
-                                break;
-                            }
-                            visible += 1;
-                        }
-                    }
-                }
-                Screen::Today => {
-                    if let Some(index) = g::TODAY_ACTIONS.iter().position(|r| r.contains(x, y)) {
-                        self.today_selected = index as u8;
-                        self.activate();
-                    }
-                }
-                Screen::Settings => {
-                    if let Some(index) = g::SETTINGS.iter().position(|r| r.contains(x, y)) {
-                        self.settings_selected = index as u8;
-                        self.activate();
-                    }
-                }
-                _ => {}
-            }
-        }
-    }
     /// Consumes one existing logical action. Event counters include ignored
     /// input, while redraw occurs only for visible changes. Private-use Unicode
     /// actions travel through the existing TextInput wire; no scan code coupling.
     pub fn handle(&mut self, action: Action) -> bool {
-        let action = action.semantic();
+        let mut action = action.semantic();
         if matches!(action, Action::Pointer { x, y } if x >= geometry::WIDTH || y >= geometry::HEIGHT)
         {
             return false;
         }
         let before = *self;
+        if action == Action::CancelInput {
+            self.cancel_input();
+            let changed =
+                before.pointer.active && before.pointer.target != 0 && !before.pointer.cancelled;
+            if changed {
+                self.invalidate();
+            }
+            return changed;
+        }
         self.events_processed = self.events_processed.wrapping_add(1);
+        if let Action::HardwareKey { phase, key } = action {
+            action = self
+                .hardware_action(phase, key)
+                .unwrap_or(Action::HardwareKey { phase, key });
+        }
+        if !matches!(
+            action,
+            Action::Pointer { .. }
+                | Action::PointerEvent { .. }
+                | Action::PointerHold { .. }
+                | Action::HardwareKey { .. }
+        ) {
+            self.cancel_pointer();
+        }
+        if matches!(
+            action,
+            Action::Key(Event::Select | Event::Back | Event::Menu)
+                | Action::Home
+                | Action::Start
+                | Action::SystemPanel
+                | Action::SwitchTask
+                | Action::SoftLeft
+                | Action::SoftRight
+        ) {
+            self.actions_invoked = self.actions_invoked.wrapping_add(1);
+        }
         if let Action::Pointer { x, y } = action {
-            self.pointer(x, y);
+            self.tap(x, y);
+        } else if let Action::PointerEvent { phase, x, y } = action {
+            self.pointer_event(phase, x, y);
+        } else if let Action::PointerHold { millis } = action {
+            self.pointer_hold(millis);
         } else if action == Action::Home {
             self.home();
+        } else if action == Action::Start {
+            self.open(Screen::Launcher);
+        } else if action == Action::SystemPanel {
+            if self.overlay == 4 {
+                self.overlay = 0;
+            } else {
+                self.system_panel();
+            }
         } else if action == Action::SwitchTask {
             self.overlay = 0;
             self.switch();
         } else if self.overlay != 0 {
-            let count = match self.overlay {
-                1 => 6,
-                2 => 3,
-                _ => 2,
-            };
+            let count = self.overlay_count();
             match action {
                 Action::Key(Event::Back) | Action::Key(Event::Menu) | Action::SoftRight => {
                     self.overlay = 0
@@ -689,7 +809,10 @@ impl Shell {
             || self.overlay_selected != before.overlay_selected
             || self.theme != before.theme
             || self.query != before.query
-            || self.query_len != before.query_len;
+            || self.query_len != before.query_len
+            || self.modes != before.modes
+            || self.scroll != before.scroll
+            || self.pressed_target() != before.pressed_target();
         if changed || self.screen == Screen::Diagnostics {
             if changed
                 && before.screen == Screen::Desktop
@@ -745,7 +868,7 @@ impl Shell {
                 self.settings_selected =
                     (self.settings_selected as i8 + vertical + horizontal).clamp(0, 1) as u8
             }
-            _ => {}
+            Screen::About | Screen::Diagnostics => self.scroll_by(vertical + horizontal),
         }
     }
     /// Composes into the caller's sole framebuffer only on a dirty state. The

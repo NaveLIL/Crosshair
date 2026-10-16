@@ -134,7 +134,7 @@ fn existing_text_wire_special_actions_and_unknown_keys_do_not_corrupt_state() {
     assert_eq!(shell.screen, Screen::Launcher);
     assert_eq!(fold('Ё'), 'ё');
     assert_eq!(fold('Й'), 'й');
-    assert_eq!(Action::from_code(11), None);
+    assert_eq!(Action::from_code(13), None);
 }
 
 #[test]
@@ -256,7 +256,7 @@ fn burst_navigation_has_bounded_valid_focus_history_and_no_implicit_apps() {
         assert!(
             state.settings_selected < 2
                 && state.today_selected < 2
-                && state.overlay <= 3
+                && state.overlay <= 4
                 && state.theme <= 1
         );
         assert!(
@@ -264,15 +264,7 @@ fn burst_navigation_has_bounded_valid_focus_history_and_no_implicit_apps() {
                 && shell.query_len as usize <= QUERY_CAPACITY
         );
         assert!(state.opened_mask & (1 << state.screen) != 0);
-        assert!(
-            state.overlay == 0
-                || state.overlay_selected
-                    < match state.overlay {
-                        1 => 6,
-                        2 => 3,
-                        _ => 2,
-                    }
-        );
+        assert!(state.overlay == 0 || state.overlay_selected < shell.overlay_count() as u32);
     }
     assert_eq!(shell.events_processed, 20_000);
 }
@@ -344,24 +336,36 @@ fn pointer_overlays_are_modal_and_dialog_cancel_confirm_are_distinct() {
     assert_eq!(shell.overlay, 3);
     assert!(!tap(&mut shell, 20, 45)); // cannot hit shortcut behind modal
     assert_eq!(shell.overlay, 3);
+    pointer_phase(&mut shell, PointerPhase::Press, 20, 45);
+    pointer_phase(&mut shell, PointerPhase::Release, 20, 45);
+    assert_eq!(shell.overlay, 3); // real mouse route also keeps dialog modal
     tap(&mut shell, 150, 208); // Cancel
     assert_eq!(shell.theme, 1);
     assert_eq!(shell.overlay, 0);
     tap(&mut shell, 30, 138);
     tap(&mut shell, 40, 208); // Reset
     assert_eq!(shell.theme, 0);
-    tap(&mut shell, 180, 308); // right softkey menu
+    shell.handle(Action::SoftRight); // keyboard context action; no permanent footer
     assert_eq!(shell.overlay, 1);
     tap(&mut shell, 30, 96); // Today
     assert_eq!(shell.screen, Screen::Today);
-    tap(&mut shell, 30, 260); // Today Diagnostics action
+    tap(&mut shell, 30, 282); // Today Diagnostics inline action
     assert_eq!(shell.screen, Screen::Diagnostics);
-    tap(&mut shell, 30, 308); // left Back
+    tap(&mut shell, 228, 12); // title Back
     assert_eq!(shell.screen, Screen::Today);
     key(&mut shell, Event::Menu);
     tap(&mut shell, 235, 40); // dismiss outside menu, no underlying action
     assert_eq!(shell.overlay, 0);
     assert_eq!(shell.screen, Screen::Today);
+    shell.handle(Action::Home);
+    shell.handle(Action::SystemPanel);
+    let commands = shell.actions_invoked;
+    // Outside the panel, but over the underlying Today shortcut: dismiss only.
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 45);
+    pointer_phase(&mut shell, PointerPhase::Release, 40, 45);
+    assert_eq!(shell.overlay, 0);
+    assert_eq!(shell.screen, Screen::Desktop);
+    assert_eq!(shell.actions_invoked, commands);
 }
 
 #[test]
@@ -386,8 +390,8 @@ fn pointer_half_open_bounds_invalid_wire_and_keyboard_interleave_preserve_state(
     }
     assert!(geometry::START.contains(0, 0));
     assert!(!geometry::START.contains(58, 0));
-    assert!(!geometry::SOFT_LEFT.contains(120, 308));
-    assert!(geometry::SOFT_RIGHT.contains(120, 308));
+    assert!(!geometry::panel_button(ChromeMode::Standard).contains(216, 12));
+    assert!(geometry::back(ChromeMode::Standard).contains(216, 12));
     assert!(!geometry::launcher_row(usize::MAX).contains(0, 0));
     assert!(!geometry::menu_row(usize::MAX).contains(0, 0));
     key(
@@ -445,7 +449,7 @@ fn desktop_menu_overlay_reuses_wallpaper_and_dismissal_matches_fresh_composition
     let mut surface = Surface::new(&mut pixels, 240, 320, 240).unwrap();
     shell.render(&mut surface);
     assert_eq!(shell.render_stats().full, 1);
-    assert_eq!(shell.render_stats().wallpaper.pixels_written, 240 * 272);
+    assert_eq!(shell.render_stats().wallpaper.pixels_written, 240 * 296);
     surface.present(|_, _, _| Ok::<(), ()>(())).unwrap();
     assert!(!shell.render(&mut surface));
     assert_eq!(shell.render_stats(), RenderStats::ZERO);
@@ -471,6 +475,291 @@ fn desktop_menu_overlay_reuses_wallpaper_and_dismissal_matches_fresh_composition
     shell.render(&mut surface);
     fresh.render(&mut expected_surface);
     assert_eq!(shell.render_stats().full, 0);
-    assert_eq!(shell.render_stats().wallpaper.pixels_written, 220 * 204);
+    assert_eq!(shell.render_stats().wallpaper.pixels_written, 220 * 242);
     assert_eq!(surface.pixels(), expected_surface.pixels());
+}
+
+fn pointer_phase(shell: &mut Shell, phase: PointerPhase, x: u16, y: u16) {
+    shell.handle(Action::PointerEvent { phase, x, y });
+}
+fn edge(shell: &mut Shell, phase: KeyPhase, key: u8) {
+    shell.handle(Action::HardwareKey { phase, key });
+}
+fn open_about(shell: &mut Shell) {
+    shell.handle(Action::Home);
+    shell.handle(Action::Start);
+    key(shell, Event::Select);
+    assert_eq!(shell.screen, Screen::About);
+}
+fn mode(shell: &mut Shell, mode: ChromeMode) {
+    shell.handle(Action::SystemPanel);
+    for _ in 0..4 + mode as u32 {
+        key(shell, Event::Down);
+    }
+    key(shell, Event::Select);
+    assert_eq!(shell.chrome_mode(), mode);
+}
+
+#[test]
+fn adaptive_modes_keep_content_history_focus_and_have_pointer_recovery() {
+    let mut shell = Shell::new(BuildInfo::WAVE007_2);
+    assert_eq!(shell.content_rect(), geometry::Rect::new(0, 24, 240, 296));
+    let before = shell.snapshot();
+    tap(&mut shell, 30, 308);
+    assert_eq!(shell.screen, Screen::Desktop);
+    assert_eq!(shell.desktop_selected, before.desktop_selected as u8);
+    open_about(&mut shell);
+    let history = shell.history_len;
+    mode(&mut shell, ChromeMode::Compact);
+    assert_eq!(shell.content_rect(), geometry::Rect::new(0, 16, 240, 304));
+    assert_eq!(shell.history_len, history);
+    for _ in 0..100 {
+        key(&mut shell, Event::Down);
+    }
+    assert_eq!(shell.scroll_offset(), shell.scroll_max());
+    mode(&mut shell, ChromeMode::Immersive);
+    assert_eq!(shell.content_rect(), geometry::Rect::new(0, 0, 240, 320));
+    assert!(!geometry::scroll_up(ChromeMode::Immersive).contains(232, 8));
+    assert!(!geometry::IMMERSIVE_HANDLE.contains(232, 24));
+    assert_eq!(shell.hit_target(232, 8), adaptive::target::PANEL);
+    assert_eq!(
+        shell.hit_target(232, geometry::scroll_up(ChromeMode::Immersive).y + 8),
+        adaptive::target::SCROLL_UP
+    );
+    assert!(shell.scroll_offset() <= shell.scroll_max());
+    tap(&mut shell, 232, 8);
+    assert_eq!(shell.overlay, 4);
+    key(&mut shell, Event::Back);
+    pointer_phase(&mut shell, PointerPhase::Press, 4, 1);
+    pointer_phase(&mut shell, PointerPhase::Move, 4, 14);
+    assert_eq!(shell.overlay, 4);
+    assert!(!shell.pointer.active);
+    key(&mut shell, Event::Back);
+    mode(&mut shell, ChromeMode::Standard);
+    shell.handle(Action::Home);
+    shell.handle(Action::SwitchTask);
+    shell.handle(Action::SwitchTask);
+    assert_eq!(shell.screen, Screen::About);
+    assert_eq!(shell.chrome_mode(), ChromeMode::Standard);
+    assert_eq!(shell.launcher_selected, 0);
+    assert_eq!(core::mem::size_of::<UxSnapshot>(), 80);
+    assert_eq!(shell.ux_snapshot().words().len(), UX_WORDS);
+}
+
+#[test]
+fn pointer_press_release_capture_leave_cancel_and_stale_release_are_distinct() {
+    let mut shell = Shell::new(BuildInfo::WAVE007_2);
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 120);
+    assert_eq!(shell.screen, Screen::Desktop);
+    assert_eq!(shell.desktop_selected, 1);
+    assert!(shell.pointer.active);
+    assert_eq!(shell.actions_invoked, 0);
+    pointer_phase(&mut shell, PointerPhase::Release, 40, 120);
+    assert_eq!(shell.screen, Screen::Settings);
+    assert_eq!(shell.actions_invoked, 1);
+    assert!(!shell.pointer.active);
+    shell.handle(Action::Home);
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 68);
+    pointer_phase(&mut shell, PointerPhase::Move, 120, 68);
+    pointer_phase(&mut shell, PointerPhase::Move, 40, 68);
+    pointer_phase(&mut shell, PointerPhase::Release, 40, 68);
+    assert_eq!(shell.screen, Screen::Desktop);
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 68);
+    pointer_phase(&mut shell, PointerPhase::Cancel, 0, 0);
+    pointer_phase(&mut shell, PointerPhase::Release, 40, 68);
+    assert_eq!(shell.screen, Screen::Desktop);
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 68);
+    shell.handle(Action::Start);
+    pointer_phase(&mut shell, PointerPhase::Release, 40, 68);
+    assert_eq!(shell.screen, Screen::Launcher);
+}
+
+#[test]
+fn trusted_hold_threshold_stationarity_and_later_release_suppression() {
+    let mut shell = Shell::new(BuildInfo::WAVE007_2);
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 68);
+    shell.handle(Action::PointerHold { millis: 599 });
+    assert_eq!(shell.overlay, 0);
+    shell.handle(Action::PointerHold { millis: 600 });
+    assert_eq!(shell.overlay, 4);
+    assert!(!shell.pointer.active);
+    let selected = shell.overlay_selected;
+    pointer_phase(&mut shell, PointerPhase::Release, 40, 68);
+    assert_eq!(shell.overlay, 4);
+    assert_eq!(shell.overlay_selected, selected);
+    key(&mut shell, Event::Back);
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 68);
+    pointer_phase(&mut shell, PointerPhase::Move, 41, 68);
+    pointer_phase(&mut shell, PointerPhase::Move, 40, 68);
+    shell.handle(Action::PointerHold { millis: 4095 });
+    assert_eq!(shell.overlay, 0);
+    pointer_phase(&mut shell, PointerPhase::Release, 40, 68);
+    assert_eq!(shell.screen, Screen::Today);
+    shell.handle(Action::Start);
+    pointer_phase(&mut shell, PointerPhase::Press, 30, 70);
+    shell.handle(Action::PointerHold { millis: 600 });
+    assert_eq!(shell.overlay, 2); // actual Launcher context, also reachable by F2
+    assert!(!shell.pointer.active);
+    pointer_phase(&mut shell, PointerPhase::Release, 30, 70);
+    assert_eq!(shell.overlay, 2); // hold suppresses the later tap
+    assert_eq!(shell.screen, Screen::Launcher);
+}
+
+#[test]
+fn physical_edges_repeat_only_held_navigation_and_system_commands_once() {
+    let mut shell = Shell::new(BuildInfo::WAVE007_2);
+    edge(&mut shell, KeyPhase::Press, 1);
+    assert_eq!(shell.desktop_selected, 1);
+    edge(&mut shell, KeyPhase::Repeat, 1);
+    assert_eq!(shell.desktop_selected, 2);
+    edge(&mut shell, KeyPhase::Release, 1);
+    edge(&mut shell, KeyPhase::Repeat, 1);
+    assert_eq!(shell.desktop_selected, 2);
+    edge(&mut shell, KeyPhase::Press, 4);
+    assert_eq!(shell.screen, Screen::Diagnostics);
+    let actions = shell.key_actions;
+    edge(&mut shell, KeyPhase::Repeat, 4);
+    edge(&mut shell, KeyPhase::Press, 4);
+    assert_eq!(shell.key_actions, actions);
+    edge(&mut shell, KeyPhase::Release, 4);
+    edge(&mut shell, KeyPhase::Press, 7);
+    assert_eq!(shell.screen, Screen::Desktop);
+    assert_ne!(shell.held_keys & (1 << 7), 0);
+    let actions = shell.key_actions;
+    edge(&mut shell, KeyPhase::Press, 7);
+    edge(&mut shell, KeyPhase::Repeat, 7);
+    assert_eq!(shell.key_actions, actions);
+    edge(&mut shell, KeyPhase::Release, 7);
+    assert_eq!(shell.held_keys, 0);
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 68);
+    edge(&mut shell, KeyPhase::Press, 0);
+    let count = shell.events_processed;
+    shell.handle(Action::CancelInput);
+    assert_eq!(shell.events_processed, count);
+    assert_eq!(shell.held_keys, 0);
+    assert!(!shell.pointer.active);
+}
+
+#[test]
+fn shared_wire_phase_bounds_text_and_key_edges_fail_closed() {
+    for (base, phase) in [
+        (0x90000, PointerPhase::Release),
+        (0xb0000, PointerPhase::Move),
+        (0xd0000, PointerPhase::Press),
+    ] {
+        for (x, y) in [(0, 0), (239, 319)] {
+            assert_eq!(
+                Action::from_wire(0x08000000 | (base + (y << 8) + x)),
+                Action::PointerEvent {
+                    phase,
+                    x: x as u16,
+                    y: y as u16
+                }
+            );
+        }
+        for (x, y) in [(240, 0), (255, 319), (0, 320), (255, 511)] {
+            assert_eq!(
+                Action::from_wire(0x08000000 | (base + (y << 8) + x)),
+                Action::CancelInput
+            );
+        }
+    }
+    assert_eq!(Action::from_wire(0x080fefff), Action::CancelInput);
+    assert_eq!(
+        Action::from_wire(0x0800e006),
+        Action::PointerEvent {
+            phase: PointerPhase::Cancel,
+            x: 0,
+            y: 0
+        }
+    );
+    assert_eq!(Action::from_wire(0x0800e007), Action::CancelInput);
+    assert_eq!(
+        Action::from_wire(0x0800e100 + 600),
+        Action::PointerHold { millis: 600 }
+    );
+    assert_eq!(
+        Action::from_wire(0x0800f0ff),
+        Action::PointerHold { millis: 4095 }
+    );
+    for phase in [KeyPhase::Press, KeyPhase::Repeat, KeyPhase::Release] {
+        for key in 0..=12 {
+            assert_eq!(
+                Action::from_wire(0x0800e010 + ((phase as u32) << 4) + key),
+                Action::HardwareKey {
+                    phase,
+                    key: key as u8
+                }
+            );
+        }
+    }
+    for wire in [
+        0, 0x01000001, 0x09000000, 0x0800d800, 0x08110000, 0x0800e01d,
+    ] {
+        assert_eq!(Action::from_wire(wire), Action::CancelInput);
+    }
+    assert_eq!(
+        Action::from_wire(0x0800041e),
+        Action::Key(Event::TextInput('О'))
+    );
+}
+
+#[test]
+fn input_loss_clears_capture_and_held_state_without_fabricated_actions() {
+    let mut shell = Shell::new(BuildInfo::WAVE007_2);
+    let mut r = RuntimeInfo::UNKNOWN;
+    r.valid = VALID_INPUT;
+    shell.update_runtime(r);
+    edge(&mut shell, KeyPhase::Press, 0);
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 68);
+    let events = shell.events_processed;
+    r.input_overflows = 1;
+    shell.update_runtime(r);
+    assert_eq!(shell.events_processed, events);
+    assert!(!shell.pointer.active);
+    assert_eq!(shell.held_keys, 0);
+    pointer_phase(&mut shell, PointerPhase::Release, 40, 68);
+    assert_eq!(shell.screen, Screen::Desktop);
+    edge(&mut shell, KeyPhase::Press, 0);
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 68);
+    r.version = 99;
+    shell.update_runtime(r);
+    assert!(!shell.pointer.active);
+    assert_eq!(shell.held_keys, 0);
+    // Invalid groups cannot smuggle an invented counter change into policy.
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 68);
+    r.input_overflows = 9;
+    shell.update_runtime(r);
+    assert!(shell.pointer.active);
+    shell.handle(Action::CancelInput);
+    tap(&mut shell, 24, 12);
+    assert_eq!(shell.screen, Screen::Launcher);
+}
+
+#[test]
+fn pressed_partial_render_matches_fresh_frame_and_bottom_is_wallpaper() {
+    let mut shell = Shell::new(BuildInfo::WAVE007_2);
+    let mut a = vec![0; 240 * 320];
+    let mut s = Surface::new(&mut a, 240, 320, 240).unwrap();
+    shell.render(&mut s);
+    s.present(|_, _, _| Ok::<(), ()>(())).unwrap();
+    let mut wallpaper = vec![0; 240 * 320];
+    let mut w = Surface::new(&mut wallpaper, 240, 320, 240).unwrap();
+    wallpaper::draw_region(&mut w, 0, 296, 240, 24, false);
+    assert_eq!(&s.pixels()[296 * 240..], &w.pixels()[296 * 240..]);
+    pointer_phase(&mut shell, PointerPhase::Press, 40, 120);
+    let mut fresh = shell;
+    fresh.invalidate();
+    let mut b = vec![0; 240 * 320];
+    let mut full = Surface::new(&mut b, 240, 320, 240).unwrap();
+    shell.render(&mut s);
+    fresh.render(&mut full);
+    assert_eq!(s.pixels(), full.pixels());
+    assert_eq!(shell.render_stats().wallpaper.pixels_written, 8352);
+    pointer_phase(&mut shell, PointerPhase::Move, 120, 120);
+    let mut fresh = shell;
+    fresh.invalidate();
+    shell.render(&mut s);
+    fresh.render(&mut full);
+    assert_eq!(s.pixels(), full.pixels());
 }

@@ -142,7 +142,7 @@ def capture(qmp, r, destination):
     qmp.request("pmemsave", {"val": r["fb_pa"], "size": FB_BYTES, "filename": str(raw)})
     encode(raw, png)
     qmp.request("screendump", {"filename": str(ppm)})
-    equal(png_rgb(png), ppm_rgb(ppm), "actual guest framebuffer equals the QEMU committed console pixels")
+    equal(png_rgb(png) == ppm_rgb(ppm), True, "actual guest framebuffer equals the QEMU committed console pixels")
     return {"name": destination.name, "raw565": raw.name, "png": png.name, "ppm": ppm.name,
             "raw565_sha256": sha(raw.read_bytes()), "png_sha256": sha(png.read_bytes()),
             "console_rgb_sha256": sha(ppm_rgb(ppm)), "generation": r["frames"]}
@@ -201,8 +201,8 @@ def verify_reference(exporter, directory, trace, snapshots, captures):
         frame = frames[index]
         host_raw = host / frame["file"]
         guest_raw = directory / observed["raw565"]
-        equal(guest_raw.read_bytes(), host_raw.read_bytes(), "byte-exact actual ARM vs host Shell RGB565")
-        equal(ppm_rgb(directory / observed["ppm"]), png_rgb(host_raw.with_suffix(".png")), "QEMU console vs host Shell pixel parity")
+        equal(guest_raw.read_bytes() == host_raw.read_bytes(), True, f"byte-exact actual ARM vs host Shell RGB565 at step{index}")
+        equal(ppm_rgb(directory / observed["ppm"]) == png_rgb(host_raw.with_suffix(".png")), True, f"QEMU console vs host Shell pixel parity at step{index}")
         observed["host_raw565_sha256"] = sha(host_raw.read_bytes())
         observed["host_png_sha256"] = sha(host_raw.with_suffix(".png").read_bytes())
     return {"frames": len(frames), "pixel_comparisons": len(captures), "host_replay_sha256": sha(replay.read_bytes())}
@@ -361,6 +361,7 @@ def main():
                                    "scripts/build-shell.sh","scripts/test-shell.sh","scripts/test-shell-ui.sh","scripts/test-wave007.sh",
                                    "scripts/test-shell-pointer.sh","scripts/test-wave007-1.sh","tools/smoke_shell_pointer.py",
                                    "tools/run_shell.py","tools/crosshair_gui.swift","tools/test_shell_input.py",
+                                   "tools/smoke_shell_adaptive.py","scripts/test-shell-adaptive.sh","scripts/test-wave007-2.sh",
                                    "crosshair-emulator/qemu/crosshair-blueangel-display-test.c",
                                    "crosshair-emulator/qemu/crosshair-blueangel-e2b.c","crosshair-emulator/qemu/crosshair-blueangel-e2a.c")]
     result["source_sha256"]={str(path.relative_to(ROOT)):sha(path.read_bytes())for path in sorted(set(sources))if path.is_file()}

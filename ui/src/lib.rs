@@ -5,6 +5,7 @@
 pub mod components;
 pub mod fixtures;
 pub mod font;
+pub mod pda;
 pub mod theme;
 
 pub const MAX_WIDTH: usize = 240;

@@ -45,7 +45,7 @@ def user_record(memory, symbols):
 
 
 def wire(action):
-    if not 0 <= action <= 10:
+    if not 0 <= action <= 12:
         raise ValueError("unknown logical Shell action")
     return ((action + 1) << 24) if action <= 6 else (8 << 24) | (0xE000 + action - 7)
 
@@ -57,12 +57,42 @@ def pointer_wire(x, y):
 
 
 def pointer_coordinates(value):
-    """Decode only the reserved pointer carrier; keep arbitrary text distinct."""
-    if value >> 24 != 8 or not 0xF0000 <= (value & 0xFFFFFF) <= 0x10FFFF:
+    """Logical points in atomic emulator-reserved scalar blocks, not scan codes."""
+    if value >> 24 != 8 or not 0x90000 <= (value & 0xFFFFFF) <= 0x10FFFF:
         return None
-    point = (value & 0xFFFFFF) - 0xF0000
+    point = ((value & 0xFFFFFF) - 0x90000) & 0x1FFFF
     x, y = point & 255, point >> 8
     return (x, y) if x < 240 and y < 320 else None
+
+
+def pointer_phase_wire(phase, x=0, y=0, held_ms=0):
+    """1Press/2Move/3Release/4Cancel/5measuredHold; invalid points are testable."""
+    if phase in (1, 2, 3):
+        if not 0 <= x <= 255 or not 0 <= y <= 511:
+            raise ValueError("pointer carrier exceeds its bounded coordinate bits")
+        base = {1: 0xD0000, 2: 0xB0000, 3: 0x90000}[phase]
+        return 0x08000000 | (base + (y << 8) + x)
+    if phase == 4:
+        return 0x0800E006
+    if phase == 5 and 0 <= held_ms <= 0xFFFFFFFF:
+        return 0x08000000 | (0xE100 + min(held_ms, 4095))
+    raise ValueError("invalid pointer phase or held duration")
+
+
+def hardware_key_wire(edge, key):
+    if edge not in (0, 1, 2) or not 0 <= key <= 12:
+        raise ValueError("invalid semantic hardware key/edge")
+    return 0x08000000 | (0xE010 + (edge << 4) + key)
+
+
+UX_FIELDS = """version chrome_mode content_y content_height panel pointer_active pointer_target pointer_cancelled
+scroll_offset scroll_max gesture_serial actions_invoked input_cancels last_phase panel_invocations mode_changes
+held_keys last_key_phase last_key key_actions""".split()
+
+
+def ux_record(memory, symbols):
+    values = struct.unpack("<20I", read_bytes(memory, physical(symbols["SHELL_UX_METRICS"]), 80))
+    return dict(zip(UX_FIELDS, values))
 
 
 def await_stable(memory, symbols, user_symbols, events, process, timeout=30, shell_events=None):

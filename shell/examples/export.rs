@@ -35,8 +35,8 @@ fn action(value: &str) -> io::Result<Option<Action>> {
     if let Some(hex) = value.strip_prefix("text:") {
         let scalar = u32::from_str_radix(hex.trim_start_matches("0x"), 16)
             .map_err(|_| fail("invalid text scalar"))?;
-        if scalar >= crosshair_shell::POINTER_SCALAR_BASE {
-            return Err(fail("supplementary PUA is reserved for pointer wire"));
+        if scalar >= 0x90000 || (0xe000..=0xf0ff).contains(&scalar) {
+            return Err(fail("scalar reserved for synthetic system input"));
         }
         return char::from_u32(scalar)
             .map(|ch| Some(Action::Key(Event::TextInput(ch))))
@@ -45,28 +45,7 @@ fn action(value: &str) -> io::Result<Option<Action>> {
     if let Some(hex) = value.strip_prefix("wire:") {
         let wire = u32::from_str_radix(hex.trim_start_matches("0x"), 16)
             .map_err(|_| fail("invalid logical wire"))?;
-        let scalar = wire & 0x00ff_ffff;
-        if wire >> 24 == 8 && (crosshair_shell::POINTER_SCALAR_BASE..=0x10ffff).contains(&scalar) {
-            let point = scalar - crosshair_shell::POINTER_SCALAR_BASE;
-            return Ok(Some(Action::Pointer {
-                x: (point & 255) as u16,
-                y: (point >> 8) as u16,
-            }));
-        }
-        let key = match wire >> 24 {
-            1 => Event::Up,
-            2 => Event::Down,
-            3 => Event::Left,
-            4 => Event::Right,
-            5 => Event::Select,
-            6 => Event::Back,
-            7 => Event::Menu,
-            8 => Event::TextInput(
-                char::from_u32(wire & 0x00ff_ffff).ok_or_else(|| fail("invalid wire scalar"))?,
-            ),
-            _ => return Err(fail("unsupported event wire tag")),
-        };
-        return Ok(Some(Action::Key(key)));
+        return Ok(Some(Action::from_wire(wire)));
     }
     Action::from_code(integer(value)?)
         .map(Some)
@@ -143,7 +122,7 @@ fn capture(
     Ok(format!(
         concat!(
             "{{\"name\":{},\"snapshot\":{},\"snapshot_words\":{:?},\"query\":{},",
-            "\"runtime_words\":{:?},\"render_stats\":{:?},\"changed\":{},\"rendered\":{},\"file\":{},",
+            "\"runtime_words\":{:?},\"ux_words\":{:?},\"render_stats\":{:?},\"changed\":{},\"rendered\":{},\"file\":{},",
             "\"width\":240,\"height\":320,\"stride\":240,\"bytes\":153600,\"fnv1a64\":\"0x{:016x}\"}}"
         ),
         json(name),
@@ -151,6 +130,7 @@ fn capture(
         shell.snapshot().words(),
         json(&query),
         shell.runtime().words(),
+        shell.ux_snapshot().words(),
         shell.render_stats().words(),
         changed,
         rendered,
@@ -162,7 +142,7 @@ fn main() -> io::Result<()> {
     let mut args = std::env::args().skip(1);
     let out = PathBuf::from(args.next().ok_or_else(|| fail("OUT required"))?);
     let mut replay = None;
-    let mut build = BuildInfo::WAVE007_1;
+    let mut build = BuildInfo::WAVE007_2;
     while let Some(flag) = args.next() {
         let value = args.next().ok_or_else(|| fail("flag requires a value"))?;
         match flag.as_str() {
@@ -216,7 +196,7 @@ fn main() -> io::Result<()> {
             concat!(
                 "{{\n\"schema\":\"crosshair-shell-frames-v1\",",
                 "\"pixel_format\":\"RGB565_LE\",\"physical_input\":false,\"shell_bytes\":{},",
-                "\"runtime_bytes\":48,\"snapshot_bytes\":64,\"frames\":[\n{}\n]}}\n"
+                "\"runtime_bytes\":48,\"snapshot_bytes\":64,\"ux_bytes\":80,\"frames\":[\n{}\n]}}\n"
             ),
             core::mem::size_of::<Shell>(),
             frames.join(",\n")

@@ -1,100 +1,152 @@
-//! Shell composition using the existing Surface/font/components/theme. Original
-//! theme-tinted Tabler masks, shared hit geometry and one caller framebuffer.
+//! One shared Surface, dense PDA components and Shell-owned adaptive chrome.
 use crate::{
-    APPS, Screen, Shell, VALID_INPUT, VALID_MEMORY, VALID_TASKS, VALID_TIMER, geometry as g, icons,
+    APPS, ChromeMode, Screen, Shell, VALID_INPUT, VALID_MEMORY, VALID_TASKS, VALID_TIMER,
+    adaptive::target as t, geometry as g, icons,
 };
 use crosshair_ui::{
     Rgb565, Surface,
     components::{self, Area},
-    theme::{colors as c, layout},
+    pda::{self, Palette},
+    theme::colors as c,
 };
-
-#[derive(Clone, Copy)]
-struct Palette {
-    background: Rgb565,
-    surface: Rgb565,
-    ink: Rgb565,
-    muted: Rgb565,
-}
 fn palette(shell: &Shell) -> Palette {
-    if shell.theme == 0 {
-        Palette {
-            background: c::BACKGROUND,
-            surface: c::SURFACE,
-            ink: c::INK,
-            muted: c::MUTED,
-        }
-    } else {
-        Palette {
-            background: c::SYSTEM,
-            surface: c::HEADER,
-            ink: c::WHITE,
-            muted: c::SELECTED,
-        }
+    Palette {
+        ink: if shell.theme == 0 { c::INK } else { c::WHITE },
+        muted: if shell.theme == 0 {
+            c::MUTED
+        } else {
+            c::SELECTED
+        },
+        surface: if shell.theme == 0 {
+            c::SURFACE
+        } else {
+            c::HEADER
+        },
+        edge: c::EDGE,
+        focus: if shell.theme == 0 {
+            c::FOCUS
+        } else {
+            c::SELECTED
+        },
+        selected: c::SELECTED,
     }
 }
-/// Cozette advances 6px, with up to 8px ink. Clip at the component bound, not
-/// merely at the screen. No heap, substring byte slicing or newline expansion.
+fn selected(mut p: Palette, yes: bool) -> Palette {
+    if yes {
+        p.ink = c::INK;
+        p.focus = c::FOCUS;
+    }
+    p
+}
+fn area(r: g::Rect) -> Area {
+    Area {
+        x: r.x as i32,
+        y: r.y as i32,
+        width: r.width,
+        height: r.height,
+    }
+}
 fn text(s: &mut Surface<'_>, x: i32, y: i32, width: u16, value: &str, color: Rgb565) {
-    let limit = if width < 8 {
-        0
-    } else {
-        (width as usize - 8) / 6 + 1
-    };
-    for (index, ch) in value
-        .chars()
-        .take(limit)
-        .take_while(|c| *c != '\n')
-        .enumerate()
-    {
-        let mut utf8 = [0; 4];
-        s.text(x + index as i32 * 6, y, ch.encode_utf8(&mut utf8), color);
-    }
+    pda::text(
+        s,
+        Area {
+            x,
+            y,
+            width,
+            height: 13,
+        },
+        value,
+        color,
+    );
 }
-fn number(s: &mut Surface<'_>, x: i32, y: i32, value: u32, color: Rgb565) {
-    let mut digits = [b'0'; 10];
-    let mut count = 0;
-    let mut n = value;
+fn decimal(mut value: u32, out: &mut [u8; 10]) -> &str {
+    let mut start = 10;
     loop {
-        count += 1;
-        digits[10 - count] = b'0' + (n % 10) as u8;
-        n /= 10;
-        if n == 0 {
+        start -= 1;
+        out[start] = b'0' + (value % 10) as u8;
+        value /= 10;
+        if value == 0 {
             break;
         }
     }
-    // Every byte is one of the ten ASCII decimal digits.
-    if let Ok(value) = core::str::from_utf8(&digits[10 - count..]) {
-        text(s, x, y, 82, value, color);
-    }
+    core::str::from_utf8(&out[start..]).unwrap_or("")
 }
-fn row(s: &mut Surface<'_>, y: i32, label: &str, value: Option<u32>, p: Palette) {
-    s.fill_rect(8, y - 2, 224, 20, p.surface);
-    text(s, 14, y, 130, label, p.ink);
-    if let Some(value) = value {
-        number(s, 148, y, value, p.ink);
-    } else {
-        text(s, 148, y, 78, "нет данных", p.muted);
-    }
+fn fact(s: &mut Surface<'_>, y: u16, label: &str, value: &str, p: Palette) {
+    pda::key_value(
+        s,
+        Area {
+            x: 8,
+            y: y as i32,
+            width: 212,
+            height: 16,
+        },
+        label,
+        value,
+        p,
+    );
 }
-fn area(rect: g::Rect) -> Area {
-    Area {
-        x: rect.x as i32,
-        y: rect.y as i32,
-        width: rect.width,
-        height: rect.height,
-    }
+fn heading(s: &mut Surface<'_>, y: u16, value: &str, p: Palette) {
+    pda::section_heading(
+        s,
+        Area {
+            x: 8,
+            y: y as i32,
+            width: 212,
+            height: 18,
+        },
+        value,
+        p,
+    );
+}
+fn section_icon(s: &mut Surface<'_>, y: u16, label: &str, icon: icons::IconId, p: Palette) {
+    icons::draw_icon(s, 8, y as i32 + 2, icon, 12, p.muted);
+    pda::section_heading(
+        s,
+        Area {
+            x: 24,
+            y: y as i32,
+            width: 196,
+            height: 18,
+        },
+        label,
+        p,
+    );
 }
 fn title(s: &mut Surface<'_>, shell: &Shell) {
-    s.fill_rect(0, 0, 240, g::TOP.height as u32, c::SYSTEM);
-    icons::draw_icon(s, 4, 4, icons::catalog::IconId::Applications, 16, c::WHITE);
-    text(s, 23, 6, 34, "Пуск", c::WHITE);
-    s.line(58, 3, 58, 20, c::EDGE);
+    let mode = shell.chrome_mode();
+    if mode == ChromeMode::Immersive {
+        let r = g::IMMERSIVE_HANDLE;
+        s.fill_rect(
+            r.x as i32,
+            r.y as i32,
+            r.width as u32,
+            r.height as u32,
+            c::SYSTEM,
+        );
+        icons::draw_icon(s, 226, 2, icons::IconId::Menu, 12, c::WHITE);
+        return;
+    }
+    let h = mode.top();
+    s.fill_rect(0, 0, 240, h as u32, c::SYSTEM);
+    let icon = if mode == ChromeMode::Compact { 12 } else { 16 };
+    icons::draw_icon(
+        s,
+        4,
+        ((h - icon as u16) / 2) as i32,
+        icons::IconId::Applications,
+        icon,
+        c::WHITE,
+    );
+    let title_x = if mode == ChromeMode::Compact { 28 } else { 65 };
+    if mode == ChromeMode::Standard {
+        text(s, 23, 6, 34, "Пуск", c::WHITE);
+        s.line(58, 3, 58, 20, c::EDGE);
+    }
     text(
         s,
-        65,
-        6,
-        146,
+        title_x,
+        (h as i32 - 13) / 2,
+        (190 - title_x) as u16,
         if shell.screen == Screen::Desktop {
             "Crosshair"
         } else {
@@ -102,53 +154,50 @@ fn title(s: &mut Surface<'_>, shell: &Shell) {
         },
         c::WHITE,
     );
+    icons::draw_icon(
+        s,
+        198,
+        ((h - 12) / 2) as i32,
+        icons::IconId::Menu,
+        12,
+        c::WHITE,
+    );
     if shell.screen != Screen::Desktop {
-        icons::draw_icon(s, 220, 4, icons::catalog::IconId::Back, 16, c::WHITE);
+        icons::draw_icon(
+            s,
+            222,
+            ((h - 12) / 2) as i32,
+            icons::IconId::Back,
+            12,
+            c::WHITE,
+        );
     }
-    s.line(0, 23, 239, 23, c::EDGE);
-}
-fn softkeys(s: &mut Surface<'_>, shell: &Shell) {
-    let (left, right) = if shell.overlay == 3 {
-        ("Сбросить", "Отмена")
-    } else if shell.overlay != 0 {
-        ("Выбор", "Отмена")
-    } else {
-        match shell.screen {
-            Screen::Desktop => ("Пуск", "Меню"),
-            Screen::About | Screen::Diagnostics => ("Назад", "Меню"),
-            Screen::Settings => ("Изменить", "Меню"),
-            _ => ("Открыть", "Меню"),
-        }
-    };
-    s.fill_rect(0, 296, 240, 24, c::SYSTEM);
-    s.stroke_rect(0, 296, 240, 24, c::EDGE);
-    s.line(120, 296, 120, 319, c::EDGE);
-    text(s, 12, 302, 100, left, c::WHITE);
-    text(s, 132, 302, 100, right, c::WHITE);
-    if shell.overlay == 0 && matches!(shell.screen, Screen::About | Screen::Diagnostics) {
-        s.stroke_rect(2, 298, 116, 20, c::SELECTED);
-    }
-}
-fn desktop(s: &mut Surface<'_>, shell: &Shell, p: Palette) {
-    for index in 0..g::DESKTOP.len() {
-        shortcut(s, shell, index);
-    }
-    // Captions have opaque backing for contrast on any approved wallpaper.
-    // The rest of the workspace remains free of launch cards or status fiction.
-    let _ = p;
+    s.line(0, h as i32 - 1, 239, h as i32 - 1, c::EDGE);
 }
 fn shortcut(s: &mut Surface<'_>, shell: &Shell, index: usize) {
-    let labels = ["Сегодня", "Настройки", "Диагностика"];
-    let label = labels[index];
-    let rect = g::DESKTOP[index];
-    let x = rect.x as i32;
-    let y = rect.y as i32;
-    let selected = index == shell.desktop_selected as usize;
-    s.fill_rect(x + 20, y + 1, 32, 32, c::HEADER);
+    let r = g::DESKTOP[index];
+    let x = r.x as i32;
+    let y = r.y as i32;
+    let selected = shell.desktop_selected as usize == index;
+    let pressed = shell.pressed(t::DESKTOP + index as u16);
+    s.fill_rect(
+        x + 20,
+        y + 1,
+        32,
+        32,
+        if pressed { c::SELECTED } else { c::HEADER },
+    );
     if selected {
         s.stroke_rect(x + 19, y, 34, 34, c::SELECTED);
     }
-    icons::draw(s, x + 24, y + 5, index as u8 + 1, c::WHITE, c::SELECTED);
+    icons::draw(
+        s,
+        x + 24,
+        y + 5,
+        index as u8 + 1,
+        if pressed { c::INK } else { c::WHITE },
+        c::SELECTED,
+    );
     s.fill_rect(
         x,
         y + 38,
@@ -156,6 +205,7 @@ fn shortcut(s: &mut Surface<'_>, shell: &Shell, index: usize) {
         18,
         if selected { c::SELECTED } else { c::SYSTEM },
     );
+    let label = ["Сегодня", "Настройки", "Диагностика"][index];
     let width = (label.chars().count() * 6 + 2).min(70) as u16;
     text(
         s,
@@ -166,6 +216,17 @@ fn shortcut(s: &mut Surface<'_>, shell: &Shell, index: usize) {
         if selected { c::INK } else { c::WHITE },
     );
 }
+fn desktop(s: &mut Surface<'_>, shell: &Shell) {
+    for index in 0..3 {
+        shortcut(s, shell, index);
+    }
+}
+fn add_stats(a: &mut crate::wallpaper::DrawStats, b: crate::wallpaper::DrawStats) {
+    a.packets_decoded += b.packets_decoded;
+    a.pixels_decoded += b.pixels_decoded;
+    a.pixels_written += b.pixels_written;
+    a.runs_written += b.runs_written;
+}
 pub(super) fn redraw_desktop_focus(
     shell: &Shell,
     s: &mut Surface<'_>,
@@ -173,52 +234,25 @@ pub(super) fn redraw_desktop_focus(
 ) -> crate::wallpaper::DrawStats {
     let mut stats = crate::wallpaper::DrawStats::default();
     if dirty & 0x20 != 0 {
-        let rect = g::DESKTOP_OVERLAY_RESTORE;
-        stats = crate::wallpaper::draw_region(
-            s,
-            rect.x,
-            rect.y,
-            rect.width,
-            rect.height,
-            shell.theme != 0,
-        );
-        for index in 0..g::DESKTOP.len() {
-            shortcut(s, shell, index);
-        }
+        let r = g::DESKTOP_OVERLAY_RESTORE;
+        stats = crate::wallpaper::draw_region(s, r.x, r.y, r.width, r.height, shell.theme != 0);
+        desktop(s, shell);
     }
-    for (index, rect) in g::DESKTOP.into_iter().enumerate() {
+    for (index, r) in g::DESKTOP.into_iter().enumerate() {
         if dirty & 0x20 == 0 && dirty & (1 << index) != 0 {
-            let work = crate::wallpaper::draw_region(
-                s,
-                rect.x,
-                rect.y,
-                rect.width,
-                rect.height,
-                shell.theme != 0,
+            add_stats(
+                &mut stats,
+                crate::wallpaper::draw_region(s, r.x, r.y, r.width, r.height, shell.theme != 0),
             );
-            stats.packets_decoded += work.packets_decoded;
-            stats.pixels_decoded += work.pixels_decoded;
-            stats.pixels_written += work.pixels_written;
-            stats.runs_written += work.runs_written;
             shortcut(s, shell, index);
         }
     }
-    if dirty & 0x40 != 0 {
-        if shell.overlay != 0 {
-            overlay(s, shell);
-        }
-        softkeys(s, shell);
+    if dirty & 0x40 != 0 && shell.overlay != 0 {
+        overlay(s, shell);
     }
     stats
 }
 fn launcher(s: &mut Surface<'_>, shell: &Shell, p: Palette) {
-    s.fill_rect(
-        g::SEARCH.x as i32,
-        g::SEARCH.y as i32,
-        g::SEARCH.width as u32,
-        g::SEARCH.height as u32,
-        p.surface,
-    );
     s.stroke_rect(
         8,
         g::SEARCH.y as i32,
@@ -242,108 +276,167 @@ fn launcher(s: &mut Surface<'_>, shell: &Shell, p: Palette) {
             p.ink,
         );
     }
-    let mut row_index = 0;
+    let mut visible = 0;
     for (index, app) in APPS.into_iter().enumerate() {
         if !shell.matches(app) {
             continue;
         }
-        let rect = g::launcher_row(row_index);
-        let y = rect.y as i32;
-        row_index += 1;
-        let selected = index == shell.launcher_selected as usize;
-        if selected {
-            components::selection(s, area(rect), true);
-        } else {
-            s.fill_rect(8, y, 224, rect.height as u32, p.surface);
-        }
-        let ink = if selected { c::INK } else { p.ink };
+        let r = g::launcher_row(visible);
+        visible += 1;
+        let focus = shell.launcher_selected as usize == index;
+        let rp = selected(p, focus);
+        pda::compact_row(s, area(r), "", focus, rp);
         let icon = match app {
-            Screen::About => 4,
-            Screen::Diagnostics => 3,
-            Screen::Settings => 2,
-            _ => 1,
+            Screen::About => icons::IconId::Information,
+            Screen::Diagnostics => icons::IconId::Diagnostics,
+            Screen::Settings => icons::IconId::Settings,
+            _ => icons::IconId::Today,
         };
-        icons::draw_icon(
-            s,
-            15,
-            y + 6,
-            icons::catalog::IconId::from_u16(icon).unwrap(),
-            16,
-            ink,
-        );
-        text(s, 40, y + 7, 184, app.title(), ink);
+        icons::draw_icon(s, 15, r.y as i32 + 6, icon, 16, rp.ink);
+        text(s, 40, r.y as i32 + 7, 184, app.title(), rp.ink);
+        if shell.pressed(t::LAUNCHER + index as u16) {
+            s.stroke_rect(10, r.y as i32 + 2, 220, r.height as u32 - 4, p.focus);
+        }
     }
-    if row_index == 0 {
-        text(s, 16, 99, 208, "Нет приложений", p.ink);
-        text(s, 16, 121, 208, "Back — очистить поиск", p.muted);
+    if visible == 0 {
+        text(s, 12, 72, 212, "Нет приложений", p.ink);
     }
-    text(s, 12, 239, 216, "Встроенные приложения", p.muted);
-    text(s, 12, 258, 216, "Текст — поиск; Select — открыть", p.muted);
-    text(s, 12, 277, 216, "Back — назад / очистить поиск", p.muted);
+    heading(s, 210, "Встроенные приложения", p);
+    text(s, 12, 234, 216, "Текст — поиск; Enter — открыть", p.muted);
+    text(s, 12, 252, 216, "Esc — назад / очистить поиск", p.muted);
 }
 fn today(s: &mut Surface<'_>, shell: &Shell, p: Palette) {
-    text(s, 12, 36, 216, "Сегодня в Crosshair", p.ink);
-    text(s, 12, 55, 216, shell.build.environment, p.muted);
-    let unavailable = [
-        "Часы: служба недоступна",
-        "Питание: нет данных",
-        "Связь: служба недоступна",
+    let r = shell.runtime;
+    section_icon(
+        s,
+        30,
+        "Сегодня — сеанс Crosshair",
+        icons::IconId::Diagnostics,
+        p,
+    );
+    let values = [
+        ("Задач", r.has(VALID_TASKS).then_some(r.task_count)),
+        ("Готовы", r.has(VALID_TASKS).then_some(r.ready_tasks)),
+        ("В работе", r.has(VALID_TASKS).then_some(r.running_tasks)),
+        ("С ошибкой", r.has(VALID_TASKS).then_some(r.faulted_tasks)),
+        (
+            "RAM резерв",
+            r.has(VALID_MEMORY).then_some(r.working_ram_bytes),
+        ),
+        ("Ввод", r.has(VALID_INPUT).then_some(r.events_delivered)),
+        (
+            "Переполнения",
+            r.has(VALID_INPUT).then_some(r.input_overflows),
+        ),
     ];
-    for (index, label) in unavailable.into_iter().enumerate() {
-        let y = 80 + index as i32 * 25;
-        s.fill_rect(8, y - 3, 224, 23, p.surface);
-        text(s, 14, y, 212, label, p.ink);
+    for (index, (label, value)) in values.into_iter().enumerate() {
+        let mut n = [0; 10];
+        fact(
+            s,
+            52 + index as u16 * 16,
+            label,
+            value.map_or("—", |v| decimal(v, &mut n)),
+            p,
+        );
     }
-    row(
+    section_icon(
         s,
-        159,
-        "Задач",
-        shell
-            .runtime
-            .has(VALID_TASKS)
-            .then_some(shell.runtime.task_count),
+        170,
+        "Источники устройства",
+        icons::IconId::Information,
         p,
     );
-    row(
-        s,
-        183,
-        "Событий ввода",
-        shell
-            .runtime
-            .has(VALID_INPUT)
-            .then_some(shell.runtime.events_delivered),
-        p,
-    );
+    text(s, 10, 194, 212, "Часы / питание / связь: —", p.muted);
+    text(s, 10, 212, 212, "Физическая плата не проверена", p.muted);
     for (index, label) in ["Приложения", "Диагностика"].into_iter().enumerate()
     {
-        components::list_row(
+        let focus = shell.today_selected as usize == index;
+        pda::inline_action(
             s,
             area(g::TODAY_ACTIONS[index]),
             label,
-            shell.today_selected as usize == index,
-            shell.today_selected as usize == index,
+            focus,
+            selected(p, focus),
         );
     }
 }
+fn content_rows(s: &mut Surface<'_>, shell: &Shell, rows: &[(&str, &str)], p: Palette) {
+    let content = shell.content_rect();
+    let visible = content.height.saturating_sub(8) / 16;
+    for (index, (label, value)) in rows
+        .iter()
+        .skip(shell.scroll_offset() as usize)
+        .take(visible as usize)
+        .enumerate()
+    {
+        let y = content.y + 4 + index as u16 * 16;
+        if label.is_empty() {
+            pda::section_heading(
+                s,
+                Area {
+                    x: 8,
+                    y: y as i32,
+                    width: 212,
+                    height: 16,
+                },
+                value,
+                p,
+            );
+        } else {
+            fact(s, y, label, value, p);
+        }
+    }
+    if shell.scroll_max() > 0 {
+        icons::draw_icon(
+            s,
+            226,
+            g::scroll_up(shell.chrome_mode()).y as i32 + 2,
+            icons::IconId::Up,
+            12,
+            p.ink,
+        );
+        icons::draw_icon(s, 226, 306, icons::IconId::Down, 12, p.ink);
+        let track_y = g::scroll_up(shell.chrome_mode()).y + 20;
+        let track_h = 304u16.saturating_sub(track_y);
+        s.fill_rect(231, track_y as i32, 2, track_h as u32, c::EDGE);
+        let thumb = 8;
+        let y = track_y + (track_h - thumb) * shell.scroll_offset() / shell.scroll_max();
+        s.fill_rect(229, y as i32, 6, thumb as u32, p.muted);
+    }
+}
 fn about(s: &mut Surface<'_>, shell: &Shell, p: Palette) {
-    let fields = [
-        ("Оболочка", "Crosshair Shell 0.1.1"),
+    let rows = [
+        ("", "Система"),
+        ("Оболочка", crate::VERSION),
         ("Сборка", shell.build.version),
         ("Архитектура", shell.build.architecture),
         ("Окружение", shell.build.environment),
-        ("Код / шрифт", "MIT / Cozette MIT"),
+        ("Экран", "240x320 RGB565"),
+        ("", "Лицензии"),
+        ("Свой код", "MIT"),
+        ("Шрифт", "Cozette MIT"),
+        ("Значки", "Tabler MIT"),
+        ("Обои", "Ресурс Crosshair"),
+        ("", "Возможности"),
+        ("Framebuffer", "Один, 153600B"),
+        ("Изоляция", "User / MMU"),
+        ("Приложения", "4 встроенных"),
+        ("Файлы / сеть", "Нет служб"),
+        ("Сохранение", "Не подключено"),
+        ("Часы/питание", "Нет источника"),
+        ("Физ. плата", "Не проверена"),
+        ("Буфер", "Нет службы"),
+        ("", "Управление"),
+        ("Menu / F2", "Системная панель"),
+        ("Home", "Рабочий стол"),
+        ("Стилус", "Tap / hold 600ms"),
+        ("Ввод PDA2k", "Не проверен"),
     ];
-    for (index, (label, value)) in fields.into_iter().enumerate() {
-        let y = 57 + index as i32 * 42;
-        s.fill_rect(8, y - 3, 224, 38, p.surface);
-        text(s, 14, y, 212, label, p.muted);
-        text(s, 14, y + 17, 212, value, p.ink);
-    }
-    text(s, 12, 273, 216, "Физическая плата не проверена", p.muted);
+    content_rows(s, shell, &rows, p);
 }
 fn diagnostics(s: &mut Surface<'_>, shell: &Shell, p: Palette) {
     let r = shell.runtime;
-    let rows = [
+    let values = [
         ("Тики IRQ", r.has(VALID_TIMER).then_some(r.ticks)),
         ("Переключения", r.has(VALID_TIMER).then_some(r.switches)),
         ("Задач", r.has(VALID_TASKS).then_some(r.task_count)),
@@ -351,11 +444,11 @@ fn diagnostics(s: &mut Surface<'_>, shell: &Shell, p: Palette) {
         ("В работе", r.has(VALID_TASKS).then_some(r.running_tasks)),
         ("С ошибкой", r.has(VALID_TASKS).then_some(r.faulted_tasks)),
         (
-            "RAM, байт",
+            "RAM резерв",
             r.has(VALID_MEMORY).then_some(r.working_ram_bytes),
         ),
         (
-            "Ввод доставлен",
+            "Ввод принят",
             r.has(VALID_INPUT).then_some(r.events_delivered),
         ),
         (
@@ -363,56 +456,94 @@ fn diagnostics(s: &mut Surface<'_>, shell: &Shell, p: Palette) {
             r.has(VALID_INPUT).then_some(r.input_overflows),
         ),
         ("События UI", Some(shell.events_processed)),
-        ("Кадров UI", Some(shell.renders)),
+        ("Кадры UI", Some(shell.renders)),
     ];
-    for (index, (label, value)) in rows.into_iter().enumerate() {
-        row(s, 57 + index as i32 * 20, label, value, p);
+    let mut numbers = [[0; 10]; 11];
+    let mut rows = [("", ""); 22];
+    rows[0] = ("", "Наблюдения ядра / UI");
+    for (index, ((label, value), digits)) in values.into_iter().zip(numbers.iter_mut()).enumerate()
+    {
+        let value = if let Some(v) = value {
+            decimal(v, digits)
+        } else {
+            "—"
+        };
+        rows[index + 1] = (label, value);
     }
-    text(s, 12, 279, 216, "Снимок служб / счётчики UI", p.muted);
+    rows[12] = ("", "Границы измерений");
+    rows[13] = ("Present", "Полный кадр");
+    rows[14] = ("Передача", "153600B / render");
+    rows[15] = ("Стоимость", "Счётчики работы");
+    rows[16] = ("Циклы CPU", "Не измерены");
+    rows[17] = ("Физ. LCD", "Не проверен");
+    rows[18] = ("", "Управление");
+    rows[19] = ("Menu / F2", "Системная панель");
+    rows[20] = ("Home", "Рабочий стол");
+    rows[21] = ("Стилус", "Tap / hold 600ms");
+    content_rows(s, shell, &rows, p);
 }
 fn settings(s: &mut Surface<'_>, shell: &Shell, p: Palette) {
-    text(s, 12, 40, 216, "Настройки интерфейса", p.muted);
+    heading(s, 30, "Интерфейс", p);
     for index in 0..2 {
-        let rect = g::SETTINGS[index];
-        let y = rect.y as i32;
-        let selected = index as u8 == shell.settings_selected;
-        if selected {
-            components::selection(s, area(rect), true);
-        } else {
-            s.fill_rect(8, y, 224, rect.height as u32, p.surface);
-        }
-        let ink = if selected { c::INK } else { p.ink };
+        let r = g::SETTINGS[index];
+        let focus = shell.settings_selected as usize == index;
+        let rp = selected(p, focus);
+        pda::compact_row(s, area(r), "", focus, rp);
         text(
             s,
-            16,
-            y + 8,
-            208,
+            14,
+            r.y as i32 + 7,
+            212,
             if index == 0 {
                 "Цветовая тема"
             } else {
                 "Сбросить тему"
             },
-            ink,
+            rp.ink,
         );
-        let detail = if index == 0 {
-            if shell.theme == 0 {
+        text(
+            s,
+            14,
+            r.y as i32 + 26,
+            212,
+            if index == 1 {
+                "С подтверждением"
+            } else if shell.theme == 0 {
                 "Холодная серая"
             } else {
                 "Ночная синяя"
-            }
-        } else {
-            "С подтверждением"
-        };
-        text(s, 16, y + 30, 208, detail, ink);
+            },
+            rp.ink,
+        );
     }
-    text(s, 12, 234, 216, "Выбор действует до перезагрузки.", p.muted);
-    text(s, 12, 254, 216, "Select — изменить", p.muted);
-    text(s, 12, 274, 216, "Сохранение не подключено", p.muted);
+    text(s, 10, 196, 216, "Тема действует до перезагрузки.", p.muted);
+    text(s, 10, 216, 216, "Сохранение не подключено", p.muted);
 }
 fn overlay(s: &mut Surface<'_>, shell: &Shell) {
+    let p = Palette {
+        ink: c::INK,
+        muted: c::MUTED,
+        surface: c::SURFACE,
+        edge: c::EDGE,
+        focus: c::FOCUS,
+        selected: c::SELECTED,
+    };
     if shell.overlay == 3 {
-        s.fill_rect(12, 82, 216, 152, c::SURFACE);
-        s.stroke_rect(12, 82, 216, 152, c::FOCUS);
+        let r = g::DIALOG;
+        s.fill_rect(
+            r.x as i32,
+            r.y as i32,
+            r.width as u32,
+            r.height as u32,
+            c::SURFACE,
+        );
+        s.stroke_rect(
+            r.x as i32,
+            r.y as i32,
+            r.width as u32,
+            r.height as u32,
+            c::FOCUS,
+        );
         components::title_bar(
             s,
             Area {
@@ -426,100 +557,128 @@ fn overlay(s: &mut Surface<'_>, shell: &Shell) {
         text(s, 24, 121, 192, "Вернуть холодную серую", c::INK);
         text(s, 24, 141, 192, "тему интерфейса?", c::INK);
         text(s, 24, 163, 192, "Другие данные не меняются.", c::MUTED);
-        components::button(
-            s,
-            area(g::DIALOG_BUTTONS[0]),
-            "Сбросить",
-            shell.overlay_selected == 0,
-        );
-        components::button(
-            s,
-            area(g::DIALOG_BUTTONS[1]),
-            "Отмена",
-            shell.overlay_selected == 1,
-        );
-    } else {
-        let system = [
-            "Сегодня",
-            "Приложения",
-            "Настройки",
-            "Диагностика",
-            "О системе",
-            "Следующий экран",
-        ];
-        let context = [
-            if shell.launcher_matches() == 0 {
-                "Сбросить поиск"
-            } else {
-                "Открыть"
-            },
-            "На рабочий стол",
-            "О системе",
-        ];
-        let entries: &[&str] = if shell.overlay == 1 {
-            &system
-        } else {
-            &context
-        };
-        let height = 30 + entries.len() as u32 * 26;
-        s.fill_rect(12, 60, 216, height, c::SURFACE);
-        s.stroke_rect(12, 60, 216, height, c::FOCUS);
-        components::title_bar(
-            s,
-            Area {
-                x: 13,
-                y: 61,
-                width: 214,
-                height: 26,
-            },
-            if shell.overlay == 1 {
-                "Системное меню"
-            } else {
-                "Действия приложения"
-            },
-        );
-        for (index, label) in entries.iter().enumerate() {
-            components::list_row(
+        for (index, label) in ["Сбросить", "Отмена"].into_iter().enumerate() {
+            components::button(
                 s,
-                area(g::menu_row(index)),
+                area(g::DIALOG_BUTTONS[index]),
                 label,
-                index == shell.overlay_selected as usize,
-                index == shell.overlay_selected as usize,
+                shell.overlay_selected as usize == index,
             );
         }
+        return;
+    }
+    let system = [
+        "Сегодня",
+        "Приложения",
+        "Настройки",
+        "Диагностика",
+        "О системе",
+        "Следующий экран",
+    ];
+    let context = [
+        if shell.launcher_matches() == 0 {
+            "Сбросить поиск"
+        } else {
+            "Открыть"
+        },
+        "На рабочий стол",
+        "О системе",
+    ];
+    let panel = [
+        "Рабочий стол",
+        "Пуск",
+        "Назад",
+        "Следующий экран",
+        "Standard",
+        "Compact",
+        "Immersive",
+        "Закрыть",
+    ];
+    let simple_panel = [
+        "Рабочий стол",
+        "Пуск",
+        "Назад",
+        "Следующий экран",
+        "Закрыть",
+    ];
+    let (entries, bounds, title) = if shell.overlay == 4 {
+        (
+            if shell.mode_available() {
+                &panel[..]
+            } else {
+                &simple_panel[..]
+            },
+            g::panel_bounds(shell.overlay_count()),
+            "Системная панель",
+        )
+    } else if shell.overlay == 1 {
+        (&system[..], g::menu_bounds(6), "Системное меню")
+    } else {
+        (&context[..], g::menu_bounds(3), "Действия приложения")
+    };
+    s.fill_rect(
+        bounds.x as i32,
+        bounds.y as i32,
+        bounds.width as u32,
+        bounds.height as u32,
+        c::SURFACE,
+    );
+    s.stroke_rect(
+        bounds.x as i32,
+        bounds.y as i32,
+        bounds.width as u32,
+        bounds.height as u32,
+        c::FOCUS,
+    );
+    components::title_bar(
+        s,
+        Area {
+            x: bounds.x as i32 + 1,
+            y: bounds.y as i32 + 1,
+            width: bounds.width - 2,
+            height: 26,
+        },
+        title,
+    );
+    for (index, label) in entries.iter().enumerate() {
+        let rect = if shell.overlay == 4 {
+            g::panel_row(index)
+        } else {
+            g::menu_row(index)
+        };
+        pda::compact_row(
+            s,
+            area(rect),
+            label,
+            shell.overlay_selected as usize == index,
+            p,
+        );
     }
 }
 pub(super) fn draw(shell: &Shell, s: &mut Surface<'_>) -> crate::wallpaper::DrawStats {
     let p = palette(shell);
     let stats = if shell.screen == Screen::Desktop {
-        // The opaque workspace and compact chrome cover every screen pixel;
-        // clearing a whole framebuffer first would duplicate 76800 stores.
-        crate::wallpaper::draw_region(
-            s,
-            g::WORKSPACE.x,
-            g::WORKSPACE.y,
-            g::WORKSPACE.width,
-            g::WORKSPACE.height,
-            shell.theme != 0,
-        )
+        let r = g::WORKSPACE;
+        crate::wallpaper::draw_region(s, r.x, r.y, r.width, r.height, shell.theme != 0)
     } else {
-        s.fill(p.background);
+        s.fill(if shell.theme == 0 {
+            c::BACKGROUND
+        } else {
+            c::SYSTEM
+        });
         crate::wallpaper::DrawStats::default()
     };
-    title(s, shell);
     match shell.screen {
-        Screen::Desktop => desktop(s, shell, p),
+        Screen::Desktop => desktop(s, shell),
         Screen::Launcher => launcher(s, shell, p),
         Screen::Today => today(s, shell, p),
         Screen::About => about(s, shell, p),
         Screen::Diagnostics => diagnostics(s, shell, p),
         Screen::Settings => settings(s, shell, p),
     }
+    title(s, shell);
     if shell.overlay != 0 {
         overlay(s, shell);
     }
-    softkeys(s, shell);
-    // The logical screen uses the existing fixed 240x320 layout contract.
-    debug_assert!(layout::WIDTH == 240 && layout::HEIGHT == 320);
     stats
 }
