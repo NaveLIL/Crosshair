@@ -1,0 +1,10 @@
+{
+  "upstream_version": "9.2.0",
+  "upstream_commit": "ae35f033b874c627d81d51070187fbf55f0bf1a7",
+  "upstream_archive_sha256": "f859f0bc65e1f533d040bbe8c92bcfecee5af2c921a6687c652fb44d089bd894",
+  "overlay_sha256": "caa413063cc9a1c28cee038fd3d9e162eb8417b70a7cb2544c9f6ef43b6f452f",
+  "qemu_sha256": "934861b3766fe0de5a7cf0ac766a12284887c01753ee0091f363d5b36ee274d2",
+  "host_license": "GPL-2.0-only; see crosshair-emulator/qemu/COPYING.GPL-2.0",
+  "included_e2a_sha256": "49e5b31e36f22240e2fd95035566085f0d8430d1abf6b30ef635d152e517ec32",
+  "machine": "crosshair-blueangel-e2b"
+}

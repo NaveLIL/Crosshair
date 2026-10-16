@@ -1,0 +1,205 @@
+{
+  "result": "PASS",
+  "machine": "crosshair-blueangel-e2b",
+  "image_sha256": {
+    "crosshair-e2b.elf": "5c81eb94dba8418b1606e01e60c0117cf833f4b86749203b0d7d685d65db12a0",
+    "crosshair-e2b.bin": "e195421fad8bc96c9515bfd77528a5af46760f63c2ba81697164152557b96285",
+    "vectors.bin": "3f66cb201cfc1ae18c5273aebdb0223d6ff962a99eccc1732df91f363e7aa379"
+  },
+  "qemu_version": "QEMU emulator version 9.2.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "qemu_sha256": "934861b3766fe0de5a7cf0ac766a12284887c01753ee0091f363d5b36ee274d2",
+  "scope": "TCG functional CPU and register-level GPIO subset; hardware validation none",
+  "command": [
+    "<qemu-cache>/bin/qemu-system-arm",
+    "-machine",
+    "crosshair-blueangel-e2b",
+    "-accel",
+    "tcg",
+    "-S",
+    "-display",
+    "none",
+    "-monitor",
+    "none",
+    "-serial",
+    "stdio",
+    "-nic",
+    "none",
+    "-d",
+    "guest_errors",
+    "-device",
+    "loader,file=<artifacts>/e2b/normal/crosshair-e2b.elf,cpu-num=0",
+    "-qmp",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest-log",
+    "<artifacts>/e2b-tests/gpio-boot-reset/memory-server.log"
+  ],
+  "boots": [
+    {
+      "boot": 1,
+      "pre_entry_stage": 2779096485,
+      "reset_external_samples": [
+        0,
+        0
+      ],
+      "gpio_trace": [
+        {
+          "pin": 0,
+          "level": 1,
+          "source": 8,
+          "irq_count": 1,
+          "pending": 256,
+          "edges": 1
+        },
+        {
+          "pin": 1,
+          "level": 1,
+          "source": 9,
+          "irq_count": 2,
+          "pending": 512,
+          "edges": 2
+        },
+        {
+          "pin": 2,
+          "level": 1,
+          "source": 10,
+          "irq_count": 3,
+          "pending": 1024,
+          "edges": 4
+        },
+        {
+          "pin": 2,
+          "level": 0,
+          "source": 10,
+          "irq_count": 4,
+          "pending": 1024,
+          "edges": 4
+        },
+        {
+          "pin": 89,
+          "level": 1,
+          "source": 10,
+          "irq_count": 5,
+          "pending": 1024,
+          "edges": 33554432
+        }
+      ],
+      "record": {
+        "magic": 1160921667,
+        "stage": 2,
+        "error": 0,
+        "irq_count": 5,
+        "midr": 1761945859,
+        "ctr": 219619698,
+        "reset_sctlr": 120,
+        "reset_ttbr": 0,
+        "reset_dacr": 0,
+        "reset_pid": 0,
+        "debug_id": 0,
+        "cache_readback": 4220,
+        "mmu_readback": 121,
+        "alias_read": 324508639,
+        "alias_write": 610839776,
+        "restored": 1,
+        "pending": 1024,
+        "edges": 33554432,
+        "irq_sp": 2684456920,
+        "fault_kind": 0,
+        "fault_lr": 0,
+        "fault_psr": 0,
+        "dfsr": 0,
+        "dfar": 0,
+        "direction": 33554432,
+        "alternate": 262144,
+        "checks": 127,
+        "expected_source": 1024,
+        "probe_selector": 0
+      },
+      "registers": "\r\nCPU#0\r\nR00=0000002a R01=fff0bdc0 R02=a000892a R03=40100000\r\nR04=a000890c R05=0000000a R06=fff0bdc0 R07=00000060\r\nR08=00000000 R09=00000000 R10=00000000 R11=00000000\r\nR12=40d00004 R13=a0018000 R14=a0008094 R15=a000808c\r\nPSR=600001d3 -ZC- A svc32\r\nFPSCR: 00000000\r\n"
+    },
+    {
+      "boot": 2,
+      "pre_entry_stage": 2779096485,
+      "reset_external_samples": [
+        3,
+        33554432
+      ],
+      "gpio_trace": [
+        {
+          "pin": 0,
+          "level": 1,
+          "source": 8,
+          "irq_count": 1,
+          "pending": 256,
+          "edges": 1
+        },
+        {
+          "pin": 1,
+          "level": 1,
+          "source": 9,
+          "irq_count": 2,
+          "pending": 512,
+          "edges": 2
+        },
+        {
+          "pin": 2,
+          "level": 1,
+          "source": 10,
+          "irq_count": 3,
+          "pending": 1024,
+          "edges": 4
+        },
+        {
+          "pin": 2,
+          "level": 0,
+          "source": 10,
+          "irq_count": 4,
+          "pending": 1024,
+          "edges": 4
+        },
+        {
+          "pin": 89,
+          "level": 1,
+          "source": 10,
+          "irq_count": 5,
+          "pending": 1024,
+          "edges": 33554432
+        }
+      ],
+      "record": {
+        "magic": 1160921667,
+        "stage": 2,
+        "error": 0,
+        "irq_count": 5,
+        "midr": 1761945859,
+        "ctr": 219619698,
+        "reset_sctlr": 120,
+        "reset_ttbr": 0,
+        "reset_dacr": 0,
+        "reset_pid": 0,
+        "debug_id": 0,
+        "cache_readback": 4220,
+        "mmu_readback": 121,
+        "alias_read": 324508639,
+        "alias_write": 610839776,
+        "restored": 1,
+        "pending": 1024,
+        "edges": 33554432,
+        "irq_sp": 2684456920,
+        "fault_kind": 0,
+        "fault_lr": 0,
+        "fault_psr": 0,
+        "dfsr": 0,
+        "dfar": 0,
+        "direction": 33554432,
+        "alternate": 262144,
+        "checks": 127,
+        "expected_source": 1024,
+        "probe_selector": 0
+      },
+      "registers": "\r\nCPU#0\r\nR00=0000002a R01=fff0bdc0 R02=a000892a R03=40100000\r\nR04=a000890c R05=0000000a R06=fff0bdc0 R07=00000060\r\nR08=00000000 R09=00000000 R10=00000000 R11=00000000\r\nR12=40d00004 R13=a0018000 R14=a0008094 R15=a000808c\r\nPSR=600001d3 -ZC- A svc32\r\nFPSCR: 00000000\r\n"
+    }
+  ],
+  "uart_utf8": "CROSSHAIR E2B \u2014 GPIO READY\r\nCROSSHAIR E2B \u2014 CP15 MMU GPIO IRQ PASS\r\nCROSSHAIR E2B \u2014 GPIO READY\r\nCROSSHAIR E2B \u2014 CP15 MMU GPIO IRQ PASS\r\n"
+}

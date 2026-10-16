@@ -1,0 +1,130 @@
+{
+  "result": "PASS",
+  "machine": "crosshair-blueangel-e2b",
+  "accelerator": "tcg",
+  "cases": [
+    {
+      "selector": 0,
+      "name": "busy_loop_timer_preemption",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-00/result.json"
+    },
+    {
+      "selector": 1,
+      "name": "other_task_read",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-01/result.json"
+    },
+    {
+      "selector": 2,
+      "name": "other_task_write",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-02/result.json"
+    },
+    {
+      "selector": 3,
+      "name": "kernel_write",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-03/result.json"
+    },
+    {
+      "selector": 4,
+      "name": "unmapped_guard",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-04/result.json"
+    },
+    {
+      "selector": 5,
+      "name": "undefined_instruction",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-05/result.json"
+    },
+    {
+      "selector": 6,
+      "name": "yield_exit_lifecycle",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-06/result.json"
+    },
+    {
+      "selector": 7,
+      "name": "unsupported_thumb_svc",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-07/result.json"
+    }
+  ],
+  "scope": "two fixed User tasks on unchanged synthetic E2B/pxa260; not PXA263 hardware security validation",
+  "image_sha256": {
+    "crosshair-tasks.elf": "9fd5faf486b7acd6308c09768c8ae87f9a85135340c4960f905add7c10019eba",
+    "crosshair-tasks.bin": "a099bf581c3cb85ed9b25d3926250643deeed5d8818ec125b7c742527d40becb",
+    "vectors.bin": "01d24cc9d926bff09df0f1785ce577ec1029e8cccdaa84797cf43b7e20d32d63"
+  },
+  "qemu_version": "QEMU emulator version 9.2.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "qemu_sha256": "934861b3766fe0de5a7cf0ac766a12284887c01753ee0091f363d5b36ee274d2",
+  "memory": {
+    "address_type": "physical",
+    "kernel_start": 2684387328,
+    "kernel_end": 2684467808,
+    "kernel_reserved_extent_bytes": 80480,
+    "vectors_bytes": 64,
+    "banked_stacks_bytes": {
+      "__stack": 16384,
+      "__irq_stack": 4096,
+      "__abort_stack": 4096,
+      "__undef_stack": 4096
+    },
+    "page_tables_total_bytes": 34816,
+    "task_table_bytes": 288,
+    "per_task": {
+      "context_bytes": 80,
+      "task_metadata_and_context_bytes": 144,
+      "l1_bytes": 16384,
+      "l2_bytes": 1024,
+      "diagnostic_copy_bytes": 64,
+      "kernel_task_overhead_bytes": 17616,
+      "user_mapped_bytes": 12288,
+      "user_reserved_extent_bytes": 16384,
+      "guard_reserved_unmapped_bytes": 4096
+    },
+    "flat_binary_is_not_working_ram": true
+  },
+  "case_count": 8,
+  "boots": 16,
+  "complete_suite": true,
+  "source_sha256": {
+    "src/tasks.rs": "6e25efd2bb4f8c233d29f908e3ffb5ea3f8f4dee34c6b128de04c03c054dcba2",
+    "src/arch/tasks_entry.S": "1b18f04263650d3722d3e65f19b0f1eb3d0a1fa65f3ecc8e7f0b256c1e36f6d0",
+    "src/arch/task_workloads.S": "63b5d570a3f47b37b1fb789aa65a480b5438adfb848b6fc29697aac974670f40",
+    "link/tasks.ld": "66b90638132b1848f2e702559ff872dfbdac0275d0a9570e2635e38be8bf7487",
+    "tools/smoke_tasks.py": "96c7fb894c22c34a3cd7df47c1a7dff5b3003418e165b54d07277ef9a8df46ed",
+    "scripts/build-tasks.sh": "cf1fbe59010f0fadad6acb4d235b5b0f9c714b66ae598efa9537dac43304e664",
+    "scripts/test-tasks.sh": "1f4d0e0124c20a4cdabad3ca104ac00ddab76e6de9f5f2d19757d1ca9ac48be1",
+    "scripts/test-wave006.sh": "c775bc8046b48064bd1d7bf3b87d13d68c6245e5fc260b38b4e2637fcb0419c9",
+    "src/security_policy.rs": "6b2e1951d2d98b1aca837bdb1938cbf1f9124ec8ae6120f8a5ab4f011429b2dc",
+    "src/drivers/pxa_uart.rs": "ac6156bcff1922130b95e3f22fbc76afaef29e3c902a30030701b9570b7bb982",
+    "build.rs": "52f69094f79e8c2e9102e84a3d21a443a8acae0c11b0eb6f6111cd2cb3c7f19a",
+    "Cargo.toml": "a2958cca2b713fb38cb35f452c15f004cb2e2c953415ca6c2f651a101cc52d66",
+    "Cargo.lock": "8f0d12e94f6a3c9f51d992e2cb599ead42b13b3c9937bc06edcf07468b25ec44",
+    ".cargo/config.toml": "698a576d07789a25dc067c5ed4d58b5a6135ab555ff83ff6670a573aa7c7d546",
+    "rust-toolchain.toml": "b3ddff9ce63260d71bc204a0df7f686401db67e6a606cce90df291abca7c74f1",
+    "tools/verify_image.py": "2b7d9a14e699998cf980c9cec134905a917dcdbb80505dd92408a58132a4c3ae",
+    "tools/qemu_control.py": "2c28484425f787d693b4e5dd271780ec0381d45c5da1b918153555899a648ad5",
+    "tools/qtest_pxa.py": "f97b7974107d6f457b369321538135ef0c4b19d4522d38f5b9802992595679d7",
+    "tools/smoke_e2a.py": "a3af4f3fe7a2b8e8f865c557e1020754db507b5526b8007446dbf584545c1b93",
+    "tools/smoke_security.py": "187c5f9fb29a265c586d63ab3162a2d107546cdd4e9f9bc646ccede761896948",
+    "crosshair-emulator/qemu/crosshair-blueangel-e2a.c": "49e5b31e36f22240e2fd95035566085f0d8430d1abf6b30ef635d152e517ec32",
+    "crosshair-emulator/qemu/crosshair-blueangel-e2b.c": "caa413063cc9a1c28cee038fd3d9e162eb8417b70a7cb2544c9f6ef43b6f452f",
+    "src/task_runtime/context.rs": "46f7234193f3fca58231c0ee14861714f51648bb080261cf4845d5eab2afb64a",
+    "src/task_runtime/memory.rs": "4e73d4de8145429dfcc11994c138aff30d0d640e43ab66d005b55989822e8974",
+    "src/task_runtime/mod.rs": "56ddc2270f1316aa0d25ee1de633a3c1850f1328184252a262fd1d19d383c90d",
+    "src/task_runtime/scheduler.rs": "39fccdab4c237022b59aefc764e727e87aa9be0b386a28ddc3bc0316ef50b30b",
+    "src/task_runtime/syscall.rs": "488aa5bf84a16817abfb1616f161df1ae86bb7d390c968dde8f02101afbee14b"
+  }
+}

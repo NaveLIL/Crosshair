@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+   5640	      0	  64096	  69736	  11068	<artifacts>/tasks/image/crosshair-tasks.elf

@@ -2,9 +2,27 @@
 
 **Integration verified:** Wave004 actually executes this shared renderer in the ARMv5TE guest, with101 logical events and23 exact guest/host/QEMU pixel comparisons. [Execution, RAM and limits](../reports/WAVE_004.md). Physical ATI/display/input behavior remains untested.
 
-Implemented for the shared 240×320 RGB565 software renderer in Wave 004. The direction is a compact, practical evolution of a Pocket PC interface: gray surfaces, a blue application header, clear keyboard focus, short Russian labels and persistent bottom actions. No reference image was attached or inspected; the implementation follows the written direction and Crosshair's existing gray-blue palette.
+Implemented for the shared 240×320 RGB565 software renderer in Wave 004. The direction is a compact, practical evolution of a Pocket PC interface: gray surfaces, a blue application header, clear keyboard focus, short Russian labels and persistent bottom actions. Wave004 originally followed the written direction and Crosshair's existing gray-blue palette. On 16.10.2026 the owner supplied and approved the visual reference below as the primary artistic direction for the next functional Crosshair Shell 0.1; that approval does not change the historical Wave004 execution results or claim that the pictured shell is already implemented.
 
 The [theme](../ui/src/theme.rs) is the single source for exact colors and geometry. [Components](../ui/src/components.rs) and `AppsScreen::render` use these constants. Host fixtures and the ARM caller share that renderer; there is no separately drawn host mockup. The existing surface renderer, eleven primitive tests, font bytes and [font license](../ui/third_party/cozette/LICENSE) remain unchanged. See [navigation](UI_NAVIGATION.md) and [screens](UI_SCREENS.md) for behavior and implementation status.
+
+## Approved visual reference for Crosshair Shell 0.1
+
+![Owner-approved Crosshair visual direction: cold gray-blue Pocket PC surfaces, dark system bars, compact lists, desktop application grid and consistent icons](design/crosshair-ui-reference-2026-10-16.png)
+
+| Provenance | Recorded fact |
+| --- | --- |
+| Source and approval | User-provided image, inspected and approved by the project owner in chat on 16.10.2026 for the next functional Crosshair Shell 0.1 |
+| Versioned original | [crosshair-ui-reference-2026-10-16.png](design/crosshair-ui-reference-2026-10-16.png), 1152×1536 PNG, 1499273 bytes |
+| SHA-256 | `cf7aecb9a0ea4b288a8008a2b26c4b33ddca48a060c2d39fc7c60088c8ff8a07` |
+| Preservation | Original bytes copied unchanged; source and repository copy have identical SHA-256. No image editing, resizing or palette conversion was performed |
+| Rights/publication | Owner approval records its use as a project reference and versioned repository asset. No separate image copyright licence was supplied or inferred; the MIT licence for Crosshair's own code does not automatically relicense external artwork. External publication of this asset is not performed by this documentation update |
+
+The reference governs the next shell's **artistic direction**, not a pixel-for-pixel copy or a replacement rendering engine. Carry forward the cold gray-blue palette, dark system bars, compact Pocket PC headers and lists, persistent bottom softkeys, uniform icon language and clear selection/focus. The Desktop should present an application grid; Today should be a separate screen rather than replacing the Desktop. Files, Settings, Applications, Phone, Messages and Console should share the same visual rules as their actual capabilities become available. Existing exact theme tokens below remain the implemented contract until a measured, tested visual update changes them.
+
+Shell 0.1 must be functional graphics on the existing shared renderer: real navigation, keyboard/stylus logical events and bounded screen/application state must drive what is drawn. Adapt the concept to 240×320 RGB565, the existing Cozette subset and an explicit RAM/stack/code budget. Reuse the current surface/components/event path; this reference does not call for an engine rewrite. A static wallpaper is optional and must preserve text/selection contrast and acceptable redraw CPU/memory cost; the reference's photographic background is not an unconditional asset or runtime requirement.
+
+Pictured clocks, radio/battery bars, phone/messages, update notices and application entries are concept content. They do not establish working time, modem, network, power or storage services. The next shell must show actual available state and meaningful actions, with unavailable capabilities identified honestly; a dialler drawing must not claim a successful call. Wave006 remains the task-runtime step; saving this reference does not implement Shell 0.1 or alter its guest/runtime.
 
 ## Color tokens
 

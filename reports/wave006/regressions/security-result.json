@@ -1,0 +1,197 @@
+{
+  "result": "PASS",
+  "machine": "crosshair-blueangel-e2b",
+  "scope": "functional ARMv5 User/SVC and MMU isolation on synthetic E2B; no physical security certification",
+  "cases": [
+    {
+      "selector": 0,
+      "name": "valid_copy",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-00/result.json"
+    },
+    {
+      "selector": 1,
+      "name": "kernel_read",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-01/result.json"
+    },
+    {
+      "selector": 2,
+      "name": "kernel_write",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-02/result.json"
+    },
+    {
+      "selector": 3,
+      "name": "mmio_read",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-03/result.json"
+    },
+    {
+      "selector": 4,
+      "name": "mmio_write",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-04/result.json"
+    },
+    {
+      "selector": 5,
+      "name": "unknown_syscall",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-05/result.json"
+    },
+    {
+      "selector": 6,
+      "name": "null_pointer",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-06/result.json"
+    },
+    {
+      "selector": 7,
+      "name": "kernel_pointer",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-07/result.json"
+    },
+    {
+      "selector": 8,
+      "name": "cross_data_boundary",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-08/result.json"
+    },
+    {
+      "selector": 9,
+      "name": "oversized_copy",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-09/result.json"
+    },
+    {
+      "selector": 10,
+      "name": "pointer_add_overflow",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-10/result.json"
+    },
+    {
+      "selector": 11,
+      "name": "one_past_zero_length",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-11/result.json"
+    },
+    {
+      "selector": 12,
+      "name": "user_code_write",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-12/result.json"
+    },
+    {
+      "selector": 13,
+      "name": "unmapped_user_guard",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-13/result.json"
+    },
+    {
+      "selector": 14,
+      "name": "wrong_svc_immediate",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-14/result.json"
+    },
+    {
+      "selector": 15,
+      "name": "privileged_cp15",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-15/result.json"
+    },
+    {
+      "selector": 16,
+      "name": "armv5_no_xn_control",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-16/result.json"
+    },
+    {
+      "selector": 17,
+      "name": "code_pointer_copy_policy",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-17/result.json"
+    },
+    {
+      "selector": 18,
+      "name": "maximum_valid_copy",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-18/result.json"
+    },
+    {
+      "selector": 19,
+      "name": "null_zero_length",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-19/result.json"
+    },
+    {
+      "selector": 20,
+      "name": "svc_from_user_rw_data",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-20/result.json"
+    },
+    {
+      "selector": 21,
+      "name": "unmapped_user_instruction_fetch",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-21/result.json"
+    },
+    {
+      "selector": 22,
+      "name": "unsupported_thumb_svc",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-22/result.json"
+    },
+    {
+      "selector": 23,
+      "name": "undefined_from_user_rw_data",
+      "result": "PASS",
+      "boots": 2,
+      "evidence": "case-23/result.json"
+    }
+  ],
+  "image_sha256": {
+    "crosshair-security.elf": "a2f96162a2fa8bd4cbd6866782b2a16cc08ebc40f84e7a99f56409a4cc0e7759",
+    "crosshair-security.bin": "9d821b0204f8fce18dd0d5bf41dc91777f42f933c6b747e319ad7d7ead7b8e30",
+    "vectors.bin": "13e6df088c815fc9f21be259d830018a4f04a3a0a2a9eade7833db7a39610307"
+  },
+  "qemu_version": "QEMU emulator version 9.2.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "qemu_sha256": "934861b3766fe0de5a7cf0ac766a12284887c01753ee0091f363d5b36ee274d2",
+  "case_count": 24,
+  "boots": 48,
+  "complete_suite": true,
+  "armv5_limitations": [
+    "No XN/W^X guarantee; case16 executes own benign code from RW data",
+    "DFSR.WnR absent on this ARMv5 CPU; LDR/STR proved from actual opcode"
+  ],
+  "source_sha256": {
+    "src/security.rs": "7b4ec31376fc3c4ab6c41d2d53214cd95f3f75cffeec4e007ac8075f0bccb80e",
+    "src/security_policy.rs": "6b2e1951d2d98b1aca837bdb1938cbf1f9124ec8ae6120f8a5ab4f011429b2dc",
+    "src/arch/security_entry.S": "5ef24fd1562be7ea24918f2e92461116e6d8d343375f7f2f886c8f9347c54efd",
+    "link/security.ld": "f91db570dc13623824cc52387644e09b3a401ec3d114ea596116f26d56936057",
+    "tools/smoke_security.py": "187c5f9fb29a265c586d63ab3162a2d107546cdd4e9f9bc646ccede761896948",
+    "scripts/test-security.sh": "c187d318594d3758f7a9cb5469d839f7170b6b392ea2311fc64c88c16895a159"
+  }
+}

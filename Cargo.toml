@@ -18,6 +18,7 @@ e2b = []
 e2b-negative-test = ["e2b"]
 display-test = ["dep:crosshair-ui"]
 security-test = []
+tasks-test = []
 panic-test = []
 
 [dependencies]
@@ -55,6 +56,13 @@ bench = false
 name = "crosshair-security"
 path = "src/security.rs"
 required-features = ["security-test"]
+test = false
+bench = false
+
+[[bin]]
+name = "crosshair-tasks"
+path = "src/tasks.rs"
+required-features = ["tasks-test"]
 test = false
 bench = false
 

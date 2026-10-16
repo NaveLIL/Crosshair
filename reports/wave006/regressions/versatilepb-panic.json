@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "command": [
+    "<workspace>/local/qemu/bin/qemu-system-arm",
+    "-machine",
+    "versatilepb,audiodev=audio0",
+    "-cpu",
+    "arm926",
+    "-m",
+    "128M",
+    "-accel",
+    "tcg",
+    "-display",
+    "none",
+    "-monitor",
+    "none",
+    "-serial",
+    "stdio",
+    "-nic",
+    "none",
+    "-audiodev",
+    "none,id=audio0",
+    "-no-reboot",
+    "-qmp",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-kernel",
+    "<artifacts>/versatilepb-panic/crosshair-boot.elf",
+    "-device",
+    "loader,addr=0x1021c,data=0xa5a5a5a5,data-len=4"
+  ],
+  "qemu_version": "QEMU emulator version 9.2.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "image_sha256": {
+    "crosshair-boot.elf": "cec6d127ee5983cec8473e443f7b93796ec07795b97a5bb2c1845850d3c75f99",
+    "crosshair-boot.bin": "08e7daab3068762c4d8840587f4e3d48cf15e99e87b2069fcbd1f9a646691b1b"
+  },
+  "registers": "\r\nCPU#0\r\nR00=101f1000 R01=0000001c R02=0000000a R03=fff0bdc0\r\nR04=00010290 R05=00000000 R06=00000000 R07=00000000\r\nR08=00000000 R09=00000000 R10=00000000 R11=00000000\r\nR12=000101f4 R13=00014280 R14=00010040 R15=00010038\r\nPSR=600001d3 -ZC- A svc32\r\ns00=00000000 s01=00000000 d00=0000000000000000\r\ns02=00000000 s03=00000000 d01=0000000000000000\r\ns04=00000000 s05=00000000 d02=0000000000000000\r\ns06=00000000 s07=00000000 d03=0000000000000000\r\ns08=00000000 s09=00000000 d04=0000000000000000\r\ns10=00000000 s11=00000000 d05=0000000000000000\r\ns12=00000000 s13=00000000 d06=0000000000000000\r\ns14=00000000 s15=00000000 d07=0000000000000000\r\ns16=00000000 s17=00000000 d08=0000000000000000\r\ns18=00000000 s19=00000000 d09=0000000000000000\r\ns20=00000000 s21=00000000 d10=0000000000000000\r\ns22=00000000 s23=00000000 d11=0000000000000000\r\ns24=00000000 s25=00000000 d12=0000000000000000\r\ns26=00000000 s27=00000000 d13=0000000000000000\r\ns28=00000000 s29=00000000 d14=0000000000000000\r\ns30=00000000 s31=00000000 d15=0000000000000000\r\nFPSCR: 00000000\r\n",
+  "memory": "0000000000010218: 0x43524f53 0x00000003 0x00000000 0x00000000\r\n0000000000010228: 0x00000000 0x0000001c\r\n",
+  "expected_utf8": "CROSSHAIR PANIC \u2014 HALTED\r\n",
+  "stage": 3
+}

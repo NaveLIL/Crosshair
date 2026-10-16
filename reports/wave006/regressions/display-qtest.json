@@ -1,0 +1,87 @@
+{
+  "result": "PASS",
+  "machine": "crosshair-blueangel-display-test",
+  "scope": "synthetic test protocols, QTest dummy CPU, no physical display/input validation",
+  "qemu_version": "QEMU emulator version 9.2.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "qemu_sha256": "67e4b486b1813d46e7c2e5a99e0559c0e9c6b496e363dab655ee8efa50396c13",
+  "command": [
+    "<workspace>/local/qemu-display-test/bin/qemu-system-arm",
+    "-machine",
+    "crosshair-blueangel-display-test",
+    "-accel",
+    "qtest",
+    "-S",
+    "-display",
+    "none",
+    "-monitor",
+    "none",
+    "-serial",
+    "null",
+    "-nic",
+    "none",
+    "-d",
+    "guest_errors",
+    "-qmp",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest-log",
+    "<artifacts>/display-qtest/qemu-qtest.log"
+  ],
+  "display": {
+    "result": "PASS",
+    "geometry": [
+      240,
+      320
+    ],
+    "format": "little-endian RGB565 expanded by bit replication",
+    "distinct_rgb565_values_compared": 65536,
+    "framebuffer_range_checked": true,
+    "guest_guards_unchanged": true,
+    "synchronous_publication": true,
+    "unpresented_mutations_invisible": true,
+    "qemu_screendump_sha256": {
+      "initial_black.ppm": "1edcc2a5a6f7f596acf98d8fbd248c4175886dc8759e6d75ec652b339c2a53b6",
+      "unpresented_black.ppm": "1edcc2a5a6f7f596acf98d8fbd248c4175886dc8759e6d75ec652b339c2a53b6",
+      "pattern.ppm": "9fbb2027cc02a63eb870c32609d8c07e39a2ef4ea3b6e938c40c95884e29280b",
+      "unpresented_pattern.ppm": "9fbb2027cc02a63eb870c32609d8c07e39a2ef4ea3b6e938c40c95884e29280b",
+      "presented_black.ppm": "1edcc2a5a6f7f596acf98d8fbd248c4175886dc8759e6d75ec652b339c2a53b6"
+    }
+  },
+  "input": {
+    "result": "PASS",
+    "fifo_capacity": 8,
+    "all_tags_ordered": true,
+    "overflow_backpressure": true,
+    "invalid_payloads_rejected": [
+      0,
+      150994944,
+      16777217,
+      134273024,
+      134275071,
+      135331840
+    ],
+    "wrap_scalar_events": 160,
+    "unicode_boundaries": [
+      0,
+      127,
+      128,
+      2047,
+      2048,
+      55295,
+      57344,
+      65535,
+      65536,
+      1114111
+    ],
+    "destructive_reads_strict_width_alignment": true
+  },
+  "reset": {
+    "result": "PASS",
+    "reset_black_sha256": "1edcc2a5a6f7f596acf98d8fbd248c4175886dc8759e6d75ec652b339c2a53b6",
+    "reset_republish_sha256": "9fbb2027cc02a63eb870c32609d8c07e39a2ef4ea3b6e938c40c95884e29280b",
+    "guest_ram_retained": true,
+    "post_reset_presentation_works": true
+  },
+  "invalid_mmio_scope": "QTest hides MemTxResult; verifies state preservation and diagnostic rejection, not CPU exception delivery"
+}

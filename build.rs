@@ -7,6 +7,7 @@ fn main() {
     let e2b = env::var_os("CARGO_FEATURE_E2B").is_some();
     let display = env::var_os("CARGO_FEATURE_DISPLAY_TEST").is_some();
     let security = env::var_os("CARGO_FEATURE_SECURITY_TEST").is_some();
+    let tasks = env::var_os("CARGO_FEATURE_TASKS_TEST").is_some();
     assert!(
         usize::from(versatile)
             + usize::from(blueangel)
@@ -14,6 +15,7 @@ fn main() {
             + usize::from(e2b)
             + usize::from(display)
             + usize::from(security)
+            + usize::from(tasks)
             == 1,
         "select exactly one BSP"
     );
@@ -21,6 +23,8 @@ fn main() {
         "versatilepb"
     } else if blueangel {
         "blueangel"
+    } else if tasks {
+        "tasks"
     } else if security {
         "security"
     } else if display {

@@ -1,0 +1,225 @@
+
+File: <artifacts>/tasks/image/crosshair-tasks.elf
+Format: elf32-littlearm
+Arch: arm
+AddressSize: 32bit
+LoadName: <Not found>
+ElfHeader {
+  Ident {
+    Magic: (7F 45 4C 46)
+    Class: 32-bit (0x1)
+    DataEncoding: LittleEndian (0x1)
+    FileVersion: 1
+    OS/ABI: SystemV (0x0)
+    ABIVersion: 0
+    Unused: (00 00 00 00 00 00 00)
+  }
+  Type: Executable (0x2)
+  Machine: EM_ARM (0x28)
+  Version: 1
+  Entry: 0xA0008000
+  ProgramHeaderOffset: 0x34
+  SectionHeaderOffset: 0x121A98
+  Flags [ (0x5000200)
+    0x200
+    0x1000000
+    0x4000000
+  ]
+  HeaderSize: 52
+  ProgramHeaderEntrySize: 32
+  ProgramHeaderCount: 5
+  SectionHeaderEntrySize: 40
+  SectionHeaderCount: 23
+  StringTableSectionIndex: 21
+}
+ProgramHeaders [
+  ProgramHeader {
+    Type: PT_LOAD (0x1)
+    Offset: 0x10000
+    VirtualAddress: 0x0
+    PhysicalAddress: 0x0
+    FileSize: 64
+    MemSize: 64
+    Flags [ (0x5)
+      PF_R (0x4)
+      PF_X (0x1)
+    ]
+    Alignment: 65536
+  }
+  ProgramHeader {
+    Type: PT_LOAD (0x1)
+    Offset: 0x18000
+    VirtualAddress: 0xA0008000
+    PhysicalAddress: 0xA0008000
+    FileSize: 4644
+    MemSize: 4644
+    Flags [ (0x5)
+      PF_R (0x4)
+      PF_X (0x1)
+    ]
+    Alignment: 65536
+  }
+  ProgramHeader {
+    Type: PT_LOAD (0x1)
+    Offset: 0x1C000
+    VirtualAddress: 0xA000C000
+    PhysicalAddress: 0xA000C000
+    FileSize: 0
+    MemSize: 64096
+    Flags [ (0x6)
+      PF_R (0x4)
+      PF_W (0x2)
+    ]
+    Alignment: 65536
+  }
+  ProgramHeader {
+    Type: PT_LOAD (0x1)
+    Offset: 0x20000
+    VirtualAddress: 0xA0200000
+    PhysicalAddress: 0xA0200000
+    FileSize: 456
+    MemSize: 456
+    Flags [ (0x5)
+      PF_R (0x4)
+      PF_X (0x1)
+    ]
+    Alignment: 65536
+  }
+  ProgramHeader {
+    Type: PT_LOAD (0x1)
+    Offset: 0x30000
+    VirtualAddress: 0xA0300000
+    PhysicalAddress: 0xA0300000
+    FileSize: 476
+    MemSize: 476
+    Flags [ (0x5)
+      PF_R (0x4)
+      PF_X (0x1)
+    ]
+    Alignment: 65536
+  }
+]
+BuildAttributes {
+  FormatVersion: 0x41
+  Section 1 {
+    SectionLength: 50
+    Vendor: aeabi
+    Tag: Tag_File (0x1)
+    Size: 40
+    FileAttributes {
+      Attribute {
+        Tag: 67
+        TagName: conformance
+        Value: 2.09
+      }
+      Attribute {
+        Tag: 5
+        TagName: CPU_name
+        Value: 5TE
+      }
+      Attribute {
+        Tag: 6
+        Value: 4
+        TagName: CPU_arch
+        Description: ARM v5TE
+      }
+      Attribute {
+        Tag: 8
+        Value: 1
+        TagName: ARM_ISA_use
+        Description: Permitted
+      }
+      Attribute {
+        Tag: 9
+        Value: 1
+        TagName: THUMB_ISA_use
+        Description: Thumb-1
+      }
+      Attribute {
+        Tag: 14
+        Value: 0
+        TagName: ABI_PCS_R9_use
+        Description: v6
+      }
+      Attribute {
+        Tag: 17
+        Value: 1
+        TagName: ABI_PCS_GOT_use
+        Description: Direct
+      }
+      Attribute {
+        Tag: 20
+        Value: 1
+        TagName: ABI_FP_denormal
+        Description: IEEE-754
+      }
+      Attribute {
+        Tag: 21
+        Value: 1
+        TagName: ABI_FP_exceptions
+        Description: IEEE-754
+      }
+      Attribute {
+        Tag: 23
+        Value: 3
+        TagName: ABI_FP_number_model
+        Description: IEEE-754
+      }
+      Attribute {
+        Tag: 24
+        Value: 1
+        TagName: ABI_align_needed
+        Description: 8-byte alignment
+      }
+      Attribute {
+        Tag: 25
+        Value: 1
+        TagName: ABI_align_preserved
+        Description: 8-byte data alignment
+      }
+      Attribute {
+        Tag: 34
+        Value: 0
+        TagName: CPU_unaligned_access
+        Description: Not Permitted
+      }
+      Attribute {
+        Tag: 38
+        Value: 1
+        TagName: ABI_FP_16bit_format
+        Description: IEEE-754
+      }
+    }
+  }
+  Section 2 {
+    SectionLength: 26
+    Vendor: aeabi
+    Tag: Tag_File (0x1)
+    Size: 16
+    FileAttributes {
+      Attribute {
+        Tag: 5
+        TagName: CPU_name
+        Value: 5TE
+      }
+      Attribute {
+        Tag: 6
+        Value: 4
+        TagName: CPU_arch
+        Description: ARM v5TE
+      }
+      Attribute {
+        Tag: 8
+        Value: 1
+        TagName: ARM_ISA_use
+        Description: Permitted
+      }
+      Attribute {
+        Tag: 9
+        Value: 1
+        TagName: THUMB_ISA_use
+        Description: Thumb-1
+      }
+    }
+  }
+}
