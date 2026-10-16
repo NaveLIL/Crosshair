@@ -1,0 +1,26 @@
+{
+  "host": {
+    "surface": 112,
+    "apps_state": 76,
+    "apps_align": 4,
+    "input_queue": 36,
+    "event": 4,
+    "area": 12,
+    "char": 4,
+    "usize": 8,
+    "state_plus_queue_delta_ui01": 112,
+    "framebuffer": 153600
+  },
+  "armv5te": {
+    "surface": 88,
+    "apps_state": 76,
+    "apps_align": 4,
+    "input_queue": 36,
+    "event": 4,
+    "area": 12,
+    "char": 4,
+    "usize": 4,
+    "state_plus_queue_delta_ui01": 112,
+    "framebuffer": 153600
+  }
+}

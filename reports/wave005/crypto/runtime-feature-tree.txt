@@ -1,0 +1,69 @@
+crosshair-crypto-compile-probe v0<crypto-probe>0<crypto-probe>0 (<crypto-probe>)
+├── chacha20poly1305 feature "zeroize"
+│   ├── chacha20poly1305 v0<crypto-probe>11<crypto-probe>0
+│   │   ├── aead v0<crypto-probe>6<crypto-probe>1
+│   │   │   ├── crypto-common feature "default"
+│   │   │   │   └── crypto-common v0<crypto-probe>2<crypto-probe>2
+│   │   │   │       └── hybrid-array feature "default"
+│   │   │   │           └── hybrid-array v0<crypto-probe>4<crypto-probe>15
+│   │   │   │               ├── typenum feature "const-generics"
+│   │   │   │               │   └── typenum v1<crypto-probe>20<crypto-probe>1
+│   │   │   │               └── typenum feature "default"
+│   │   │   │                   └── typenum v1<crypto-probe>20<crypto-probe>1
+│   │   │   └── inout feature "default"
+│   │   │       └── inout v0<crypto-probe>2<crypto-probe>3
+│   │   │           └── hybrid-array feature "default" (*)
+│   │   ├── zeroize v1<crypto-probe>9<crypto-probe>1
+│   │   ├── chacha20 feature "xchacha"
+│   │   │   ├── chacha20 v0<crypto-probe>10<crypto-probe>2
+│   │   │   │   ├── zeroize v1<crypto-probe>9<crypto-probe>1
+│   │   │   │   ├── cfg-if feature "default"
+│   │   │   │   │   └── cfg-if v1<crypto-probe>0<crypto-probe>5
+│   │   │   │   ├── cipher feature "default"
+│   │   │   │   │   └── cipher v0<crypto-probe>5<crypto-probe>2
+│   │   │   │   │       ├── crypto-common feature "default" (*)
+│   │   │   │   │       ├── inout feature "default" (*)
+│   │   │   │   │       └── block-buffer feature "default"
+│   │   │   │   │           └── block-buffer v0<crypto-probe>12<crypto-probe>1
+│   │   │   │   │               └── hybrid-array feature "default" (*)
+│   │   │   │   └── cipher feature "stream-wrapper"
+│   │   │   │       ├── cipher v0<crypto-probe>5<crypto-probe>2 (*)
+│   │   │   │       └── cipher feature "block-buffer"
+│   │   │   │           └── cipher v0<crypto-probe>5<crypto-probe>2 (*)
+│   │   │   └── chacha20 feature "cipher"
+│   │   │       └── chacha20 v0<crypto-probe>10<crypto-probe>2 (*)
+│   │   ├── cipher feature "default" (*)
+│   │   └── poly1305 feature "default"
+│   │       └── poly1305 v0<crypto-probe>9<crypto-probe>1
+│   │           └── universal-hash feature "default"
+│   │               └── universal-hash v0<crypto-probe>6<crypto-probe>1
+│   │                   ├── crypto-common feature "default" (*)
+│   │                   └── ctutils feature "default"
+│   │                       └── ctutils v0<crypto-probe>4<crypto-probe>3
+│   │                           └── cmov feature "default"
+│   │                               └── cmov v0<crypto-probe>5<crypto-probe>4
+│   └── chacha20 feature "zeroize"
+│       └── chacha20 v0<crypto-probe>10<crypto-probe>2 (*)
+└── ed25519-dalek feature "zeroize"
+    ├── ed25519-dalek v3<crypto-probe>0<crypto-probe>0
+    │   ├── ed25519 v3<crypto-probe>0<crypto-probe>0
+    │   │   └── signature v3<crypto-probe>0<crypto-probe>0
+    │   ├── sha2 v0<crypto-probe>11<crypto-probe>0
+    │   │   ├── cfg-if feature "default" (*)
+    │   │   └── digest feature "default"
+    │   │       ├── digest v0<crypto-probe>11<crypto-probe>3
+    │   │       │   ├── crypto-common feature "default" (*)
+    │   │       │   └── block-buffer feature "default" (*)
+    │   │       └── digest feature "block-api"
+    │   │           └── digest v0<crypto-probe>11<crypto-probe>3 (*)
+    │   ├── subtle v2<crypto-probe>6<crypto-probe>1
+    │   ├── zeroize v1<crypto-probe>9<crypto-probe>1
+    │   └── curve25519-dalek feature "digest"
+    │       └── curve25519-dalek v5<crypto-probe>0<crypto-probe>0
+    │           ├── zeroize v1<crypto-probe>9<crypto-probe>1
+    │           ├── cfg-if feature "default" (*)
+    │           ├── digest feature "block-api" (*)
+    │           └── subtle feature "const-generics"
+    │               └── subtle v2<crypto-probe>6<crypto-probe>1
+    └── curve25519-dalek feature "zeroize"
+        └── curve25519-dalek v5<crypto-probe>0<crypto-probe>0 (*)

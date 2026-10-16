@@ -1,0 +1,31 @@
+ Downloading crates <crypto-probe><crypto-probe><crypto-probe>
+  Downloaded sha2 v0<crypto-probe>11<crypto-probe>0
+   Compiling compiler_builtins v0<crypto-probe>1<crypto-probe>148
+   Compiling core v0<crypto-probe>0<crypto-probe>0 (<rustup>/toolchains/nightly-2025-03-01-x86_64-apple-darwin/lib/rustlib/src/rust/library/core)
+   Compiling semver v1<crypto-probe>0<crypto-probe>28
+   Compiling rustc_version v0<crypto-probe>4<crypto-probe>1
+   Compiling curve25519-dalek v5<crypto-probe>0<crypto-probe>0
+   Compiling rustc-std-workspace-core v1<crypto-probe>99<crypto-probe>0 (<rustup>/toolchains/nightly-2025-03-01-x86_64-apple-darwin/lib/rustlib/src/rust/library/rustc-std-workspace-core)
+   Compiling typenum v1<crypto-probe>20<crypto-probe>1
+   Compiling cfg-if v1<crypto-probe>0<crypto-probe>5
+   Compiling zeroize v1<crypto-probe>9<crypto-probe>1
+   Compiling cmov v0<crypto-probe>5<crypto-probe>4
+   Compiling signature v3<crypto-probe>0<crypto-probe>0
+   Compiling subtle v2<crypto-probe>6<crypto-probe>1
+   Compiling ed25519 v3<crypto-probe>0<crypto-probe>0
+   Compiling ctutils v0<crypto-probe>4<crypto-probe>3
+   Compiling hybrid-array v0<crypto-probe>4<crypto-probe>15
+   Compiling crypto-common v0<crypto-probe>2<crypto-probe>2
+   Compiling block-buffer v0<crypto-probe>12<crypto-probe>1
+   Compiling inout v0<crypto-probe>2<crypto-probe>3
+   Compiling digest v0<crypto-probe>11<crypto-probe>3
+   Compiling cipher v0<crypto-probe>5<crypto-probe>2
+   Compiling universal-hash v0<crypto-probe>6<crypto-probe>1
+   Compiling aead v0<crypto-probe>6<crypto-probe>1
+   Compiling poly1305 v0<crypto-probe>9<crypto-probe>1
+   Compiling sha2 v0<crypto-probe>11<crypto-probe>0
+   Compiling chacha20 v0<crypto-probe>10<crypto-probe>2
+   Compiling chacha20poly1305 v0<crypto-probe>11<crypto-probe>0
+   Compiling ed25519-dalek v3<crypto-probe>0<crypto-probe>0
+   Compiling crosshair-crypto-compile-probe v0<crypto-probe>0<crypto-probe>0 (<crypto-probe>)
+    Finished `release` profile [optimized] target(s) in 16<crypto-probe>70s

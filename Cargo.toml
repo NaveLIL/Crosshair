@@ -17,6 +17,7 @@ e2a-mmio-test = ["e2a"]
 e2b = []
 e2b-negative-test = ["e2b"]
 display-test = ["dep:crosshair-ui"]
+security-test = []
 panic-test = []
 
 [dependencies]
@@ -47,6 +48,13 @@ bench = false
 name = "crosshair-display-test"
 path = "src/display_test.rs"
 required-features = ["display-test"]
+test = false
+bench = false
+
+[[bin]]
+name = "crosshair-security"
+path = "src/security.rs"
+required-features = ["security-test"]
 test = false
 bench = false
 

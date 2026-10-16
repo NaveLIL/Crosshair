@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+   4035	      0	  62464	  66499	  103c3	<workspace>/target/artifacts/security/image/crosshair-security.elf

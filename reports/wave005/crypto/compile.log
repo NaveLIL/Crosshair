@@ -1,0 +1,50 @@
+    Updating crates<crypto-probe>io index
+     Locking 32 packages to latest compatible versions
+      Adding sha2 v0<crypto-probe>11<crypto-probe>1 (requires Rust 1<crypto-probe>88)
+ Downloading crates <crypto-probe><crypto-probe><crypto-probe>
+  Downloaded ctutils v0<crypto-probe>4<crypto-probe>3
+  Downloaded typenum v1<crypto-probe>20<crypto-probe>1
+  Downloaded unicode-ident v1<crypto-probe>0<crypto-probe>27
+  Downloaded subtle v2<crypto-probe>6<crypto-probe>1
+  Downloaded universal-hash v0<crypto-probe>6<crypto-probe>1
+  Downloaded curve25519-dalek-derive v0<crypto-probe>1<crypto-probe>1
+  Downloaded inout v0<crypto-probe>2<crypto-probe>3
+  Downloaded chacha20poly1305 v0<crypto-probe>11<crypto-probe>0
+  Downloaded signature v3<crypto-probe>0<crypto-probe>0
+  Downloaded digest v0<crypto-probe>11<crypto-probe>3
+  Downloaded sha2 v0<crypto-probe>11<crypto-probe>1
+  Downloaded zeroize v1<crypto-probe>9<crypto-probe>1
+  Downloaded proc-macro2 v1<crypto-probe>0<crypto-probe>107
+  Downloaded chacha20 v0<crypto-probe>10<crypto-probe>2
+  Downloaded ed25519-dalek v3<crypto-probe>0<crypto-probe>0
+  Downloaded semver v1<crypto-probe>0<crypto-probe>28
+  Downloaded poly1305 v0<crypto-probe>9<crypto-probe>1
+  Downloaded quote v1<crypto-probe>0<crypto-probe>47
+  Downloaded cpufeatures v0<crypto-probe>3<crypto-probe>1
+  Downloaded cipher v0<crypto-probe>5<crypto-probe>2
+  Downloaded block-buffer v0<crypto-probe>12<crypto-probe>1
+  Downloaded aead v0<crypto-probe>6<crypto-probe>1
+  Downloaded hybrid-array v0<crypto-probe>4<crypto-probe>15
+  Downloaded ed25519 v3<crypto-probe>0<crypto-probe>0
+  Downloaded crypto-common v0<crypto-probe>2<crypto-probe>2
+  Downloaded cfg-if v1<crypto-probe>0<crypto-probe>5
+  Downloaded syn v2<crypto-probe>0<crypto-probe>119
+  Downloaded curve25519-dalek v5<crypto-probe>0<crypto-probe>0
+  Downloaded rustc_version v0<crypto-probe>4<crypto-probe>1
+  Downloaded cmov v0<crypto-probe>5<crypto-probe>4
+    Updating crates<crypto-probe>io index
+ Downloading crates <crypto-probe><crypto-probe><crypto-probe>
+  Downloaded cfg-if v1<crypto-probe>0<crypto-probe>0
+  Downloaded allocator-api2 v0<crypto-probe>2<crypto-probe>21
+  Downloaded rustc-demangle v0<crypto-probe>1<crypto-probe>24
+  Downloaded getopts v0<crypto-probe>2<crypto-probe>21
+  Downloaded hashbrown v0<crypto-probe>15<crypto-probe>2
+  Downloaded unicode-width v0<crypto-probe>1<crypto-probe>14
+  Downloaded compiler_builtins v0<crypto-probe>1<crypto-probe>148
+  Downloaded libc v0<crypto-probe>2<crypto-probe>169
+error: rustc 1<crypto-probe>87<crypto-probe>0-nightly is not supported by the following package:
+  sha2@0<crypto-probe>11<crypto-probe>1 requires rustc 1<crypto-probe>88
+Either upgrade rustc or select compatible dependency versions with
+`cargo update <name>@<current-ver> --precise <compatible-ver>`
+where `<compatible-ver>` is the latest version supporting rustc 1<crypto-probe>87<crypto-probe>0-nightly
+

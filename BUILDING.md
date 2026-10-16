@@ -1,5 +1,18 @@
 # Сборка Crosshair
 
+## Wave005: отдельный User/MMU/SVC guest
+
+Используются прежний Rust toolchain и **неизменённый E2B QEMU cache**; новая machine/overlay не нужна. `QEMU_E2B` выбирает существующий внешний cache как прежде. [Протокол](reports/WAVE_005.md), [security contract и ограничения](docs/SECURITY_MODEL.md), [модель угроз](docs/THREAT_MODEL.md).
+
+```sh
+scripts/bootstrap-qemu-e2b.sh  # Если E2B cache ещё не подготовлен.
+scripts/test-security.sh      # Сборка, два host policy tests и24 TCG cases.
+# Все принятые регрессии и новый эксперимент:
+scripts/test-wave005.sh
+```
+
+`scripts/build-security.sh` создаёт `target/artifacts/security/image/`: отдельный `crosshair-security.elf`, flat BIN,64B vectors, attributes/disassembly/size/manifest и host policy test log. `tools/smoke_security.py` пишет24 case records и общий результат в `target/artifacts/security-tests/`; полный `scripts/test-wave005.sh` завершён exit0,24cases/48boots. Flat BIN содержит адресный gap и не равен working RAM; accounting приведён в отчёте. Harness запускает guest в QEMU; это не HaRET image. Фактически проверен macOS x86_64; новый WSL-прогон не заявляется. Криптографический compile-only probe имеет отдельный [manifest/reproducer](research/crypto-candidates.json) и не добавляет зависимостей ядру/UI.
+
 ## Wave004: UI внутри ARM guest
 
 Используются прежние Rust nightly-2025-03-01 и отдельный QEMU9.2 overlay. Новый cache `local/qemu-display-test` требует pixman (на Linux: `libpixman-1-dev`; macOS: `pixman` через pkg-config); прежние E1/E2A/E2B caches не меняются. Native Cocoa backend компилируется на macOS, но фактически проверен headless `-display none` с настоящей QEMU graphical console и QMP screendump.
@@ -71,7 +84,7 @@ Collector проверяет статусы, hashes источников UI/об
 | QEMU build helpers | Meson `1.5.0`, Ninja `1.11.1.3`, distlib `0.3.9`, pycotap `1.3.1` в local venv |
 | Python | 3.10+ для инструментов проекта; на хосте проверен 3.12.13 |
 
-Это рабочая проверенная комбинация Rust, а не утверждение о самой ранней поддерживающей версии. Отсутствие prebuilt `rust-std` для Tier 3 ожидаемо; `rustup target add` не используется. У приложения нет зависимостей Cargo; source tree стандартной библиотеки закреплён датой toolchain и содержит свой Cargo.lock (`compiler_builtins 0.1.148`).
+Это рабочая проверенная комбинация Rust, а не утверждение о самой ранней поддерживающей версии. Отсутствие prebuilt `rust-std` для Tier 3 ожидаемо; `rustup target add` не используется. У ядра нет внешних runtime Cargo dependencies; display-test использует собственный UI path dependency. Source tree стандартной библиотеки закреплён датой toolchain и содержит свой Cargo.lock (`compiler_builtins 0.1.148`).
 
 Источники: [официальная цель Rust](https://doc.rust-lang.org/rustc/platform-support/armv5te-none-eabi.html), [Cargo build-std](https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#build-std), [rustup installation](https://rust-lang.github.io/rustup/installation/index.html). Фактическая конфигурация выбранного компилятора сохранена в `reports/target-spec.json`, `target-cfg.txt`, `rustc.txt`, `cargo.txt`.
 

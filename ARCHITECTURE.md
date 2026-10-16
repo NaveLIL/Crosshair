@@ -1,5 +1,7 @@
 # Архитектура · исследовательский проект
 
+Wave005 проверил отдельную User/MMU/SVC границу на неизменённом E2B: privileged AP1 kernel/MMIO, User RO code/RW data+stack/guard, bounded64B copy-in и завершение trapped User context с healthy replacement. [24cases/48boots и RAM](reports/WAVE_005.md), [механизмы](docs/SECURITY_MODEL.md), [границы доверия и угрозы](docs/THREAT_MODEL.md). Это один последовательный тестовый контекст без scheduler/app loader/capability manager. Kernel и privileged drivers остаются TCB; ARMv5 не даёт современный XN, IRQ/FIQ masked не ограничивают nontrapping User loop. UI Wave004 по-прежнему исполняется privileged. Криптографические сервисы только спроектированы; совместимость кандидатов проверена отдельно compile-only.
+
 Wave004 links the same dependency-free UI into an ARMv5TE guest. Only the test BSP owns framebuffer RAM, MMIO publication and a serialized logical input FIFO; UI code still has no device access. QEMU's synthetic display synchronously copies the one guest framebuffer into host console storage. That host storage is not a second guest framebuffer. RGB565/geometry and semantic input remain explicit boundaries for a future ATI/input driver. [Measured integration and limits](reports/WAVE_004.md), [central theme](ui/src/theme.rs), [native UI standard](docs/UI_DESIGN_SYSTEM.md).
 
 Wave003 добавляет отдельный GPL host GPIO subset в `crosshair-blueangel-e2b`, не меняя E2A C model. Собственный MIT test guest проверяет функциональную MMU и GPIO IRQ; это эксперимент CPU260, без аппаратной точности cache/CP14/PXA263. [Границы и результаты](reports/WAVE_003.md).
@@ -38,7 +40,7 @@ UI0.2 сохраняет `no_std`, `forbid(unsafe_code)` и borrowed RGB565 surf
 ARM bootstrap: вход в образ, стек, состояние CPU, переход в Rust
 ```
 
-На ранней стадии допустим один статический образ. Это не считается изоляцией приложений: сбой в таком прототипе может нарушить всю систему. До испытаний на роль надёжного телефона требуется определить границы привилегий, обращения к драйверам и поведение при аварии.
+На ранней стадии допустим один статический образ. Прежние privileged диагностические guests не считаются изоляцией приложений; отдельный Wave005 проверяет только описанную User boundary. До испытаний на роль надёжного телефона нужны полноценные app lifetime/authority, preemption, driver access и recovery contracts.
 
 Монолитное ядро — текущий вариант для исследования, а не необратимый выбор. Не строить большую систему процессов до первого устойчивого запуска, но не обещать изоляцию, пока её нет.
 
