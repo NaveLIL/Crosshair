@@ -1,0 +1,63 @@
+{
+  "result": "PASS",
+  "machine": "crosshair-blueangel-e2a",
+  "image_sha256": {
+    "crosshair-e2a.elf": "430fa8b6b2663cf8280e564d1da686c3d14466e3f1f7f3795c22b57f6d95e0cf",
+    "crosshair-e2a.bin": "503840106b7116002d5242ea38406866d535a4790b32f716d8c13a7938e98105",
+    "vectors.bin": "c743923832589ead31c43d6d30536907d49df0607b4e735b9a1e35d3ff35f2c5"
+  },
+  "scope": "experimental QEMU pxa260 proxy, not hardware-validated PXA263",
+  "qemu_version": "QEMU emulator version 9.2.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "qemu_sha256": "ea9dbd311573eda256ec3c4057305af0f8b73f8002e3ab922115c960acda1458",
+  "command": [
+    "<host-path>",
+    "-machine",
+    "crosshair-blueangel-e2a",
+    "-accel",
+    "tcg",
+    "-display",
+    "none",
+    "-monitor",
+    "none",
+    "-serial",
+    "stdio",
+    "-nic",
+    "none",
+    "-S",
+    "-qtest",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest-log",
+    "<workspace>/target/artifacts/e2a-tests/fault-4/memory-server.log",
+    "-qmp",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-d",
+    "guest_errors",
+    "-device",
+    "loader,file=<workspace>/target/artifacts/e2a/mmio-test/crosshair-e2a.elf,cpu-num=0",
+    "-device",
+    "loader,addr=0xa0000100,data=4,data-len=4"
+  ],
+  "fault_probe": "unmapped_address",
+  "boots": [
+    {
+      "boot": 1,
+      "pre_entry_stage": 2779096485,
+      "registers": "\r\nCPU#0\r\nR00=a00083c3 R01=fff0bdc0 R02=40100000 R03=0000000a\r\nR04=a0008228 R05=00000000 R06=00000000 R07=00000000\r\nR08=00000000 R09=00000000 R10=00000000 R11=00000000\r\nR12=fff0bdc0 R13=a000c418 R14=a0008070 R15=a0008068\r\nPSR=600001d3 -ZC- A svc32\r\nFPSCR: 00000000\r\n",
+      "record_words": [
+        1347961170,
+        5,
+        0,
+        0,
+        0,
+        1761945859,
+        4,
+        8,
+        1342177280,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "uart_utf8": "CROSSHAIR E2A \u2014 DATA ABORT PASS\n"
+}

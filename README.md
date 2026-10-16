@@ -2,6 +2,8 @@
 
 Собственная ОС на Rust для i-mate PDA2k / HTC Blue Angel, Intel XScale PXA263 (ARMv5TE). Цель — самостоятельное ядро, аппаратная клавиатура и сенсор, приложения, звонки/SMS и надёжный сон.
 
+**Wave005 / Security Foundation0.1 проверен:** отдельный User/MMU/SVC guest на неизменённой synthetic E2B прошёл24 сценария и48 boot/reset executions с healthy User recovery. Working RAM с vectors —91200B. Это узкий прототип без scheduler; UI Wave004 остаётся privileged, ARMv5 не получает NX. [Протокол](reports/WAVE_005.md), [модель безопасности](docs/SECURITY_MODEL.md), [модель угроз](docs/THREAT_MODEL.md). Crypto candidates проверены только compile-only, без ключей или включения crypto runtime.
+
 **Crosshair Boot 0.1 проверен в QEMU 9.2.0 на VersatilePB/ARM926:** настоящий `no_std` Rust-код печатает `CROSSHAIR BOOT 0.1 — HELLO FROM RUST` и переходит в проверяемый цикл. Проверены normal/panic, ARM EABI5, BSS и стек. [Протокол](reports/BOOT_0.1.md).
 
 **E2A проверен:** собственная `crosshair-blueangel-e2a` на QEMU9.2 с экспериментальным CPU260 proxy выполняет Crosshair, timer IRQ, reset/reboot и MMIO data-abort tests. [Результаты и сравнение с E1](reports/E2A_MINIMAL_BOARD.md), [контракт](docs/E2A_CONTRACT.md). Это ограниченная синтетическая плата; точность PXA263 не заявляется.

@@ -1,0 +1,79 @@
+{
+  "result": "PASS",
+  "machine": "crosshair-blueangel-e2a",
+  "image_sha256": {
+    "crosshair-e2a.elf": "2ed713db6958717f496149b76d1a6710f6bf1398b1d39e4cb18a22fa9caad188",
+    "crosshair-e2a.bin": "9b03f2fafee3c0c2fe2d4d6bf4acfcfa924eebedb62d66a8f80f63adba266b91",
+    "vectors.bin": "c743923832589ead31c43d6d30536907d49df0607b4e735b9a1e35d3ff35f2c5"
+  },
+  "scope": "experimental QEMU pxa260 proxy, not hardware-validated PXA263",
+  "qemu_version": "QEMU emulator version 9.2.0\nCopyright (c) 2003-2024 Fabrice Bellard and the QEMU Project developers\n",
+  "qemu_sha256": "ea9dbd311573eda256ec3c4057305af0f8b73f8002e3ab922115c960acda1458",
+  "command": [
+    "<host-path>",
+    "-machine",
+    "crosshair-blueangel-e2a",
+    "-accel",
+    "tcg",
+    "-display",
+    "none",
+    "-monitor",
+    "none",
+    "-serial",
+    "stdio",
+    "-nic",
+    "none",
+    "-S",
+    "-qtest",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-qtest-log",
+    "<workspace>/target/artifacts/e2a-tests/boot-reset/memory-server.log",
+    "-qmp",
+    "unix:<temporary-qmp-socket>,server=on,wait=off",
+    "-d",
+    "guest_errors",
+    "-device",
+    "loader,file=<workspace>/target/artifacts/e2a/normal/crosshair-e2a.elf,cpu-num=0"
+  ],
+  "boots": [
+    {
+      "boot": 1,
+      "pre_entry_stage": 2779096485,
+      "registers": "\r\nCPU#0\r\nR00=00000027 R01=a0008428 R02=fff0bdc0 R03=0000000a\r\nR04=a000c4a4 R05=a000c49c R06=00000060 R07=fff0bdc0\r\nR08=40d00004 R09=a0008478 R10=40100000 R11=40a00000\r\nR12=00000000 R13=a000c488 R14=a0008070 R15=a0008068\r\nPSR=600001d3 -ZC- A svc32\r\nFPSCR: 00000000\r\n",
+      "record_words": [
+        1347961170,
+        2,
+        3,
+        80474,
+        238115,
+        1761945859,
+        0,
+        67108864,
+        1,
+        0,
+        0,
+        2684408960
+      ]
+    },
+    {
+      "boot": 2,
+      "pre_entry_stage": 2779096485,
+      "registers": "\r\nCPU#0\r\nR00=00000027 R01=a0008428 R02=fff0bdc0 R03=0000000a\r\nR04=a000c4a4 R05=a000c49c R06=00000060 R07=fff0bdc0\r\nR08=40d00004 R09=a0008478 R10=40100000 R11=40a00000\r\nR12=00000000 R13=a000c488 R14=a0008070 R15=a0008068\r\nPSR=600001d3 -ZC- A svc32\r\nFPSCR: 00000000\r\n",
+      "record_words": [
+        1347961170,
+        2,
+        3,
+        74306,
+        230204,
+        1761945859,
+        0,
+        67108864,
+        1,
+        0,
+        0,
+        2684408960
+      ]
+    }
+  ],
+  "uart_utf8": "CROSSHAIR E2A \u2014 UART TIMER IRQ PASS\nCROSSHAIR E2A \u2014 UART TIMER IRQ PASS\n"
+}

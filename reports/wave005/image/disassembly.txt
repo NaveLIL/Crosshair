@@ -1,0 +1,1088 @@
+
+<workspace>/target/artifacts/security/image/crosshair-security.elf:	file format elf32-littlearm
+
+Disassembly of section .vectors:
+
+00000000 <.vectors>:
+       0: e59ff018     	ldr	pc, [pc, #0x18]         @ 0x20 <.vectors+0x20>
+       4: e59ff018     	ldr	pc, [pc, #0x18]         @ 0x24 <.vectors+0x24>
+       8: e59ff018     	ldr	pc, [pc, #0x18]         @ 0x28 <.vectors+0x28>
+       c: e59ff018     	ldr	pc, [pc, #0x18]         @ 0x2c <.vectors+0x2c>
+      10: e59ff018     	ldr	pc, [pc, #0x18]         @ 0x30 <.vectors+0x30>
+      14: e59ff018     	ldr	pc, [pc, #0x18]         @ 0x34 <.vectors+0x34>
+      18: e59ff018     	ldr	pc, [pc, #0x18]         @ 0x38 <.vectors+0x38>
+      1c: e59ff018     	ldr	pc, [pc, #0x18]         @ 0x3c <.vectors+0x3c>
+      20: 00 80 00 a0  	.word	0xa0008000
+      24: 54 81 00 a0  	.word	0xa0008154
+      28: bc 80 00 a0  	.word	0xa00080bc
+      2c: a0 81 00 a0  	.word	0xa00081a0
+      30: 08 81 00 a0  	.word	0xa0008108
+      34: 00 82 00 a0  	.word	0xa0008200
+      38: 00 82 00 a0  	.word	0xa0008200
+      3c: 00 82 00 a0  	.word	0xa0008200
+
+Disassembly of section .text:
+
+a0008000 <_start>:
+a0008000: e321f0d2     	msr	CPSR_c, #210
+a0008004: e59fd034     	ldr	sp, [pc, #0x34]         @ 0xa0008040 <_start+0x40>
+a0008008: e321f0d7     	msr	CPSR_c, #215
+a000800c: e59fd030     	ldr	sp, [pc, #0x30]         @ 0xa0008044 <_start+0x44>
+a0008010: e321f0db     	msr	CPSR_c, #219
+a0008014: e59fd02c     	ldr	sp, [pc, #0x2c]         @ 0xa0008048 <_start+0x48>
+a0008018: e321f0d3     	msr	CPSR_c, #211
+a000801c: e59fd028     	ldr	sp, [pc, #0x28]         @ 0xa000804c <_start+0x4c>
+a0008020: e59f0028     	ldr	r0, [pc, #0x28]         @ 0xa0008050 <_start+0x50>
+a0008024: e59f1028     	ldr	r1, [pc, #0x28]         @ 0xa0008054 <_start+0x54>
+a0008028: e3a02000     	mov	r2, #0
+a000802c: e1500001     	cmp	r0, r1
+a0008030: 34802004     	strlo	r2, [r0], #4
+a0008034: 3afffffc     	blo	0xa000802c <_start+0x2c> @ imm = #-0x10
+a0008038: eb00023a     	bl	0xa0008928 <rust_main>  @ imm = #0x8e8
+a000803c: ea000070     	b	0xa0008204 <kernel_idle> @ imm = #0x1c0
+a0008040: 00 94 01 a0  	.word	0xa0019400
+a0008044: 00 a4 01 a0  	.word	0xa001a400
+a0008048: 00 b4 01 a0  	.word	0xa001b400
+a000804c: 00 84 01 a0  	.word	0xa0018400
+a0008050: 00 c0 00 a0  	.word	0xa000c000
+a0008054: 00 44 01 a0  	.word	0xa0014400
+
+a0008058 <security_run_user>:
+a0008058: e92d5ff0     	push	{r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
+a000805c: e59f2050     	ldr	r2, [pc, #0x50]         @ 0xa00080b4 <security_run_user+0x5c>
+a0008060: e582d000     	str	sp, [r2]
+a0008064: e1a0c000     	mov	r12, r0
+a0008068: e321f0df     	msr	CPSR_c, #223
+a000806c: e59fd044     	ldr	sp, [pc, #0x44]         @ 0xa00080b8 <security_run_user+0x60>
+a0008070: e3a0e000     	mov	lr, #0
+a0008074: e321f0d3     	msr	CPSR_c, #211
+a0008078: e3a020d0     	mov	r2, #208
+a000807c: e16ff002     	msr	SPSR_fsxc, r2
+a0008080: e1a00001     	mov	r0, r1
+a0008084: e3a01000     	mov	r1, #0
+a0008088: e3a02000     	mov	r2, #0
+a000808c: e3a03000     	mov	r3, #0
+a0008090: e3a04000     	mov	r4, #0
+a0008094: e3a05000     	mov	r5, #0
+a0008098: e3a06000     	mov	r6, #0
+a000809c: e3a07000     	mov	r7, #0
+a00080a0: e3a08000     	mov	r8, #0
+a00080a4: e3a09000     	mov	r9, #0
+a00080a8: e3a0a000     	mov	r10, #0
+a00080ac: e3a0b000     	mov	r11, #0
+a00080b0: e1b0f00c     	movs	pc, r12
+a00080b4: 20 c1 00 a0  	.word	0xa000c120
+a00080b8: 00 40 00 01  	.word	0x01004000
+
+a00080bc <security_svc>:
+a00080bc: e24dd040     	sub	sp, sp, #64
+a00080c0: e88d1fff     	stm	sp, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12}
+a00080c4: e58de034     	str	lr, [sp, #0x34]
+a00080c8: e14f1000     	mrs	r1, spsr
+a00080cc: e58d1038     	str	r1, [sp, #0x38]
+a00080d0: e3a01002     	mov	r1, #2
+a00080d4: e58d103c     	str	r1, [sp, #0x3c]
+a00080d8: e1a0000d     	mov	r0, sp
+a00080dc: eb0000dc     	bl	0xa0008454 <rust_trap>  @ imm = #0x370
+a00080e0: e3500000     	cmp	r0, #0
+a00080e4: 1a000005     	bne	0xa0008100 <security_svc+0x44> @ imm = #0x14
+a00080e8: e59d1038     	ldr	r1, [sp, #0x38]
+a00080ec: e16ff001     	msr	SPSR_fsxc, r1
+a00080f0: e59de034     	ldr	lr, [sp, #0x34]
+a00080f4: e89d1fff     	ldm	sp, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12}
+a00080f8: e28dd040     	add	sp, sp, #64
+a00080fc: e1b0f00e     	movs	pc, lr
+a0008100: e28dd040     	add	sp, sp, #64
+a0008104: ea000038     	b	0xa00081ec <security_return_kernel> @ imm = #0xe0
+
+a0008108 <security_abort>:
+a0008108: e24dd040     	sub	sp, sp, #64
+a000810c: e88d1fff     	stm	sp, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12}
+a0008110: e58de034     	str	lr, [sp, #0x34]
+a0008114: e14f1000     	mrs	r1, spsr
+a0008118: e58d1038     	str	r1, [sp, #0x38]
+a000811c: e3a01003     	mov	r1, #3
+a0008120: e58d103c     	str	r1, [sp, #0x3c]
+a0008124: e1a0000d     	mov	r0, sp
+a0008128: eb0000c9     	bl	0xa0008454 <rust_trap>  @ imm = #0x324
+a000812c: e3500000     	cmp	r0, #0
+a0008130: 1a000005     	bne	0xa000814c <security_abort+0x44> @ imm = #0x14
+a0008134: e59d1038     	ldr	r1, [sp, #0x38]
+a0008138: e16ff001     	msr	SPSR_fsxc, r1
+a000813c: e59de034     	ldr	lr, [sp, #0x34]
+a0008140: e89d1fff     	ldm	sp, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12}
+a0008144: e28dd040     	add	sp, sp, #64
+a0008148: e1b0f00e     	movs	pc, lr
+a000814c: e28dd040     	add	sp, sp, #64
+a0008150: ea000025     	b	0xa00081ec <security_return_kernel> @ imm = #0x94
+
+a0008154 <security_undefined>:
+a0008154: e24dd040     	sub	sp, sp, #64
+a0008158: e88d1fff     	stm	sp, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12}
+a000815c: e58de034     	str	lr, [sp, #0x34]
+a0008160: e14f1000     	mrs	r1, spsr
+a0008164: e58d1038     	str	r1, [sp, #0x38]
+a0008168: e3a01001     	mov	r1, #1
+a000816c: e58d103c     	str	r1, [sp, #0x3c]
+a0008170: e1a0000d     	mov	r0, sp
+a0008174: eb0000b6     	bl	0xa0008454 <rust_trap>  @ imm = #0x2d8
+a0008178: e3500000     	cmp	r0, #0
+a000817c: 1a000005     	bne	0xa0008198 <security_undefined+0x44> @ imm = #0x14
+a0008180: e59d1038     	ldr	r1, [sp, #0x38]
+a0008184: e16ff001     	msr	SPSR_fsxc, r1
+a0008188: e59de034     	ldr	lr, [sp, #0x34]
+a000818c: e89d1fff     	ldm	sp, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12}
+a0008190: e28dd040     	add	sp, sp, #64
+a0008194: e1b0f00e     	movs	pc, lr
+a0008198: e28dd040     	add	sp, sp, #64
+a000819c: ea000012     	b	0xa00081ec <security_return_kernel> @ imm = #0x48
+
+a00081a0 <security_prefetch>:
+a00081a0: e24dd040     	sub	sp, sp, #64
+a00081a4: e88d1fff     	stm	sp, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12}
+a00081a8: e58de034     	str	lr, [sp, #0x34]
+a00081ac: e14f1000     	mrs	r1, spsr
+a00081b0: e58d1038     	str	r1, [sp, #0x38]
+a00081b4: e3a01004     	mov	r1, #4
+a00081b8: e58d103c     	str	r1, [sp, #0x3c]
+a00081bc: e1a0000d     	mov	r0, sp
+a00081c0: eb0000a3     	bl	0xa0008454 <rust_trap>  @ imm = #0x28c
+a00081c4: e3500000     	cmp	r0, #0
+a00081c8: 1a000005     	bne	0xa00081e4 <security_prefetch+0x44> @ imm = #0x14
+a00081cc: e59d1038     	ldr	r1, [sp, #0x38]
+a00081d0: e16ff001     	msr	SPSR_fsxc, r1
+a00081d4: e59de034     	ldr	lr, [sp, #0x34]
+a00081d8: e89d1fff     	ldm	sp, {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12}
+a00081dc: e28dd040     	add	sp, sp, #64
+a00081e0: e1b0f00e     	movs	pc, lr
+a00081e4: e28dd040     	add	sp, sp, #64
+a00081e8: eaffffff     	b	0xa00081ec <security_return_kernel> @ imm = #-0x4
+
+a00081ec <security_return_kernel>:
+a00081ec: e321f0d3     	msr	CPSR_c, #211
+a00081f0: e59fd010     	ldr	sp, [pc, #0x10]         @ 0xa0008208 <kernel_idle+0x4>
+a00081f4: e59dd000     	ldr	sp, [sp]
+a00081f8: e8bd5ff0     	pop	{r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
+a00081fc: e12fff1e     	bx	lr
+
+a0008200 <security_fatal>:
+a0008200: eaffffff     	b	0xa0008204 <kernel_idle> @ imm = #-0x4
+
+a0008204 <kernel_idle>:
+a0008204: eafffffe     	b	0xa0008204 <kernel_idle> @ imm = #-0x8
+a0008208: 20 c1 00 a0  	.word	0xa000c120
+
+a000820c <_ZN18crosshair_security12init_buffers17h6985b79ba8270c65E>:
+a000820c: e59f106c     	ldr	r1, [pc, #0x6c]         @ 0xa0008280 <_ZN18crosshair_security12init_buffers17h6985b79ba8270c65E+0x74>
+a0008210: e3a00000     	mov	r0, #0
+a0008214: e59f2068     	ldr	r2, [pc, #0x68]         @ 0xa0008284 <_ZN18crosshair_security12init_buffers17h6985b79ba8270c65E+0x78>
+a0008218: e0803001     	add	r3, r0, r1
+a000821c: e7823100     	str	r3, [r2, r0, lsl #2]
+a0008220: e2800001     	add	r0, r0, #1
+a0008224: e3500010     	cmp	r0, #16
+a0008228: 1afffffa     	bne	0xa0008218 <_ZN18crosshair_security12init_buffers17h6985b79ba8270c65E+0xc> @ imm = #-0x18
+a000822c: e92d4800     	push	{r11, lr}
+a0008230: e3a0c8e1     	mov	r12, #14745600
+a0008234: e59fe04c     	ldr	lr, [pc, #0x4c]         @ 0xa0008288 <_ZN18crosshair_security12init_buffers17h6985b79ba8270c65E+0x7c>
+a0008238: e38cc32b     	orr	r12, r12, #-1409286144
+a000823c: e3a01000     	mov	r1, #0
+a0008240: e081300c     	add	r3, r1, r12
+a0008244: e1a0000e     	mov	r0, lr
+a0008248: e2432801     	sub	r2, r3, #65536
+a000824c: e7a02101     	str	r2, [r0, r1, lsl #2]!
+a0008250: e2811001     	add	r1, r1, #1
+a0008254: e3510004     	cmp	r1, #4
+a0008258: e5803050     	str	r3, [r0, #0x50]
+a000825c: 1afffff7     	bne	0xa0008240 <_ZN18crosshair_security12init_buffers17h6985b79ba8270c65E+0x34> @ imm = #-0x24
+a0008260: e3a01000     	mov	r1, #0
+a0008264: e3a020cc     	mov	r2, #204
+a0008268: e08e0001     	add	r0, lr, r1
+a000826c: e2811001     	add	r1, r1, #1
+a0008270: e3510040     	cmp	r1, #64
+a0008274: e5c02010     	strb	r2, [r0, #0x10]
+a0008278: 1afffffa     	bne	0xa0008268 <_ZN18crosshair_security12init_buffers17h6985b79ba8270c65E+0x5c> @ imm = #-0x18
+a000827c: e8bd8800     	pop	{r11, pc}
+a0008280: 00 51 fe ca  	.word	0xcafe5100
+a0008284: 24 c1 00 a0  	.word	0xa000c124
+a0008288: 68 c1 00 a0  	.word	0xa000c168
+
+a000828c <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE>:
+a000828c: e59f1090     	ldr	r1, [pc, #0x90]         @ 0xa0008324 <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE+0x98>
+a0008290: e3a00000     	mov	r0, #0
+a0008294: e59f208c     	ldr	r2, [pc, #0x8c]         @ 0xa0008328 <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE+0x9c>
+a0008298: e3500010     	cmp	r0, #16
+a000829c: 0a000006     	beq	0xa00082bc <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE+0x30> @ imm = #0x18
+a00082a0: e7913100     	ldr	r3, [r1, r0, lsl #2]
+a00082a4: e0233000     	eor	r3, r3, r0
+a00082a8: e2800001     	add	r0, r0, #1
+a00082ac: e1530002     	cmp	r3, r2
+a00082b0: 0afffff8     	beq	0xa0008298 <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE+0xc> @ imm = #-0x20
+a00082b4: e3a0006b     	mov	r0, #107
+a00082b8: eb0002a4     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0xa90
+a00082bc: e3a0c6ce     	mov	r12, #216006656
+a00082c0: e59f2064     	ldr	r2, [pc, #0x64]         @ 0xa000832c <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE+0xa0>
+a00082c4: e38cc20a     	orr	r12, r12, #-1610612736
+a00082c8: e3a00000     	mov	r0, #0
+a00082cc: e3500004     	cmp	r0, #4
+a00082d0: 0a00000c     	beq	0xa0008308 <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE+0x7c> @ imm = #0x30
+a00082d4: e7923100     	ldr	r3, [r2, r0, lsl #2]
+a00082d8: e0233000     	eor	r3, r3, r0
+a00082dc: e153000c     	cmp	r3, r12
+a00082e0: 1a00000d     	bne	0xa000831c <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE+0x90> @ imm = #0x34
+a00082e4: e0823100     	add	r3, r2, r0, lsl #2
+a00082e8: e28c1801     	add	r1, r12, #65536
+a00082ec: e5933050     	ldr	r3, [r3, #0x50]
+a00082f0: e0233000     	eor	r3, r3, r0
+a00082f4: e2800001     	add	r0, r0, #1
+a00082f8: e1530001     	cmp	r3, r1
+a00082fc: 0afffff2     	beq	0xa00082cc <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE+0x40> @ imm = #-0x38
+a0008300: e3a00071     	mov	r0, #113
+a0008304: eb000291     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0xa44
+a0008308: e59f0020     	ldr	r0, [pc, #0x20]         @ 0xa0008330 <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE+0xa4>
+a000830c: e3a01001     	mov	r1, #1
+a0008310: e5801058     	str	r1, [r0, #0x58]
+a0008314: e580105c     	str	r1, [r0, #0x5c]
+a0008318: e12fff1e     	bx	lr
+a000831c: e3a00072     	mov	r0, #114
+a0008320: eb00028a     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0xa28
+a0008324: 24 c1 00 a0  	.word	0xa000c124
+a0008328: 00 51 fe ca  	.word	0xcafe5100
+a000832c: 68 c1 00 a0  	.word	0xa000c168
+a0008330: 00 c0 00 a0  	.word	0xa000c000
+
+a0008334 <_ZN18crosshair_security9init_user17hcb6c89db2f110783E>:
+a0008334: e92d41f0     	push	{r4, r5, r6, r7, r8, lr}
+a0008338: e24dd018     	sub	sp, sp, #24
+a000833c: e59f50f8     	ldr	r5, [pc, #0xf8]         @ 0xa000843c <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0x108>
+a0008340: e3a00000     	mov	r0, #0
+a0008344: e3a01c1e     	mov	r1, #7680
+a0008348: e3a02000     	mov	r2, #0
+a000834c: e0853002     	add	r3, r5, r2
+a0008350: e2822004     	add	r2, r2, #4
+a0008354: e3520a01     	cmp	r2, #4096
+a0008358: e5030200     	str	r0, [r3, #-0x200]
+a000835c: e7830001     	str	r0, [r3, r1]
+a0008360: 1afffff9     	bne	0xa000834c <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0x18> @ imm = #-0x1c
+a0008364: e59f10d4     	ldr	r1, [pc, #0xd4]         @ 0xa0008440 <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0x10c>
+a0008368: e3a00000     	mov	r0, #0
+a000836c: e0852000     	add	r2, r5, r0
+a0008370: e7d13000     	ldrb	r3, [r1, r0]
+a0008374: e2800001     	add	r0, r0, #1
+a0008378: e350000f     	cmp	r0, #15
+a000837c: e5423200     	strb	r3, [r2, #-0x200]
+a0008380: 1afffff9     	bne	0xa000836c <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0x38> @ imm = #-0x1c
+a0008384: e3a00000     	mov	r0, #0
+a0008388: e0851000     	add	r1, r5, r0
+a000838c: e5410180     	strb	r0, [r1, #-0x180]
+a0008390: e2800001     	add	r0, r0, #1
+a0008394: e3500040     	cmp	r0, #64
+a0008398: 1afffffa     	bne	0xa0008388 <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0x54> @ imm = #-0x18
+a000839c: e3a00f42     	mov	r0, #264
+a00083a0: e1a0800d     	mov	r8, sp
+a00083a4: e58d0010     	str	r0, [sp, #0x10]
+a00083a8: e3a00f41     	mov	r0, #260
+a00083ac: e58d000c     	str	r0, [sp, #0xc]
+a00083b0: e3a00c01     	mov	r0, #256
+a00083b4: e58d0008     	str	r0, [sp, #0x8]
+a00083b8: e3a00003     	mov	r0, #3
+a00083bc: e2887008     	add	r7, r8, #8
+a00083c0: e28d4014     	add	r4, sp, #20
+a00083c4: e58d0004     	str	r0, [sp, #0x4]
+a00083c8: e3a00000     	mov	r0, #0
+a00083cc: e3e06000     	mvn	r6, #0
+a00083d0: e58d0000     	str	r0, [sp]
+a00083d4: e1a00004     	mov	r0, r4
+a00083d8: e58d8014     	str	r8, [sp, #0x14]
+a00083dc: eb00025c     	bl	0xa0008d54 <_ZN83_$LT$$RF$mut$u20$I$u20$as$u20$core..iter..traits..exact_size..ExactSizeIterator$GT$3len17h6fc1747e9f68a475E> @ imm = #0x970
+a00083e0: e3500000     	cmp	r0, #0
+a00083e4: 0a000006     	beq	0xa0008404 <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0xd0> @ imm = #0x18
+a00083e8: e59d0000     	ldr	r0, [sp]
+a00083ec: e2801001     	add	r1, r0, #1
+a00083f0: e58d1000     	str	r1, [sp]
+a00083f4: e7970100     	ldr	r0, [r7, r0, lsl #2]
+a00083f8: e0850000     	add	r0, r5, r0
+a00083fc: e5006200     	str	r6, [r0, #-0x200]
+a0008400: eafffff3     	b	0xa00083d4 <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0xa0> @ imm = #-0x34
+a0008404: e59f0038     	ldr	r0, [pc, #0x38]         @ 0xa0008444 <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0x110>
+a0008408: e5850000     	str	r0, [r5]
+a000840c: e59f0034     	ldr	r0, [pc, #0x34]         @ 0xa0008448 <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0x114>
+a0008410: e5850004     	str	r0, [r5, #0x4]
+a0008414: e59f0030     	ldr	r0, [pc, #0x30]         @ 0xa000844c <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0x118>
+a0008418: e5850020     	str	r0, [r5, #0x20]
+a000841c: e3a004ef     	mov	r0, #-285212672
+a0008420: e5850024     	str	r0, [r5, #0x24]
+a0008424: e3a00cdf     	mov	r0, #57088
+a0008428: e5850040     	str	r0, [r5, #0x40]
+a000842c: e59f001c     	ldr	r0, [pc, #0x1c]         @ 0xa0008450 <_ZN18crosshair_security9init_user17hcb6c89db2f110783E+0x11c>
+a0008430: e5850060     	str	r0, [r5, #0x60]
+a0008434: e28dd018     	add	sp, sp, #24
+a0008438: e8bd81f0     	pop	{r4, r5, r6, r7, r8, pc}
+a000843c: 00 12 20 a0  	.word	0xa0201200
+a0008440: 68 8d 00 a0  	.word	0xa0008d68
+a0008444: 5a 80 a0 e3  	.word	0xe3a0805a
+a0008448: 1e ff 2f e1  	.word	0xe12fff1e
+a000844c: 01 70 a0 e3  	.word	0xe3a07001
+a0008450: f0 00 f0 e7  	.word	0xe7f000f0
+
+a0008454 <rust_trap>:
+a0008454: e92d48f0     	push	{r4, r5, r6, r7, r11, lr}
+a0008458: e10fe000     	mrs	lr, apsr
+a000845c: e5904038     	ldr	r4, [r0, #0x38]
+a0008460: e204101f     	and	r1, r4, #31
+a0008464: e3510010     	cmp	r1, #16
+a0008468: 1a000124     	bne	0xa0008900 <rust_trap+0x4ac> @ imm = #0x490
+a000846c: e59f149c     	ldr	r1, [pc, #0x49c]        @ 0xa0008910 <rust_trap+0x4bc>
+a0008470: e2043020     	and	r3, r4, #32
+a0008474: e591c004     	ldr	r12, [r1, #0x4]
+a0008478: e590503c     	ldr	r5, [r0, #0x3c]
+a000847c: e3550002     	cmp	r5, #2
+a0008480: 1a000017     	bne	0xa00084e4 <rust_trap+0x90> @ imm = #0x5c
+a0008484: e591210c     	ldr	r2, [r1, #0x10c]
+a0008488: e3530000     	cmp	r3, #0
+a000848c: e2822001     	add	r2, r2, #1
+a0008490: e581210c     	str	r2, [r1, #0x10c]
+a0008494: e5902034     	ldr	r2, [r0, #0x34]
+a0008498: 0a000054     	beq	0xa00085f0 <rust_trap+0x19c> @ imm = #0x150
+a000849c: e2423002     	sub	r3, r2, #2
+a00084a0: e3a04000     	mov	r4, #0
+a00084a4: e3530401     	cmp	r3, #16777216
+a00084a8: 3a000060     	blo	0xa0008630 <rust_trap+0x1dc> @ imm = #0x180
+a00084ac: e2123001     	ands	r3, r2, #1
+a00084b0: 1a00005e     	bne	0xa0008630 <rust_trap+0x1dc> @ imm = #0x178
+a00084b4: e2423004     	sub	r3, r2, #4
+a00084b8: e2433401     	sub	r3, r3, #16777216
+a00084bc: e2833002     	add	r3, r3, #2
+a00084c0: e1a03623     	lsr	r3, r3, #12
+a00084c4: e3530003     	cmp	r3, #3
+a00084c8: 8a000058     	bhi	0xa0008630 <rust_trap+0x1dc> @ imm = #0x160
+a00084cc: e3530002     	cmp	r3, #2
+a00084d0: 159f343c     	ldrne	r3, [pc, #0x43c]        @ 0xa0008914 <rust_trap+0x4c0>
+a00084d4: 13a04001     	movne	r4, #1
+a00084d8: 10823003     	addne	r3, r2, r3
+a00084dc: 11d330b2     	ldrhne	r3, [r3, #2]
+a00084e0: ea000052     	b	0xa0008630 <rust_trap+0x1dc> @ imm = #0x148
+a00084e4: e35c0004     	cmp	r12, #4
+a00084e8: 0a000106     	beq	0xa0008908 <rust_trap+0x4b4> @ imm = #0x418
+a00084ec: e3550001     	cmp	r5, #1
+a00084f0: e3a07004     	mov	r7, #4
+a00084f4: 03a07003     	moveq	r7, #3
+a00084f8: e3550003     	cmp	r5, #3
+a00084fc: 03a07002     	moveq	r7, #2
+a0008500: e3a02004     	mov	r2, #4
+a0008504: e5817010     	str	r7, [r1, #0x10]
+a0008508: e3a0c000     	mov	r12, #0
+a000850c: e5815020     	str	r5, [r1, #0x20]
+a0008510: e3e05003     	mvn	r5, #3
+a0008514: e5907034     	ldr	r7, [r0, #0x34]
+a0008518: e5817024     	str	r7, [r1, #0x24]
+a000851c: e5814028     	str	r4, [r1, #0x28]
+a0008520: e3e04003     	mvn	r4, #3
+a0008524: e581e0b0     	str	lr, [r1, #0xb0]
+a0008528: ee157f10     	mrc	p15, #0x0, r7, c5, c0, #0x0
+a000852c: ee166f10     	mrc	p15, #0x0, r6, c6, c0, #0x0
+a0008530: e581702c     	str	r7, [r1, #0x2c]
+a0008534: e5816030     	str	r6, [r1, #0x30]
+a0008538: ee157f30     	mrc	p15, #0x0, r7, c5, c0, #0x1
+a000853c: e5817110     	str	r7, [r1, #0x110]
+a0008540: e590603c     	ldr	r6, [r0, #0x3c]
+a0008544: e5907034     	ldr	r7, [r0, #0x34]
+a0008548: e3560004     	cmp	r6, #4
+a000854c: 13e04001     	mvnne	r4, #1
+a0008550: e3530000     	cmp	r3, #0
+a0008554: 13a02002     	movne	r2, #2
+a0008558: 01a04005     	moveq	r4, r5
+a000855c: e3560003     	cmp	r6, #3
+a0008560: 03e04007     	mvneq	r4, #7
+a0008564: e0845007     	add	r5, r4, r7
+a0008568: e3550401     	cmp	r5, #16777216
+a000856c: 3a000017     	blo	0xa00085d0 <rust_trap+0x17c> @ imm = #0x5c
+a0008570: e2427001     	sub	r7, r2, #1
+a0008574: e0157007     	ands	r7, r5, r7
+a0008578: 1a000014     	bne	0xa00085d0 <rust_trap+0x17c> @ imm = #0x50
+a000857c: e28574ff     	add	r7, r5, #-16777216
+a0008580: e1a04627     	lsr	r4, r7, #12
+a0008584: e3540003     	cmp	r4, #3
+a0008588: 8a000010     	bhi	0xa00085d0 <rust_trap+0x17c> @ imm = #0x40
+a000858c: e3540002     	cmp	r4, #2
+a0008590: 0a00000e     	beq	0xa00085d0 <rust_trap+0x17c> @ imm = #0x38
+a0008594: e3a070ff     	mov	r7, #255
+a0008598: e2622a01     	rsb	r2, r2, #4096
+a000859c: e3877c0f     	orr	r7, r7, #3840
+a00085a0: e0057007     	and	r7, r5, r7
+a00085a4: e1570002     	cmp	r7, r2
+a00085a8: e3a02000     	mov	r2, #0
+a00085ac: 8a000008     	bhi	0xa00085d4 <rust_trap+0x180> @ imm = #0x20
+a00085b0: e59f235c     	ldr	r2, [pc, #0x35c]        @ 0xa0008914 <rust_trap+0x4c0>
+a00085b4: e3530000     	cmp	r3, #0
+a00085b8: e3a0c001     	mov	r12, #1
+a00085bc: e0852002     	add	r2, r5, r2
+a00085c0: e2822004     	add	r2, r2, #4
+a00085c4: 11d220b0     	ldrhne	r2, [r2]
+a00085c8: 05922000     	ldreq	r2, [r2]
+a00085cc: ea000000     	b	0xa00085d4 <rust_trap+0x180> @ imm = #0x0
+a00085d0: e3a02000     	mov	r2, #0
+a00085d4: e5812034     	str	r2, [r1, #0x34]
+a00085d8: e581c0fc     	str	r12, [r1, #0xfc]
+a00085dc: e590203c     	ldr	r2, [r0, #0x3c]
+a00085e0: e3520001     	cmp	r2, #1
+a00085e4: 158100d4     	strne	r0, [r1, #0xd4]
+a00085e8: 058100d8     	streq	r0, [r1, #0xd8]
+a00085ec: ea00002d     	b	0xa00086a8 <rust_trap+0x254> @ imm = #0xb4
+a00085f0: e2425004     	sub	r5, r2, #4
+a00085f4: e3a04000     	mov	r4, #0
+a00085f8: e3550401     	cmp	r5, #16777216
+a00085fc: 3a00002c     	blo	0xa00086b4 <rust_trap+0x260> @ imm = #0xb0
+a0008600: e2123003     	ands	r3, r2, #3
+a0008604: 1a00002a     	bne	0xa00086b4 <rust_trap+0x260> @ imm = #0xa8
+a0008608: e2423004     	sub	r3, r2, #4
+a000860c: e2433401     	sub	r3, r3, #16777216
+a0008610: e1a03623     	lsr	r3, r3, #12
+a0008614: e3530003     	cmp	r3, #3
+a0008618: 8a000025     	bhi	0xa00086b4 <rust_trap+0x260> @ imm = #0x94
+a000861c: e3530002     	cmp	r3, #2
+a0008620: 159f32ec     	ldrne	r3, [pc, #0x2ec]        @ 0xa0008914 <rust_trap+0x4c0>
+a0008624: 13a04001     	movne	r4, #1
+a0008628: 17923003     	ldrne	r3, [r2, r3]
+a000862c: ea000020     	b	0xa00086b4 <rust_trap+0x260> @ imm = #0x80
+a0008630: e3540000     	cmp	r4, #0
+a0008634: 01a03004     	moveq	r3, r4
+a0008638: e35c0004     	cmp	r12, #4
+a000863c: 0a0000b1     	beq	0xa0008908 <rust_trap+0x4b4> @ imm = #0x2c4
+a0008640: e3a07005     	mov	r7, #5
+a0008644: e5817010     	str	r7, [r1, #0x10]
+a0008648: e3a07002     	mov	r7, #2
+a000864c: e5817020     	str	r7, [r1, #0x20]
+a0008650: e5812024     	str	r2, [r1, #0x24]
+a0008654: e5902038     	ldr	r2, [r0, #0x38]
+a0008658: e5812028     	str	r2, [r1, #0x28]
+a000865c: e5813034     	str	r3, [r1, #0x34]
+a0008660: e58140fc     	str	r4, [r1, #0xfc]
+a0008664: e581e0b0     	str	lr, [r1, #0xb0]
+a0008668: e5912014     	ldr	r2, [r1, #0x14]
+a000866c: e2822001     	add	r2, r2, #1
+a0008670: e5812014     	str	r2, [r1, #0x14]
+a0008674: e5902034     	ldr	r2, [r0, #0x34]
+a0008678: e5812038     	str	r2, [r1, #0x38]
+a000867c: e5902038     	ldr	r2, [r0, #0x38]
+a0008680: e581203c     	str	r2, [r1, #0x3c]
+a0008684: e5813040     	str	r3, [r1, #0x40]
+a0008688: e590201c     	ldr	r2, [r0, #0x1c]
+a000868c: e5812044     	str	r2, [r1, #0x44]
+a0008690: e5902000     	ldr	r2, [r0]
+a0008694: e5812048     	str	r2, [r1, #0x48]
+a0008698: e5902004     	ldr	r2, [r0, #0x4]
+a000869c: e581204c     	str	r2, [r1, #0x4c]
+a00086a0: e581e0b4     	str	lr, [r1, #0xb4]
+a00086a4: e58100d0     	str	r0, [r1, #0xd0]
+a00086a8: ebfffef7     	bl	0xa000828c <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE> @ imm = #-0x424
+a00086ac: e3a00001     	mov	r0, #1
+a00086b0: e8bd88f0     	pop	{r4, r5, r6, r7, r11, pc}
+a00086b4: e3540000     	cmp	r4, #0
+a00086b8: 01a03004     	moveq	r3, r4
+a00086bc: e3550401     	cmp	r5, #16777216
+a00086c0: 3affffdc     	blo	0xa0008638 <rust_trap+0x1e4> @ imm = #-0x90
+a00086c4: e59f624c     	ldr	r6, [pc, #0x24c]        @ 0xa0008918 <rust_trap+0x4c4>
+a00086c8: e286660e     	add	r6, r6, #14680064
+a00086cc: e2866206     	add	r6, r6, #1610612736
+a00086d0: e1550006     	cmp	r5, r6
+a00086d4: 2affffd7     	bhs	0xa0008638 <rust_trap+0x1e4> @ imm = #-0xa4
+a00086d8: e35304ef     	cmp	r3, #-285212672
+a00086dc: 0590401c     	ldreq	r4, [r0, #0x1c]
+a00086e0: 03540000     	cmpeq	r4, #0
+a00086e4: 0a000015     	beq	0xa0008740 <rust_trap+0x2ec> @ imm = #0x54
+a00086e8: e35c0004     	cmp	r12, #4
+a00086ec: 1a000019     	bne	0xa0008758 <rust_trap+0x304> @ imm = #0x64
+a00086f0: e59120b8     	ldr	r2, [r1, #0xb8]
+a00086f4: e35304ef     	cmp	r3, #-285212672
+a00086f8: e2822001     	add	r2, r2, #1
+a00086fc: e58120b8     	str	r2, [r1, #0xb8]
+a0008700: e3a02000     	mov	r2, #0
+a0008704: e5812064     	str	r2, [r1, #0x64]
+a0008708: e5902038     	ldr	r2, [r0, #0x38]
+a000870c: e5812068     	str	r2, [r1, #0x68]
+a0008710: e5902034     	ldr	r2, [r0, #0x34]
+a0008714: e5812100     	str	r2, [r1, #0x100]
+a0008718: e5813104     	str	r3, [r1, #0x104]
+a000871c: e590201c     	ldr	r2, [r0, #0x1c]
+a0008720: e5812108     	str	r2, [r1, #0x108]
+a0008724: e3e02025     	mvn	r2, #37
+a0008728: e581e114     	str	lr, [r1, #0x114]
+a000872c: 1a000035     	bne	0xa0008808 <rust_trap+0x3b4> @ imm = #0xd4
+a0008730: e590301c     	ldr	r3, [r0, #0x1c]
+a0008734: e3530001     	cmp	r3, #1
+a0008738: 0a00001a     	beq	0xa00087a8 <rust_trap+0x354> @ imm = #0x68
+a000873c: ea000031     	b	0xa0008808 <rust_trap+0x3b4> @ imm = #0xc4
+a0008740: e35c0004     	cmp	r12, #4
+a0008744: 1a000031     	bne	0xa0008810 <rust_trap+0x3bc> @ imm = #0xc4
+a0008748: e59100c0     	ldr	r0, [r1, #0xc0]
+a000874c: e2800001     	add	r0, r0, #1
+a0008750: e58100c0     	str	r0, [r1, #0xc0]
+a0008754: eaffffd4     	b	0xa00086ac <rust_trap+0x258> @ imm = #-0xb0
+a0008758: e5914014     	ldr	r4, [r1, #0x14]
+a000875c: e35304ef     	cmp	r3, #-285212672
+a0008760: e2844001     	add	r4, r4, #1
+a0008764: e5814014     	str	r4, [r1, #0x14]
+a0008768: e5812038     	str	r2, [r1, #0x38]
+a000876c: e5902038     	ldr	r2, [r0, #0x38]
+a0008770: e581203c     	str	r2, [r1, #0x3c]
+a0008774: e5813040     	str	r3, [r1, #0x40]
+a0008778: e590201c     	ldr	r2, [r0, #0x1c]
+a000877c: e5812044     	str	r2, [r1, #0x44]
+a0008780: e5902000     	ldr	r2, [r0]
+a0008784: e5812048     	str	r2, [r1, #0x48]
+a0008788: e5902004     	ldr	r2, [r0, #0x4]
+a000878c: e581204c     	str	r2, [r1, #0x4c]
+a0008790: e581e0b4     	str	lr, [r1, #0xb4]
+a0008794: e58100d0     	str	r0, [r1, #0xd0]
+a0008798: 1a000024     	bne	0xa0008830 <rust_trap+0x3dc> @ imm = #0x90
+a000879c: e590201c     	ldr	r2, [r0, #0x1c]
+a00087a0: e3520001     	cmp	r2, #1
+a00087a4: 1a000026     	bne	0xa0008844 <rust_trap+0x3f0> @ imm = #0x98
+a00087a8: e5903004     	ldr	r3, [r0, #0x4]
+a00087ac: e3e02015     	mvn	r2, #21
+a00087b0: e3530040     	cmp	r3, #64
+a00087b4: 8a000011     	bhi	0xa0008800 <rust_trap+0x3ac> @ imm = #0x44
+a00087b8: e5905000     	ldr	r5, [r0]
+a00087bc: e0952003     	adds	r2, r5, r3
+a00087c0: e3e0200d     	mvn	r2, #13
+a00087c4: 2a00000d     	bhs	0xa0008800 <rust_trap+0x3ac> @ imm = #0x34
+a00087c8: e3a0ea01     	mov	lr, #4096
+a00087cc: e3a04000     	mov	r4, #0
+a00087d0: e38ee401     	orr	lr, lr, #16777216
+a00087d4: e0837005     	add	r7, r3, r5
+a00087d8: e155000e     	cmp	r5, lr
+a00087dc: e28e5a01     	add	r5, lr, #4096
+a00087e0: 33a04001     	movlo	r4, #1
+a00087e4: e3a06000     	mov	r6, #0
+a00087e8: e1570005     	cmp	r7, r5
+a00087ec: 83a06001     	movhi	r6, #1
+a00087f0: e1947006     	orrs	r7, r4, r6
+a00087f4: e1a04003     	mov	r4, r3
+a00087f8: 13e0400d     	mvnne	r4, #13
+a00087fc: 0a00001f     	beq	0xa0008880 <rust_trap+0x42c> @ imm = #0x7c
+a0008800: e35c0004     	cmp	r12, #4
+a0008804: 1a000015     	bne	0xa0008860 <rust_trap+0x40c> @ imm = #0x54
+a0008808: e5812064     	str	r2, [r1, #0x64]
+a000880c: ea000017     	b	0xa0008870 <rust_trap+0x41c> @ imm = #0x5c
+a0008810: e5900000     	ldr	r0, [r0]
+a0008814: e581001c     	str	r0, [r1, #0x1c]
+a0008818: e59100bc     	ldr	r0, [r1, #0xbc]
+a000881c: e2800001     	add	r0, r0, #1
+a0008820: e58100bc     	str	r0, [r1, #0xbc]
+a0008824: e3a00001     	mov	r0, #1
+a0008828: e5810010     	str	r0, [r1, #0x10]
+a000882c: e8bd88f0     	pop	{r4, r5, r6, r7, r11, pc}
+a0008830: e59120c4     	ldr	r2, [r1, #0xc4]
+a0008834: e2822001     	add	r2, r2, #1
+a0008838: e58120c4     	str	r2, [r1, #0xc4]
+a000883c: e3e02025     	mvn	r2, #37
+a0008840: ea000009     	b	0xa000886c <rust_trap+0x418> @ imm = #0x24
+a0008844: e59120c8     	ldr	r2, [r1, #0xc8]
+a0008848: e2822001     	add	r2, r2, #1
+a000884c: e58120c8     	str	r2, [r1, #0xc8]
+a0008850: e590301c     	ldr	r3, [r0, #0x1c]
+a0008854: e3e02025     	mvn	r2, #37
+a0008858: e3530001     	cmp	r3, #1
+a000885c: 1a000002     	bne	0xa000886c <rust_trap+0x418> @ imm = #0x8
+a0008860: e59130cc     	ldr	r3, [r1, #0xcc]
+a0008864: e2833001     	add	r3, r3, #1
+a0008868: e58130cc     	str	r3, [r1, #0xcc]
+a000886c: e5812018     	str	r2, [r1, #0x18]
+a0008870: e5802000     	str	r2, [r0]
+a0008874: ebfffe84     	bl	0xa000828c <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE> @ imm = #-0x5f0
+a0008878: e3a00000     	mov	r0, #0
+a000887c: e8bd88f0     	pop	{r4, r5, r6, r7, r11, pc}
+a0008880: e59f2094     	ldr	r2, [pc, #0x94]         @ 0xa000891c <rust_trap+0x4c8>
+a0008884: e3530000     	cmp	r3, #0
+a0008888: 0a000010     	beq	0xa00088d0 <rust_trap+0x47c> @ imm = #0x40
+a000888c: e59f308c     	ldr	r3, [pc, #0x8c]         @ 0xa0008920 <rust_trap+0x4cc>
+a0008890: e3a05000     	mov	r5, #0
+a0008894: e5906000     	ldr	r6, [r0]
+a0008898: e0837005     	add	r7, r3, r5
+a000889c: e7d56006     	ldrb	r6, [r5, r6]
+a00088a0: e2855001     	add	r5, r5, #1
+a00088a4: e1540005     	cmp	r4, r5
+a00088a8: e5c76010     	strb	r6, [r7, #0x10]
+a00088ac: 1afffff8     	bne	0xa0008894 <rust_trap+0x440> @ imm = #-0x20
+a00088b0: e59fe06c     	ldr	lr, [pc, #0x6c]         @ 0xa0008924 <rust_trap+0x4d0>
+a00088b4: e2833010     	add	r3, r3, #16
+a00088b8: e1a05004     	mov	r5, r4
+a00088bc: e4d36001     	ldrb	r6, [r3], #1
+a00088c0: e2555001     	subs	r5, r5, #1
+a00088c4: e0226006     	eor	r6, r2, r6
+a00088c8: e0020e96     	<unknown>
+a00088cc: 1afffffa     	bne	0xa00088bc <rust_trap+0x468> @ imm = #-0x18
+a00088d0: e59130ac     	ldr	r3, [r1, #0xac]
+a00088d4: e35c0004     	cmp	r12, #4
+a00088d8: e2833001     	add	r3, r3, #1
+a00088dc: e58130ac     	str	r3, [r1, #0xac]
+a00088e0: 1a000002     	bne	0xa00088f0 <rust_trap+0x49c> @ imm = #0x8
+a00088e4: e58120a8     	str	r2, [r1, #0xa8]
+a00088e8: e1a02004     	mov	r2, r4
+a00088ec: eaffffc5     	b	0xa0008808 <rust_trap+0x3b4> @ imm = #-0xec
+a00088f0: e5814050     	str	r4, [r1, #0x50]
+a00088f4: e5812054     	str	r2, [r1, #0x54]
+a00088f8: e1a02004     	mov	r2, r4
+a00088fc: eaffffda     	b	0xa000886c <rust_trap+0x418> @ imm = #-0x98
+a0008900: e3a00026     	mov	r0, #38
+a0008904: eb000111     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x444
+a0008908: e3a0001b     	mov	r0, #27
+a000890c: eb00010f     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x43c
+a0008910: 00 c0 00 a0  	.word	0xa000c000
+a0008914: fc ff 1f 9f  	.word	0x9f1ffffc
+a0008918: e0 01 20 a0  	.word	0xa02001e0
+a000891c: c5 9d 1c 81  	.word	0x811c9dc5
+a0008920: 68 c1 00 a0  	.word	0xa000c168
+a0008924: 93 01 00 01  	.word	0x01000193
+
+a0008928 <rust_main>:
+a0008928: e59fa3b8     	ldr	r10, [pc, #0x3b8]       @ 0xa0008ce8 <rust_main+0x3c0>
+a000892c: e59a0004     	ldr	r0, [r10, #0x4]
+a0008930: e3500000     	cmp	r0, #0
+a0008934: 1a0000e1     	bne	0xa0008cc0 <rust_main+0x398> @ imm = #0x384
+a0008938: e59f03ac     	ldr	r0, [pc, #0x3ac]        @ 0xa0008cec <rust_main+0x3c4>
+a000893c: e58a0000     	str	r0, [r10]
+a0008940: e3a00001     	mov	r0, #1
+a0008944: e58a0004     	str	r0, [r10, #0x4]
+a0008948: e3a00c01     	mov	r0, #256
+a000894c: e380020a     	orr	r0, r0, #-1610612736
+a0008950: e5908000     	ldr	r8, [r0]
+a0008954: e3580018     	cmp	r8, #24
+a0008958: 2a0000da     	bhs	0xa0008cc8 <rust_main+0x3a0> @ imm = #0x368
+a000895c: e3a00018     	mov	r0, #24
+a0008960: e58a800c     	str	r8, [r10, #0xc]
+a0008964: e58a00e0     	str	r0, [r10, #0xe0]
+a0008968: e3a00040     	mov	r0, #64
+a000896c: e58a00e4     	str	r0, [r10, #0xe4]
+a0008970: e3a00a02     	mov	r0, #8192
+a0008974: e3800401     	orr	r0, r0, #16777216
+a0008978: e3a06602     	mov	r6, #2097152
+a000897c: e58a00e8     	str	r0, [r10, #0xe8]
+a0008980: e386620a     	orr	r6, r6, #-1610612736
+a0008984: e59f0364     	ldr	r0, [pc, #0x364]        @ 0xa0008cf0 <rust_main+0x3c8>
+a0008988: e1500006     	cmp	r0, r6
+a000898c: 1a0000cf     	bne	0xa0008cd0 <rust_main+0x3a8> @ imm = #0x33c
+a0008990: e59f735c     	ldr	r7, [pc, #0x35c]        @ 0xa0008cf4 <rust_main+0x3cc>
+a0008994: e59f935c     	ldr	r9, [pc, #0x35c]        @ 0xa0008cf8 <rust_main+0x3d0>
+a0008998: e28706fe     	add	r0, r7, #266338304
+a000899c: e2800205     	add	r0, r0, #1342177280
+a00089a0: e58a00ec     	str	r0, [r10, #0xec]
+a00089a4: e2490c01     	sub	r0, r9, #256
+a00089a8: e1570000     	cmp	r7, r0
+a00089ac: 2a000004     	bhs	0xa00089c4 <rust_main+0x9c> @ imm = #0x10
+a00089b0: e3a01000     	mov	r1, #0
+a00089b4: e1a02007     	mov	r2, r7
+a00089b8: e4c21001     	strb	r1, [r2], #1
+a00089bc: e1500002     	cmp	r0, r2
+a00089c0: 1afffffc     	bne	0xa00089b8 <rust_main+0x90> @ imm = #-0x10
+a00089c4: e59f0330     	ldr	r0, [pc, #0x330]        @ 0xa0008cfc <rust_main+0x3d4>
+a00089c8: ee101f10     	mrc	p15, #0x0, r1, c0, c0, #0x0
+a00089cc: e1510000     	cmp	r1, r0
+a00089d0: 1a0000c0     	bne	0xa0008cd8 <rust_main+0x3b0> @ imm = #0x300
+a00089d4: e58a0070     	str	r0, [r10, #0x70]
+a00089d8: ebfffe0b     	bl	0xa000820c <_ZN18crosshair_security12init_buffers17h6985b79ba8270c65E> @ imm = #-0x7d4
+a00089dc: ebfffe54     	bl	0xa0008334 <_ZN18crosshair_security9init_user17hcb6c89db2f110783E> @ imm = #-0x6b0
+a00089e0: e59f4318     	ldr	r4, [pc, #0x318]        @ 0xa0008d00 <rust_main+0x3d8>
+a00089e4: e1560007     	cmp	r6, r7
+a00089e8: e1a00004     	mov	r0, r4
+a00089ec: 2a000007     	bhs	0xa0008a10 <rust_main+0xe8> @ imm = #0x1c
+a00089f0: e59f130c     	ldr	r1, [pc, #0x30c]        @ 0xa0008d04 <rust_main+0x3dc>
+a00089f4: e1a00004     	mov	r0, r4
+a00089f8: e1a02006     	mov	r2, r6
+a00089fc: e4d23001     	ldrb	r3, [r2], #1
+a0008a00: e1570002     	cmp	r7, r2
+a0008a04: e0203003     	eor	r3, r0, r3
+a0008a08: e0000193     	<unknown>
+a0008a0c: 1afffffa     	bne	0xa00089fc <rust_main+0xd4> @ imm = #-0x18
+a0008a10: e58a0118     	str	r0, [r10, #0x118]
+a0008a14: e3a01002     	mov	r1, #2
+a0008a18: e59f02e8     	ldr	r0, [pc, #0x2e8]        @ 0xa0008d08 <rust_main+0x3e0>
+a0008a1c: e3811b01     	orr	r1, r1, #1024
+a0008a20: e3a02000     	mov	r2, #0
+a0008a24: e3a03b0a     	mov	r3, #10240
+a0008a28: e5801000     	str	r1, [r0]
+a0008a2c: e59f12d8     	ldr	r1, [pc, #0x2d8]        @ 0xa0008d0c <rust_main+0x3e4>
+a0008a30: e0805102     	add	r5, r0, r2, lsl #2
+a0008a34: e2822001     	add	r2, r2, #1
+a0008a38: e3520080     	cmp	r2, #128
+a0008a3c: e7851003     	str	r1, [r5, r3]
+a0008a40: e2811601     	add	r1, r1, #1048576
+a0008a44: 1afffff9     	bne	0xa0008a30 <rust_main+0x108> @ imm = #-0x1c
+a0008a48: e59f12c0     	ldr	r1, [pc, #0x2c0]        @ 0xa0008d10 <rust_main+0x3e8>
+a0008a4c: e3a02000     	mov	r2, #0
+a0008a50: e3a03a01     	mov	r3, #4096
+a0008a54: e0805102     	add	r5, r0, r2, lsl #2
+a0008a58: e2822001     	add	r2, r2, #1
+a0008a5c: e3520010     	cmp	r2, #16
+a0008a60: e7851003     	str	r1, [r5, r3]
+a0008a64: e2811601     	add	r1, r1, #1048576
+a0008a68: 1afffff9     	bne	0xa0008a54 <rust_main+0x12c> @ imm = #-0x1c
+a0008a6c: e59f12a0     	ldr	r1, [pc, #0x2a0]        @ 0xa0008d14 <rust_main+0x3ec>
+a0008a70: e3a0c000     	mov	r12, #0
+a0008a74: e3a03001     	mov	r3, #1
+a0008a78: e3a05079     	mov	r5, #121
+a0008a7c: e3812001     	orr	r2, r1, #1
+a0008a80: e5802040     	str	r2, [r0, #0x40]
+a0008a84: e59f228c     	ldr	r2, [pc, #0x28c]        @ 0xa0008d18 <rust_main+0x3f0>
+a0008a88: e5812000     	str	r2, [r1]
+a0008a8c: e59f2288     	ldr	r2, [pc, #0x288]        @ 0xa0008d1c <rust_main+0x3f4>
+a0008a90: e5812004     	str	r2, [r1, #0x4]
+a0008a94: e3822a02     	orr	r2, r2, #8192
+a0008a98: e581200c     	str	r2, [r1, #0xc]
+a0008a9c: ee0dcf10     	mcr	p15, #0x0, r12, c13, c0, #0x0
+a0008aa0: ee020f10     	mcr	p15, #0x0, r0, c2, c0, #0x0
+a0008aa4: ee033f10     	mcr	p15, #0x0, r3, c3, c0, #0x0
+a0008aa8: ee08cf17     	mcr	p15, #0x0, r12, c8, c7, #0x0
+a0008aac: ee015f10     	mcr	p15, #0x0, r5, c1, c0, #0x0
+a0008ab0: ee122f10     	mrc	p15, #0x0, r2, c2, c0, #0x0
+a0008ab4: e1a02002     	mov	r2, r2
+a0008ab8: e24ff004     	sub	pc, pc, #4
+a0008abc: ee115f10     	mrc	p15, #0x0, r5, c1, c0, #0x0
+a0008ac0: ee122f10     	mrc	p15, #0x0, r2, c2, c0, #0x0
+a0008ac4: ee133f10     	mrc	p15, #0x0, r3, c3, c0, #0x0
+a0008ac8: ee1dcf10     	mrc	p15, #0x0, r12, c13, c0, #0x0
+a0008acc: e3550079     	cmp	r5, #121
+a0008ad0: 01520000     	cmpeq	r2, r0
+a0008ad4: 1a000002     	bne	0xa0008ae4 <rust_main+0x1bc> @ imm = #0x8
+a0008ad8: e3530001     	cmp	r3, #1
+a0008adc: 035c0000     	cmpeq	r12, #0
+a0008ae0: 0a000001     	beq	0xa0008aec <rust_main+0x1c4> @ imm = #0x4
+a0008ae4: e3a0004d     	mov	r0, #77
+a0008ae8: eb000098     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x260
+a0008aec: e3a02079     	mov	r2, #121
+a0008af0: e58a2074     	str	r2, [r10, #0x74]
+a0008af4: e3a02001     	mov	r2, #1
+a0008af8: e58a0078     	str	r0, [r10, #0x78]
+a0008afc: e58a207c     	str	r2, [r10, #0x7c]
+a0008b00: e3a02000     	mov	r2, #0
+a0008b04: e58a20f8     	str	r2, [r10, #0xf8]
+a0008b08: e5900040     	ldr	r0, [r0, #0x40]
+a0008b0c: e58a0080     	str	r0, [r10, #0x80]
+a0008b10: e7910102     	ldr	r0, [r1, r2, lsl #2]
+a0008b14: e08a3102     	add	r3, r10, r2, lsl #2
+a0008b18: e2822001     	add	r2, r2, #1
+a0008b1c: e3520004     	cmp	r2, #4
+a0008b20: e5830084     	str	r0, [r3, #0x84]
+a0008b24: 1afffff9     	bne	0xa0008b10 <rust_main+0x1e8> @ imm = #-0x1c
+a0008b28: e3a00401     	mov	r0, #16777216
+a0008b2c: e1a01008     	mov	r1, r8
+a0008b30: e58a00a0     	str	r0, [r10, #0xa0]
+a0008b34: e3a00002     	mov	r0, #2
+a0008b38: e58a0004     	str	r0, [r10, #0x4]
+a0008b3c: e3a00401     	mov	r0, #16777216
+a0008b40: ebfffd44     	bl	0xa0008058 <security_run_user> @ imm = #-0xaf0
+a0008b44: e59a00a4     	ldr	r0, [r10, #0xa4]
+a0008b48: e2800001     	add	r0, r0, #1
+a0008b4c: e58a00a4     	str	r0, [r10, #0xa4]
+a0008b50: e5990000     	ldr	r0, [r9]
+a0008b54: e58a0094     	str	r0, [r10, #0x94]
+a0008b58: e5990004     	ldr	r0, [r9, #0x4]
+a0008b5c: e58a0098     	str	r0, [r10, #0x98]
+a0008b60: e5990008     	ldr	r0, [r9, #0x8]
+a0008b64: e58a009c     	str	r0, [r10, #0x9c]
+a0008b68: e59f01b0     	ldr	r0, [pc, #0x1b0]        @ 0xa0008d20 <rust_main+0x3f8>
+a0008b6c: e5900000     	ldr	r0, [r0]
+a0008b70: e58a00dc     	str	r0, [r10, #0xdc]
+a0008b74: ebfffdc4     	bl	0xa000828c <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE> @ imm = #-0x8f0
+a0008b78: e3a00003     	mov	r0, #3
+a0008b7c: e58a0004     	str	r0, [r10, #0x4]
+a0008b80: ebfffda1     	bl	0xa000820c <_ZN18crosshair_security12init_buffers17h6985b79ba8270c65E> @ imm = #-0x97c
+a0008b84: ebfffdea     	bl	0xa0008334 <_ZN18crosshair_security9init_user17hcb6c89db2f110783E> @ imm = #-0x858
+a0008b88: e3a00004     	mov	r0, #4
+a0008b8c: e3a01000     	mov	r1, #0
+a0008b90: e58a0004     	str	r0, [r10, #0x4]
+a0008b94: e3a00401     	mov	r0, #16777216
+a0008b98: ebfffd2e     	bl	0xa0008058 <security_run_user> @ imm = #-0xb48
+a0008b9c: e59a00a4     	ldr	r0, [r10, #0xa4]
+a0008ba0: e2800001     	add	r0, r0, #1
+a0008ba4: e58a00a4     	str	r0, [r10, #0xa4]
+a0008ba8: e5990000     	ldr	r0, [r9]
+a0008bac: e58a00f0     	str	r0, [r10, #0xf0]
+a0008bb0: e5990004     	ldr	r0, [r9, #0x4]
+a0008bb4: e58a00f4     	str	r0, [r10, #0xf4]
+a0008bb8: e5990004     	ldr	r0, [r9, #0x4]
+a0008bbc: e58a006c     	str	r0, [r10, #0x6c]
+a0008bc0: e59a0064     	ldr	r0, [r10, #0x64]
+a0008bc4: e350000f     	cmp	r0, #15
+a0008bc8: 1a00000a     	bne	0xa0008bf8 <rust_main+0x2d0> @ imm = #0x28
+a0008bcc: e59a00f0     	ldr	r0, [r10, #0xf0]
+a0008bd0: e350000f     	cmp	r0, #15
+a0008bd4: 059a00f4     	ldreq	r0, [r10, #0xf4]
+a0008bd8: 020000ff     	andeq	r0, r0, #255
+a0008bdc: 035000d0     	cmpeq	r0, #208
+a0008be0: 1a000004     	bne	0xa0008bf8 <rust_main+0x2d0> @ imm = #0x10
+a0008be4: e59a00b8     	ldr	r0, [r10, #0xb8]
+a0008be8: e3500001     	cmp	r0, #1
+a0008bec: 059a00c0     	ldreq	r0, [r10, #0xc0]
+a0008bf0: 03500001     	cmpeq	r0, #1
+a0008bf4: 0a000001     	beq	0xa0008c00 <rust_main+0x2d8> @ imm = #0x4
+a0008bf8: e3a0006e     	mov	r0, #110
+a0008bfc: eb000053     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x14c
+a0008c00: ebfffda1     	bl	0xa000828c <_ZN18crosshair_security13check_buffers17hff8f643a2666470bE> @ imm = #-0x97c
+a0008c04: e1560007     	cmp	r6, r7
+a0008c08: 2a000005     	bhs	0xa0008c24 <rust_main+0x2fc> @ imm = #0x14
+a0008c0c: e59f00f0     	ldr	r0, [pc, #0xf0]         @ 0xa0008d04 <rust_main+0x3dc>
+a0008c10: e4d61001     	ldrb	r1, [r6], #1
+a0008c14: e1570006     	cmp	r7, r6
+a0008c18: e0241001     	eor	r1, r4, r1
+a0008c1c: e0040091     	<unknown>
+a0008c20: 1afffffa     	bne	0xa0008c10 <rust_main+0x2e8> @ imm = #-0x18
+a0008c24: e58a411c     	str	r4, [r10, #0x11c]
+a0008c28: e59a0118     	ldr	r0, [r10, #0x118]
+a0008c2c: e59a111c     	ldr	r1, [r10, #0x11c]
+a0008c30: e1500001     	cmp	r0, r1
+a0008c34: 1a000029     	bne	0xa0008ce0 <rust_main+0x3b8> @ imm = #0xa4
+a0008c38: e3a00001     	mov	r0, #1
+a0008c3c: e3a01000     	mov	r1, #0
+a0008c40: e58a0060     	str	r0, [r10, #0x60]
+a0008c44: e3a00601     	mov	r0, #1048576
+a0008c48: e3800101     	orr	r0, r0, #1073741824
+a0008c4c: e3a02080     	mov	r2, #128
+a0008c50: e59f60d0     	ldr	r6, [pc, #0xd0]         @ 0xa0008d28 <rust_main+0x400>
+a0008c54: e5801004     	str	r1, [r0, #0x4]
+a0008c58: e580200c     	str	r2, [r0, #0xc]
+a0008c5c: e3a02008     	mov	r2, #8
+a0008c60: e5802000     	str	r2, [r0]
+a0008c64: e3a02003     	mov	r2, #3
+a0008c68: e5801004     	str	r1, [r0, #0x4]
+a0008c6c: e580200c     	str	r2, [r0, #0xc]
+a0008c70: e3a02007     	mov	r2, #7
+a0008c74: e5802008     	str	r2, [r0, #0x8]
+a0008c78: e3a02005     	mov	r2, #5
+a0008c7c: e58a2004     	str	r2, [r10, #0x4]
+a0008c80: e59f209c     	ldr	r2, [pc, #0x9c]         @ 0xa0008d24 <rust_main+0x3fc>
+a0008c84: e7d27001     	ldrb	r7, [r2, r1]
+a0008c88: e2811001     	add	r1, r1, #1
+a0008c8c: e1a03006     	mov	r3, r6
+a0008c90: e5905014     	ldr	r5, [r0, #0x14]
+a0008c94: e3150020     	tst	r5, #32
+a0008c98: 1a000002     	bne	0xa0008ca8 <rust_main+0x380> @ imm = #0x8
+a0008c9c: e2933001     	adds	r3, r3, #1
+a0008ca0: 3afffffa     	blo	0xa0008c90 <rust_main+0x368> @ imm = #-0x18
+a0008ca4: ea000003     	b	0xa0008cb8 <rust_main+0x390> @ imm = #0xc
+a0008ca8: e351002c     	cmp	r1, #44
+a0008cac: e5807000     	str	r7, [r0]
+a0008cb0: 1afffff3     	bne	0xa0008c84 <rust_main+0x35c> @ imm = #-0x34
+a0008cb4: ebfffd52     	bl	0xa0008204 <kernel_idle> @ imm = #-0xab8
+a0008cb8: e3a00055     	mov	r0, #85
+a0008cbc: eb000023     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x8c
+a0008cc0: e3a0001d     	mov	r0, #29
+a0008cc4: eb000021     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x84
+a0008cc8: e3a0001f     	mov	r0, #31
+a0008ccc: eb00001f     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x7c
+a0008cd0: e3a00043     	mov	r0, #67
+a0008cd4: eb00001d     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x74
+a0008cd8: e3a00023     	mov	r0, #35
+a0008cdc: eb00001b     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x6c
+a0008ce0: e3a00024     	mov	r0, #36
+a0008ce4: eb000019     	bl	0xa0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E> @ imm = #0x64
+a0008ce8: 00 c0 00 a0  	.word	0xa000c000
+a0008cec: 55 43 45 53  	.word	0x53454355
+a0008cf0: 00 00 20 a0  	.word	0xa0200000
+a0008cf4: e0 01 20 a0  	.word	0xa02001e0
+a0008cf8: 00 11 20 a0  	.word	0xa0201100
+a0008cfc: 03 29 05 69  	.word	0x69052903
+a0008d00: c5 9d 1c 81  	.word	0x811c9dc5
+a0008d04: 93 01 00 01  	.word	0x01000193
+a0008d08: 00 00 01 a0  	.word	0xa0010000
+a0008d0c: 02 04 00 a0  	.word	0xa0000402
+a0008d10: 02 04 00 40  	.word	0x40000402
+a0008d14: 00 40 01 a0  	.word	0xa0014000
+a0008d18: a2 0a 20 a0  	.word	0xa0200aa2
+a0008d1c: f2 1f 20 a0  	.word	0xa0201ff2
+a0008d20: 20 c1 00 a0  	.word	0xa000c120
+a0008d24: 77 8d 00 a0  	.word	0xa0008d77
+a0008d28: c0 bd f0 ff  	.word	0xfff0bdc0
+
+a0008d2c <rust_begin_unwind>:
+a0008d2c: e59f0014     	ldr	r0, [pc, #0x14]         @ 0xa0008d48 <rust_begin_unwind+0x1c>
+a0008d30: e3a010ad     	mov	r1, #173
+a0008d34: e3811cde     	orr	r1, r1, #56832
+a0008d38: e5801008     	str	r1, [r0, #0x8]
+a0008d3c: e3a010ff     	mov	r1, #255
+a0008d40: e5801004     	str	r1, [r0, #0x4]
+a0008d44: ebfffd2e     	bl	0xa0008204 <kernel_idle> @ imm = #-0xb48
+a0008d48: 00 c0 00 a0  	.word	0xa000c000
+
+a0008d4c <_ZN4core9panicking9panic_fmt17h94659d61375b856eE>:
+a0008d4c: ebfffff6     	bl	0xa0008d2c <rust_begin_unwind> @ imm = #-0x28
+
+a0008d50 <_ZN4core9panicking5panic17hac0b3160507ed839E>:
+a0008d50: ebfffffd     	bl	0xa0008d4c <_ZN4core9panicking9panic_fmt17h94659d61375b856eE> @ imm = #-0xc
+
+a0008d54 <_ZN83_$LT$$RF$mut$u20$I$u20$as$u20$core..iter..traits..exact_size..ExactSizeIterator$GT$3len17h6fc1747e9f68a475E>:
+a0008d54: e5900000     	ldr	r0, [r0]
+a0008d58: e5901000     	ldr	r1, [r0]
+a0008d5c: e5900004     	ldr	r0, [r0, #0x4]
+a0008d60: e0400001     	sub	r0, r0, r1
+a0008d64: e12fff1e     	bx	lr
+
+Disassembly of section .user_text:
+
+a0200000 <security_user_start>:
+a0200000: e3500014     	cmp	r0, #20
+a0200004: 0a00005c     	beq	0xa020017c <user_data_svc> @ imm = #0x170
+a0200008: e3500015     	cmp	r0, #21
+a020000c: 0a00005c     	beq	0xa0200184 <user_unmapped_branch> @ imm = #0x170
+a0200010: e3500016     	cmp	r0, #22
+a0200014: 0a00005c     	beq	0xa020018c <user_thumb_svc> @ imm = #0x170
+a0200018: e3500017     	cmp	r0, #23
+a020001c: 0a00005c     	beq	0xa0200194 <user_data_undefined> @ imm = #0x170
+a0200020: e3500001     	cmp	r0, #1
+a0200024: 0a00003d     	beq	0xa0200120 <user_kernel_read> @ imm = #0xf4
+a0200028: e3500002     	cmp	r0, #2
+a020002c: 0a00003e     	beq	0xa020012c <user_kernel_write> @ imm = #0xf8
+a0200030: e3500003     	cmp	r0, #3
+a0200034: 0a000040     	beq	0xa020013c <user_mmio_read> @ imm = #0x100
+a0200038: e3500004     	cmp	r0, #4
+a020003c: 0a000041     	beq	0xa0200148 <user_mmio_write> @ imm = #0x104
+a0200040: e350000c     	cmp	r0, #12
+a0200044: 0a000043     	beq	0xa0200158 <user_code_write> @ imm = #0x10c
+a0200048: e350000d     	cmp	r0, #13
+a020004c: 0a000045     	beq	0xa0200168 <user_guard_read> @ imm = #0x114
+a0200050: e350000f     	cmp	r0, #15
+a0200054: 0a000046     	beq	0xa0200174 <user_cp15>  @ imm = #0x118
+a0200058: e1a06000     	mov	r6, r0
+a020005c: e59f0148     	ldr	r0, [pc, #0x148]        @ 0xa02001ac <user_unexpected+0x10>
+a0200060: e3a0100f     	mov	r1, #15
+a0200064: e3a07001     	mov	r7, #1
+a0200068: e3560005     	cmp	r6, #5
+a020006c: 059f713c     	ldreq	r7, [pc, #0x13c]        @ 0xa02001b0 <user_unexpected+0x14>
+a0200070: e3560006     	cmp	r6, #6
+a0200074: 03a00000     	moveq	r0, #0
+a0200078: e3560007     	cmp	r6, #7
+a020007c: 059f0130     	ldreq	r0, [pc, #0x130]        @ 0xa02001b4 <user_unexpected+0x18>
+a0200080: 03a01004     	moveq	r1, #4
+a0200084: e3560008     	cmp	r6, #8
+a0200088: 059f0128     	ldreq	r0, [pc, #0x128]        @ 0xa02001b8 <user_unexpected+0x1c>
+a020008c: 03a01008     	moveq	r1, #8
+a0200090: e3560009     	cmp	r6, #9
+a0200094: 03a01041     	moveq	r1, #65
+a0200098: e356000a     	cmp	r6, #10
+a020009c: 03e0000f     	mvneq	r0, #15
+a02000a0: 03a01020     	moveq	r1, #32
+a02000a4: e356000b     	cmp	r6, #11
+a02000a8: 059f010c     	ldreq	r0, [pc, #0x10c]        @ 0xa02001bc <user_unexpected+0x20>
+a02000ac: 03a01000     	moveq	r1, #0
+a02000b0: e3560011     	cmp	r6, #17
+a02000b4: 03a00401     	moveq	r0, #16777216
+a02000b8: 03a01004     	moveq	r1, #4
+a02000bc: e3560012     	cmp	r6, #18
+a02000c0: 059f00f8     	ldreq	r0, [pc, #0xf8]         @ 0xa02001c0 <user_unexpected+0x24>
+a02000c4: 03a01040     	moveq	r1, #64
+a02000c8: e3560013     	cmp	r6, #19
+a02000cc: 03a00000     	moveq	r0, #0
+a02000d0: 03a01000     	moveq	r1, #0
+a02000d4: e3560010     	cmp	r6, #16
+a02000d8: 1a000002     	bne	0xa02000e8 <security_user_start+0xe8> @ imm = #0x8
+a02000dc: e28fe004     	add	lr, pc, #4
+a02000e0: e59f20dc     	ldr	r2, [pc, #0xdc]         @ 0xa02001c4 <user_unexpected+0x28>
+a02000e4: e12fff12     	bx	r2
+a02000e8: e356000e     	cmp	r6, #14
+a02000ec: 0a000001     	beq	0xa02000f8 <user_bad_svc> @ imm = #0x4
+
+a02000f0 <user_copy_svc>:
+a02000f0: ef000000     	svc	#0x0
+a02000f4: ea000000     	b	0xa02000fc <user_after_svc> @ imm = #0x0
+
+a02000f8 <user_bad_svc>:
+a02000f8: ef000001     	svc	#0x1
+
+a02000fc <user_after_svc>:
+a02000fc: e59f10c4     	ldr	r1, [pc, #0xc4]         @ 0xa02001c8 <user_unexpected+0x2c>
+a0200100: e5810000     	str	r0, [r1]
+a0200104: e10f2000     	mrs	r2, apsr
+a0200108: e5812004     	str	r2, [r1, #0x4]
+a020010c: e5818008     	str	r8, [r1, #0x8]
+a0200110: e3a00000     	mov	r0, #0
+a0200114: e3a07000     	mov	r7, #0
+
+a0200118 <user_exit_svc>:
+a0200118: ef000000     	svc	#0x0
+a020011c: eafffffe     	b	0xa020011c <user_exit_svc+0x4> @ imm = #-0x8
+
+a0200120 <user_kernel_read>:
+a0200120: e59f108c     	ldr	r1, [pc, #0x8c]         @ 0xa02001b4 <user_unexpected+0x18>
+
+a0200124 <user_kernel_read_fault>:
+a0200124: e5912000     	ldr	r2, [r1]
+a0200128: ea00001b     	b	0xa020019c <user_unexpected> @ imm = #0x6c
+
+a020012c <user_kernel_write>:
+a020012c: e59f1080     	ldr	r1, [pc, #0x80]         @ 0xa02001b4 <user_unexpected+0x18>
+a0200130: e3a02077     	mov	r2, #119
+
+a0200134 <user_kernel_write_fault>:
+a0200134: e5812000     	str	r2, [r1]
+a0200138: ea000017     	b	0xa020019c <user_unexpected> @ imm = #0x5c
+
+a020013c <user_mmio_read>:
+a020013c: e59f1088     	ldr	r1, [pc, #0x88]         @ 0xa02001cc <user_unexpected+0x30>
+
+a0200140 <user_mmio_read_fault>:
+a0200140: e5912000     	ldr	r2, [r1]
+a0200144: ea000014     	b	0xa020019c <user_unexpected> @ imm = #0x50
+
+a0200148 <user_mmio_write>:
+a0200148: e59f1080     	ldr	r1, [pc, #0x80]         @ 0xa02001d0 <user_unexpected+0x34>
+a020014c: e3a02058     	mov	r2, #88
+
+a0200150 <user_mmio_write_fault>:
+a0200150: e5812000     	str	r2, [r1]
+a0200154: ea000010     	b	0xa020019c <user_unexpected> @ imm = #0x40
+
+a0200158 <user_code_write>:
+a0200158: e3a01401     	mov	r1, #16777216
+a020015c: e3a02000     	mov	r2, #0
+
+a0200160 <user_code_write_fault>:
+a0200160: e5812000     	str	r2, [r1]
+a0200164: ea00000c     	b	0xa020019c <user_unexpected> @ imm = #0x30
+
+a0200168 <user_guard_read>:
+a0200168: e59f104c     	ldr	r1, [pc, #0x4c]         @ 0xa02001bc <user_unexpected+0x20>
+
+a020016c <user_guard_read_fault>:
+a020016c: e5912000     	ldr	r2, [r1]
+a0200170: ea000009     	b	0xa020019c <user_unexpected> @ imm = #0x24
+
+a0200174 <user_cp15>:
+a0200174: ee110f10     	mrc	p15, #0x0, r0, c1, c0, #0x0
+a0200178: ea000007     	b	0xa020019c <user_unexpected> @ imm = #0x1c
+
+a020017c <user_data_svc>:
+a020017c: e59f1050     	ldr	r1, [pc, #0x50]         @ 0xa02001d4 <user_unexpected+0x38>
+a0200180: e12fff11     	bx	r1
+
+a0200184 <user_unmapped_branch>:
+a0200184: e3a01402     	mov	r1, #33554432
+
+a0200188 <user_unmapped_branch_fault>:
+a0200188: e12fff11     	bx	r1
+
+a020018c <user_thumb_svc>:
+a020018c: e59f1044     	ldr	r1, [pc, #0x44]         @ 0xa02001d8 <user_unexpected+0x3c>
+a0200190: e12fff11     	bx	r1
+
+a0200194 <user_data_undefined>:
+a0200194: e59f1040     	ldr	r1, [pc, #0x40]         @ 0xa02001dc <user_unexpected+0x40>
+a0200198: e12fff11     	bx	r1
+
+a020019c <user_unexpected>:
+a020019c: e3a0004d     	mov	r0, #77
+a02001a0: e3a07000     	mov	r7, #0
+a02001a4: ef000000     	svc	#0x0
+a02001a8: eafffffe     	b	0xa02001a8 <user_unexpected+0xc> @ imm = #-0x8
+a02001ac: 00 10 00 01  	.word	0x01001000
+a02001b0: ff ff 00 00  	.word	0x0000ffff
+a02001b4: 24 c1 00 a0  	.word	0xa000c124
+a02001b8: fc 1f 00 01  	.word	0x01001ffc
+a02001bc: 00 20 00 01  	.word	0x01002000
+a02001c0: 80 10 00 01  	.word	0x01001080
+a02001c4: 00 12 00 01  	.word	0x01001200
+a02001c8: 00 11 00 01  	.word	0x01001100
+a02001cc: 14 00 10 40  	.word	0x40100014
+a02001d0: 00 00 10 40  	.word	0x40100000
+a02001d4: 20 12 00 01  	.word	0x01001220
+a02001d8: 41 12 00 01  	.word	0x01001241
+a02001dc: 60 12 00 01  	.word	0x01001260

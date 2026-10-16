@@ -1,0 +1,60 @@
+    Updating crates<crypto-probe>io index
+     Locking 4 packages to latest compatible versions
+ Downloading crates <crypto-probe><crypto-probe><crypto-probe>
+  Downloaded getrandom v0<crypto-probe>4<crypto-probe>3
+  Downloaded libc v0<crypto-probe>2<crypto-probe>190
+   Compiling compiler_builtins v0<crypto-probe>1<crypto-probe>148
+   Compiling core v0<crypto-probe>0<crypto-probe>0 (<rustup>/toolchains/nightly-2025-03-01-x86_64-apple-darwin/lib/rustlib/src/rust/library/core)
+   Compiling getrandom v0<crypto-probe>4<crypto-probe>3
+   Compiling rustc-std-workspace-core v1<crypto-probe>99<crypto-probe>0 (<rustup>/toolchains/nightly-2025-03-01-x86_64-apple-darwin/lib/rustlib/src/rust/library/rustc-std-workspace-core)
+   Compiling cfg-if v1<crypto-probe>0<crypto-probe>5
+error: target is not supported<crypto-probe> You may need to define a custom backend see: https://docs<crypto-probe>rs/getrandom/0<crypto-probe>4<crypto-probe>3/#custom-backend
+   --> <crypto-probe>/cargo-home/registry/src/index<crypto-probe>crates<crypto-probe>io-1949cf8c6b5b557f/getrandom-0<crypto-probe>4<crypto-probe>3/src/backends<crypto-probe>rs:185:9
+    |
+185 | /         compile_error!(concat!(
+186 | |             "target is not supported<crypto-probe> You may need to define a custom backend see: \
+187 | |             https://docs<crypto-probe>rs/getrandom/", env!("CARGO_PKG_VERSION"), "/#custom-backend"
+188 | |         ));
+    | |__________^
+
+error[E0425]: cannot find function `fill_inner` in module `backends`
+   --> <crypto-probe>/cargo-home/registry/src/index<crypto-probe>crates<crypto-probe>io-1949cf8c6b5b557f/getrandom-0<crypto-probe>4<crypto-probe>3/src/lib<crypto-probe>rs:120:19
+    |
+120 |         backends::fill_inner(dest)?;
+    |                   ^^^^^^^^^^ not found in `backends`
+
+error[E0425]: cannot find function `inner_u32` in module `backends`
+   --> <crypto-probe>/cargo-home/registry/src/index<crypto-probe>crates<crypto-probe>io-1949cf8c6b5b557f/getrandom-0<crypto-probe>4<crypto-probe>3/src/lib<crypto-probe>rs:144:15
+    |
+144 |     backends::inner_u32()
+    |               ^^^^^^^^^ not found in `backends`
+    |
+help: consider importing this function
+    |
+18  + use crate::util::inner_u32;
+    |
+help: if you import `inner_u32`, refer to it directly
+    |
+144 -     backends::inner_u32()
+144 +     inner_u32()
+    |
+
+error[E0425]: cannot find function `inner_u64` in module `backends`
+   --> <crypto-probe>/cargo-home/registry/src/index<crypto-probe>crates<crypto-probe>io-1949cf8c6b5b557f/getrandom-0<crypto-probe>4<crypto-probe>3/src/lib<crypto-probe>rs:158:15
+    |
+158 |     backends::inner_u64()
+    |               ^^^^^^^^^ not found in `backends`
+    |
+help: consider importing this function
+    |
+18  + use crate::util::inner_u64;
+    |
+help: if you import `inner_u64`, refer to it directly
+    |
+158 -     backends::inner_u64()
+158 +     inner_u64()
+    |
+
+For more information about this error, try `rustc --explain E0425`<crypto-probe>
+error: could not compile `getrandom` (lib) due to 4 previous errors
+warning: build failed, waiting for other jobs to finish<crypto-probe><crypto-probe><crypto-probe>

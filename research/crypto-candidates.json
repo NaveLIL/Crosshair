@@ -1,0 +1,327 @@
+{
+  "schema": 1,
+  "status": "compile-only; no candidate AEAD/Ed25519 function or key generation executed; no Crosshair dependency added",
+  "target": "armv5te-none-eabi",
+  "compiler": "nightly-2025-03-01, rustc1.87.0-nightly(287487624), LLVM20.1.0",
+  "source_crates": [
+    {
+      "name": "chacha20poly1305",
+      "version": "0.11.0",
+      "rust_version": "1.85",
+      "checksum": "9b89e1c441e926b9c82a8d023f6e1b7ae0adcfaa7d621814e4d60789bac751cb",
+      "files": {
+        ".cargo_vcs_info.json": {
+          "sha256": "6c640f7d3c4b878f5efaee675685f09bbca18b84880d4b55f7b676165a81e33f",
+          "bytes": 110
+        },
+        "Cargo.toml": {
+          "sha256": "7ec6e52abfdaf2440a83823ab022b76c366319bc4c610dd51e8b9d0b533b12dc",
+          "bytes": 3352
+        },
+        "Cargo.toml.orig": {
+          "sha256": "3b17182be9bcc2b818b6214a4a6fe18d0fa22492d23cdcaab4fc41251c3f9bed",
+          "bytes": 1523
+        },
+        "README.md": {
+          "sha256": "3ef6cfd941096d8ce8dda11058eb59cb0252fa08ebc4dfbc7adb44e33c5f60ea",
+          "bytes": 3691
+        },
+        "src/lib.rs": {
+          "sha256": "c5735fcb58bdd9c03975a376eb40b4e8698790f3ad72282823cfbdc2aa90335f",
+          "bytes": 10747
+        }
+      },
+      "git_commit": "e37a978ccf0992d9053fbc039470d6527108e393",
+      "path_in_vcs": "chacha20poly1305"
+    },
+    {
+      "name": "ed25519-dalek",
+      "version": "3.0.0",
+      "rust_version": "1.85",
+      "checksum": "6ebaa1a2bf1290ab3bfe5a7b771d050ebffab2711c19a81691c683a5144a25de",
+      "files": {
+        ".cargo_vcs_info.json": {
+          "sha256": "6a2d5ee70d4c98065fcc85884db57250e6b0db58db48a0fc5283bd80c09b80cc",
+          "bytes": 107
+        },
+        "Cargo.toml": {
+          "sha256": "956ebf89493683eebfba8fc50659ce561f70c5ed93524ee98ece80555e02d042",
+          "bytes": 4331
+        },
+        "Cargo.toml.orig": {
+          "sha256": "64d0d6fed9c22b0b126c25e3e74662ee91aaca744fef4b0005fee368cddb53e9",
+          "bytes": 3131
+        },
+        "README.md": {
+          "sha256": "c5ae11bf86091a1d52940c2c0f9e8cf1c5ec79960d21256a1f426d5a96acc45c",
+          "bytes": 12966
+        },
+        "src/lib.rs": {
+          "sha256": "6fb99fb76beff381b060d79c922284d4f0b635e83b15c3bd8adbef747ab60e63",
+          "bytes": 11527
+        }
+      },
+      "git_commit": "07bef73ff85998a206cd2cea7f2605c801d0d1c9",
+      "path_in_vcs": "ed25519-dalek"
+    },
+    {
+      "name": "getrandom",
+      "version": "0.4.3",
+      "rust_version": "1.85",
+      "checksum": "300e883d756b2e4ec94e02791f39b04b522276138852cfc41d9fb7e904106099",
+      "files": {
+        ".cargo_vcs_info.json": {
+          "sha256": "14b81d3c44670e34376d60d06a5e24a78548bb3ad32be81e6ecee66a36de096d",
+          "bytes": 94
+        },
+        "Cargo.toml": {
+          "sha256": "4f107fe4ceacee71d0068cfbbc69554b3d8523a1fcbb99b17e9fa0d008961ff9",
+          "bytes": 4847
+        },
+        "Cargo.toml.orig": {
+          "sha256": "eebe7c6d086d3f40c2fa79f8784b00c36dc501e49b2757a1caa97e7fa4dbacf7",
+          "bytes": 5062
+        },
+        "README.md": {
+          "sha256": "700180aadb3c22383920a2c9dd2fa7fedaf2e5992a0924a061ae09aae19cc69e",
+          "bytes": 20325
+        },
+        "src/lib.rs": {
+          "sha256": "68bd1f2daa0aec1b55da25c07744869728a8be25d7c7d127bc788cd50fd8687b",
+          "bytes": 4786
+        }
+      },
+      "git_commit": "5e7cd5733536844a9856dc7259bd4696bbe5e3ae",
+      "path_in_vcs": ""
+    }
+  ],
+  "probe": {
+    "Cargo.toml": "[package]\nname = \"crosshair-crypto-compile-probe\"\nversion = \"0.0.0\"\nedition = \"2021\"\n[dependencies]\nchacha20poly1305 = { version = \"=0.11.0\", default-features = false, features = [\"zeroize\"] }\ned25519-dalek = { version = \"=3.0.0\", default-features = false, features = [\"zeroize\"] }\n[profile.release]\npanic = \"abort\"\nopt-level = \"z\"\ncodegen-units = 1\n",
+    "src/lib.rs": "#![no_std]\n#![forbid(unsafe_code)]\nuse chacha20poly1305::{aead::AeadInOut, ChaCha20Poly1305, KeyInit};\nuse ed25519_dalek::{Signature, VerifyingKey};\npub fn compile_aead_open(key: &[u8; 32], nonce: &[u8; 12], ad: &[u8], buffer: &mut [u8], tag: &[u8; 16]) -> bool {\n    ChaCha20Poly1305::new(key.into()).decrypt_inout_detached(nonce.into(), ad, buffer.into(), tag.into()).is_ok()\n}\npub fn compile_signature_verify(public: &[u8; 32], signature: &[u8; 64], message: &[u8]) -> bool {\n    VerifyingKey::from_bytes(public).map(|key| key.verify_strict(message, &Signature::from_bytes(signature)).is_ok()).unwrap_or(false)\n}\n",
+    "Cargo.lock_sha256": "dcdb6201d93677e4cc07959dd51a4210d3b969fedc58f545553f1dd216c18d71",
+    "registry_lock": [
+      {
+        "name": "aead",
+        "version": "0.6.1",
+        "checksum": "1973cfbc1a2daf9cf550e74e1f088c28e7f7d8c1e1418fb6c9dc5184b7e84c99"
+      },
+      {
+        "name": "block-buffer",
+        "version": "0.12.1",
+        "checksum": "d2f6c7dbe95a6ed67ad9f18e57daf93a2f034c524b99fd2b76d18fdfeb6660aa"
+      },
+      {
+        "name": "cfg-if",
+        "version": "1.0.5",
+        "checksum": "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
+      },
+      {
+        "name": "chacha20",
+        "version": "0.10.2",
+        "checksum": "65c35e4b699c7e15ccbe7ee35c005e4fc0a278d22238a2857e6ce2dadeda1b06"
+      },
+      {
+        "name": "chacha20poly1305",
+        "version": "0.11.0",
+        "checksum": "9b89e1c441e926b9c82a8d023f6e1b7ae0adcfaa7d621814e4d60789bac751cb"
+      },
+      {
+        "name": "cipher",
+        "version": "0.5.2",
+        "checksum": "e8cf2a2c93cd704877c0858356ed03480ff301ee950b43f1cbe4573b088bfa6c"
+      },
+      {
+        "name": "cmov",
+        "version": "0.5.4",
+        "checksum": "0c9ea0ac24bc397ab3c98583a3c9ba74fa56b09a4449bbe172b9b1ddb016027a"
+      },
+      {
+        "name": "cpufeatures",
+        "version": "0.3.1",
+        "checksum": "5ca28b0ae3115b884660db4118d803791fd6756b6e88f39c0f3f7859060d7566"
+      },
+      {
+        "name": "crypto-common",
+        "version": "0.2.2",
+        "checksum": "ce6e4c961d6cd6c9a86db418387425e8bdeaf05b3c8bc1411e6dca4c252f1453"
+      },
+      {
+        "name": "ctutils",
+        "version": "0.4.3",
+        "checksum": "03bb0e1cc970d482d121d9a1744999169b69a07470b3d644a7894e53fcaf4574"
+      },
+      {
+        "name": "curve25519-dalek",
+        "version": "5.0.0",
+        "checksum": "b5eed333089e2e1c1ac8c6c0398e5e2497b4c9926ca6d0365ed1e099afa5bc23"
+      },
+      {
+        "name": "curve25519-dalek-derive",
+        "version": "0.1.1",
+        "checksum": "f46882e17999c6cc590af592290432be3bce0428cb0d5f8b6715e4dc7b383eb3"
+      },
+      {
+        "name": "digest",
+        "version": "0.11.3",
+        "checksum": "f1dd6dbb5841937940781866fa1281a1ff7bd3bf827091440879f9994983d5c2"
+      },
+      {
+        "name": "ed25519",
+        "version": "3.0.0",
+        "checksum": "29fcf32e6c73d1079f83ab4d782de2d81620346a5f38c6237a86a22f8368980a"
+      },
+      {
+        "name": "ed25519-dalek",
+        "version": "3.0.0",
+        "checksum": "6ebaa1a2bf1290ab3bfe5a7b771d050ebffab2711c19a81691c683a5144a25de"
+      },
+      {
+        "name": "fiat-crypto",
+        "version": "0.3.0",
+        "checksum": "64cd1e32ddd350061ae6edb1b082d7c54915b5c672c389143b9a63403a109f24"
+      },
+      {
+        "name": "hybrid-array",
+        "version": "0.4.15",
+        "checksum": "27f864f10dfb56725ce5ce5472bc52252c8f93a4ab86327122cebf62c5f59a17"
+      },
+      {
+        "name": "inout",
+        "version": "0.2.3",
+        "checksum": "d8c0d789294fb457b791f7797a04478704788f30b407e5d0b01deaa846572d9f"
+      },
+      {
+        "name": "libc",
+        "version": "0.2.190",
+        "checksum": "ce5d3ddc6d3fa000eb1536d85e147bfe31aacaba692ed6a876f95cb7c855be78"
+      },
+      {
+        "name": "poly1305",
+        "version": "0.9.1",
+        "checksum": "6e2d0073b297041425c7c3df6eb4792d598a15323fe63346852b092eca02904c"
+      },
+      {
+        "name": "proc-macro2",
+        "version": "1.0.107",
+        "checksum": "985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9"
+      },
+      {
+        "name": "quote",
+        "version": "1.0.47",
+        "checksum": "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001"
+      },
+      {
+        "name": "rustc_version",
+        "version": "0.4.1",
+        "checksum": "cfcb3a22ef46e85b45de6ee7e79d063319ebb6594faafcf1c225ea92ab6e9b92"
+      },
+      {
+        "name": "semver",
+        "version": "1.0.28",
+        "checksum": "8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd"
+      },
+      {
+        "name": "sha2",
+        "version": "0.11.0",
+        "checksum": "446ba717509524cb3f22f17ecc096f10f4822d76ab5c0b9822c5f9c284e825f4"
+      },
+      {
+        "name": "signature",
+        "version": "3.0.0",
+        "checksum": "28d567dcbaf0049cb8ac2608a76cd95ff9e4412e1899d389ee400918ca7537f5"
+      },
+      {
+        "name": "subtle",
+        "version": "2.6.1",
+        "checksum": "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
+      },
+      {
+        "name": "syn",
+        "version": "2.0.119",
+        "checksum": "872831b642d1a07999a962a351ed35b955ea2cfc8f3862091e2a240a84f17297"
+      },
+      {
+        "name": "typenum",
+        "version": "1.20.1",
+        "checksum": "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
+      },
+      {
+        "name": "unicode-ident",
+        "version": "1.0.27",
+        "checksum": "a2c754d6c33795a1c324727428e5a7dedb5b06195f9890bdbcba760d3e246563"
+      },
+      {
+        "name": "universal-hash",
+        "version": "0.6.1",
+        "checksum": "f4987bdc12753382e0bec4a65c50738ffaabc998b9cdd1f952fb5f39b0048a96"
+      },
+      {
+        "name": "zeroize",
+        "version": "1.9.1",
+        "checksum": "e13084392c5e4bc371903e2935a5eaeed24905a7511356b883835e18a78f6879"
+      }
+    ],
+    "command": "cargo rustc --release --locked --target armv5te-none-eabi -Zbuild-std=core -Zbuild-std-features=compiler-builtins-mem -- --emit=obj",
+    "target_runtime_features_checked_absent": [
+      "alloc",
+      "std",
+      "getrandom"
+    ],
+    "host_build_note": "curve25519-dalek build-time rustc_version/semver uses host std; not linked into ARM target",
+    "object_bytes": 43892,
+    "object_sha256": "1df0c0bf29c98fe1cd820092f0b238042059d8fc93d95600616fc3bb82395091",
+    "object_format": "ELF32LE relocatable, ARMv5TE/EABI5, ARM/Thumb1",
+    "result": "PASS",
+    "Cargo.lock": "# This file is automatically @generated by Cargo.\n# It is not intended for manual editing.\nversion = 4\n\n[[package]]\nname = \"aead\"\nversion = \"0.6.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"1973cfbc1a2daf9cf550e74e1f088c28e7f7d8c1e1418fb6c9dc5184b7e84c99\"\ndependencies = [\n \"crypto-common\",\n \"inout\",\n]\n\n[[package]]\nname = \"block-buffer\"\nversion = \"0.12.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"d2f6c7dbe95a6ed67ad9f18e57daf93a2f034c524b99fd2b76d18fdfeb6660aa\"\ndependencies = [\n \"hybrid-array\",\n]\n\n[[package]]\nname = \"cfg-if\"\nversion = \"1.0.5\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600\"\n\n[[package]]\nname = \"chacha20\"\nversion = \"0.10.2\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"65c35e4b699c7e15ccbe7ee35c005e4fc0a278d22238a2857e6ce2dadeda1b06\"\ndependencies = [\n \"cfg-if\",\n \"cipher\",\n \"cpufeatures\",\n \"zeroize\",\n]\n\n[[package]]\nname = \"chacha20poly1305\"\nversion = \"0.11.0\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"9b89e1c441e926b9c82a8d023f6e1b7ae0adcfaa7d621814e4d60789bac751cb\"\ndependencies = [\n \"aead\",\n \"chacha20\",\n \"cipher\",\n \"poly1305\",\n \"zeroize\",\n]\n\n[[package]]\nname = \"cipher\"\nversion = \"0.5.2\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"e8cf2a2c93cd704877c0858356ed03480ff301ee950b43f1cbe4573b088bfa6c\"\ndependencies = [\n \"block-buffer\",\n \"crypto-common\",\n \"inout\",\n]\n\n[[package]]\nname = \"cmov\"\nversion = \"0.5.4\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"0c9ea0ac24bc397ab3c98583a3c9ba74fa56b09a4449bbe172b9b1ddb016027a\"\n\n[[package]]\nname = \"cpufeatures\"\nversion = \"0.3.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"5ca28b0ae3115b884660db4118d803791fd6756b6e88f39c0f3f7859060d7566\"\ndependencies = [\n \"libc\",\n]\n\n[[package]]\nname = \"crosshair-crypto-compile-probe\"\nversion = \"0.0.0\"\ndependencies = [\n \"chacha20poly1305\",\n \"ed25519-dalek\",\n]\n\n[[package]]\nname = \"crypto-common\"\nversion = \"0.2.2\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"ce6e4c961d6cd6c9a86db418387425e8bdeaf05b3c8bc1411e6dca4c252f1453\"\ndependencies = [\n \"hybrid-array\",\n]\n\n[[package]]\nname = \"ctutils\"\nversion = \"0.4.3\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"03bb0e1cc970d482d121d9a1744999169b69a07470b3d644a7894e53fcaf4574\"\ndependencies = [\n \"cmov\",\n]\n\n[[package]]\nname = \"curve25519-dalek\"\nversion = \"5.0.0\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"b5eed333089e2e1c1ac8c6c0398e5e2497b4c9926ca6d0365ed1e099afa5bc23\"\ndependencies = [\n \"cfg-if\",\n \"cpufeatures\",\n \"curve25519-dalek-derive\",\n \"digest\",\n \"fiat-crypto\",\n \"rustc_version\",\n \"subtle\",\n \"zeroize\",\n]\n\n[[package]]\nname = \"curve25519-dalek-derive\"\nversion = \"0.1.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"f46882e17999c6cc590af592290432be3bce0428cb0d5f8b6715e4dc7b383eb3\"\ndependencies = [\n \"proc-macro2\",\n \"quote\",\n \"syn\",\n]\n\n[[package]]\nname = \"digest\"\nversion = \"0.11.3\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"f1dd6dbb5841937940781866fa1281a1ff7bd3bf827091440879f9994983d5c2\"\ndependencies = [\n \"block-buffer\",\n \"crypto-common\",\n]\n\n[[package]]\nname = \"ed25519\"\nversion = \"3.0.0\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"29fcf32e6c73d1079f83ab4d782de2d81620346a5f38c6237a86a22f8368980a\"\ndependencies = [\n \"signature\",\n]\n\n[[package]]\nname = \"ed25519-dalek\"\nversion = \"3.0.0\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"6ebaa1a2bf1290ab3bfe5a7b771d050ebffab2711c19a81691c683a5144a25de\"\ndependencies = [\n \"curve25519-dalek\",\n \"ed25519\",\n \"sha2\",\n \"subtle\",\n \"zeroize\",\n]\n\n[[package]]\nname = \"fiat-crypto\"\nversion = \"0.3.0\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"64cd1e32ddd350061ae6edb1b082d7c54915b5c672c389143b9a63403a109f24\"\n\n[[package]]\nname = \"hybrid-array\"\nversion = \"0.4.15\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"27f864f10dfb56725ce5ce5472bc52252c8f93a4ab86327122cebf62c5f59a17\"\ndependencies = [\n \"typenum\",\n]\n\n[[package]]\nname = \"inout\"\nversion = \"0.2.3\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"d8c0d789294fb457b791f7797a04478704788f30b407e5d0b01deaa846572d9f\"\ndependencies = [\n \"hybrid-array\",\n]\n\n[[package]]\nname = \"libc\"\nversion = \"0.2.190\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"ce5d3ddc6d3fa000eb1536d85e147bfe31aacaba692ed6a876f95cb7c855be78\"\n\n[[package]]\nname = \"poly1305\"\nversion = \"0.9.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"6e2d0073b297041425c7c3df6eb4792d598a15323fe63346852b092eca02904c\"\ndependencies = [\n \"cpufeatures\",\n \"universal-hash\",\n]\n\n[[package]]\nname = \"proc-macro2\"\nversion = \"1.0.107\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9\"\ndependencies = [\n \"unicode-ident\",\n]\n\n[[package]]\nname = \"quote\"\nversion = \"1.0.47\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001\"\ndependencies = [\n \"proc-macro2\",\n]\n\n[[package]]\nname = \"rustc_version\"\nversion = \"0.4.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"cfcb3a22ef46e85b45de6ee7e79d063319ebb6594faafcf1c225ea92ab6e9b92\"\ndependencies = [\n \"semver\",\n]\n\n[[package]]\nname = \"semver\"\nversion = \"1.0.28\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd\"\n\n[[package]]\nname = \"sha2\"\nversion = \"0.11.0\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"446ba717509524cb3f22f17ecc096f10f4822d76ab5c0b9822c5f9c284e825f4\"\ndependencies = [\n \"cfg-if\",\n \"cpufeatures\",\n \"digest\",\n]\n\n[[package]]\nname = \"signature\"\nversion = \"3.0.0\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"28d567dcbaf0049cb8ac2608a76cd95ff9e4412e1899d389ee400918ca7537f5\"\n\n[[package]]\nname = \"subtle\"\nversion = \"2.6.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292\"\n\n[[package]]\nname = \"syn\"\nversion = \"2.0.119\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"872831b642d1a07999a962a351ed35b955ea2cfc8f3862091e2a240a84f17297\"\ndependencies = [\n \"proc-macro2\",\n \"quote\",\n \"unicode-ident\",\n]\n\n[[package]]\nname = \"typenum\"\nversion = \"1.20.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20\"\n\n[[package]]\nname = \"unicode-ident\"\nversion = \"1.0.27\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"a2c754d6c33795a1c324727428e5a7dedb5b06195f9890bdbcba760d3e246563\"\n\n[[package]]\nname = \"universal-hash\"\nversion = \"0.6.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"f4987bdc12753382e0bec4a65c50738ffaabc998b9cdd1f952fb5f39b0048a96\"\ndependencies = [\n \"crypto-common\",\n \"ctutils\",\n]\n\n[[package]]\nname = \"zeroize\"\nversion = \"1.9.1\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"e13084392c5e4bc371903e2935a5eaeed24905a7511356b883835e18a78f6879\"\n"
+  },
+  "negative_probes": [
+    {
+      "scope": "first fresh resolution of positive probe",
+      "result": "expected failure with pinned compiler",
+      "reason": "sha2 0.11.1 requires rustc1.88; lock downgraded sha2 to0.11.0(MSRV1.85)"
+    },
+    {
+      "scope": "getrandom=0.4.3, default-features=false, default backend, armv5te-none-eabi",
+      "result": "expected compile failure",
+      "reason": "target is not supported; no custom or fake backend supplied"
+    }
+  ],
+  "proof_text": [
+    {
+      "name": "compile.log",
+      "bytes": 2925,
+      "sha256": "dbda96d81e12a1cf939bbfbc3c64222a789793dfc105520bf36ac6614cae6979",
+      "normalization": "host toolchain/probe paths only; diagnostic messages unchanged"
+    },
+    {
+      "name": "resolve-compatible.log",
+      "bytes": 131,
+      "sha256": "21e00286bf9fc19ca629464d048175e7b105cd631b2c588d7e1ddc77563563f9",
+      "normalization": "host toolchain/probe paths only; diagnostic messages unchanged"
+    },
+    {
+      "name": "compile-compatible.log",
+      "bytes": 2029,
+      "sha256": "ffa5c74952e0aab533f3b0552c9c7b6a93e613da96a7df56ba7e8c7328659556",
+      "normalization": "host toolchain/probe paths only; diagnostic messages unchanged"
+    },
+    {
+      "name": "entropy-unsupported.log",
+      "bytes": 3138,
+      "sha256": "657908624504a41c656dccaa18152a596e236e463e266b66e08bd57293d6df00",
+      "normalization": "host toolchain/probe paths only; diagnostic messages unchanged"
+    },
+    {
+      "name": "arm-object-report.txt",
+      "bytes": 2625,
+      "sha256": "72d472bed6e909628256192132f968551290f27466f1187e16f61dfcd2d0e857",
+      "normalization": "host toolchain/probe paths only; diagnostic messages unchanged"
+    },
+    {
+      "name": "runtime-feature-tree.txt",
+      "bytes": 4699,
+      "sha256": "a85e45c00aad5e9d8977cd6f8fe06b3ad5645f7dc521f3c79f92534d6414db6a",
+      "normalization": "host toolchain/probe paths only; diagnostic messages unchanged"
+    }
+  ]
+}

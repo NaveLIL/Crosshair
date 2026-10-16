@@ -13,3 +13,5 @@
 
 - E2A использует честно обозначенный CPU260 ISA proxy, собственную композицию и ограниченный register-level subset; PXA263 MIDR не подделывается. QEMU9.1 остаётся comparator. [Основание](docs/E2A_CPU_PROFILE.md).
 - GPL host emulator C отделён в `crosshair-emulator/qemu/`; Rust guest и программный UI остаются MIT, GPL runtime в ядро не переносится.
+- Wave005 вводит User/MMU/SVC только в отдельном test guest на неизменённом E2B; UI Wave004 остаётся privileged. AP/domain controls не заменяют отсутствующие ARMv5 XN, scheduler и app authority. [Проверенный scope](reports/WAVE_005.md), [security model](docs/SECURITY_MODEL.md), [threat model](docs/THREAT_MODEL.md).
+- Будущая криптография использует готовые проверяемые библиотеки с pinned dependency graph; собственные алгоритмы и fake entropy не добавляются. Нынешний [probe](research/crypto-candidates.json) — compile-only, без crypto runtime/keys; entropy, key lifecycle и trust anchor должны быть установлены до включения сервисов.
